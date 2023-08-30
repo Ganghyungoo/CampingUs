@@ -24,6 +24,7 @@ class OrderDetailFragment : Fragment() {
     lateinit var mainActivity: MainActivity
     lateinit var fragmentOrderDetailBinding: FragmentOrderDetailBinding
     lateinit var orderDetailViewModel: OrderDetailViewModel
+    lateinit var orderProductList1: MutableList<OrderProductModel>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,8 +68,17 @@ class OrderDetailFragment : Fragment() {
             orderTotalPrice.observe(mainActivity){
                 //금액
                 fragmentOrderDetailBinding.textViewOrderTotalPrice.text=it
-                val adapter=fragmentOrderDetailBinding.recyclerViewOrderDetail.adapter as OrderDetailAdapter
-                adapter.notifyDataSetChanged()
+                // 리사이클러 뷰
+                fragmentOrderDetailBinding.recyclerViewOrderDetail.run {
+                    //결제 내용 패치
+                    orderProductList1=orderProductList.value!!
+                    Log.d("testt","${orderProductList1}")
+                    orderDetailViewModel.fetchOrderInfo(orderId!!)
+                    adapter = OrderDetailAdapter()
+                    layoutManager = LinearLayoutManager(mainActivity)
+                }
+                val adapter1=fragmentOrderDetailBinding.recyclerViewOrderDetail.adapter as OrderDetailAdapter
+                adapter1.notifyDataSetChanged()
             }
             orderStatus.observe(mainActivity){
                 //결제 상태?
@@ -83,8 +93,7 @@ class OrderDetailFragment : Fragment() {
 
         fragmentOrderDetailBinding.run {
 
-            //결제 내용 패치
-            orderDetailViewModel.fetchOrderInfo(orderId!!)
+
 
             // 툴바
             toolbarOrderDetail.run {
@@ -95,13 +104,6 @@ class OrderDetailFragment : Fragment() {
                     mainActivity.removeFragment(MainActivity.PAYMENT_FRAGMENT)
                     mainActivity.removeFragment(MainActivity.CART_FRAGMENT)
                 }
-            }
-
-            // 리사이클러 뷰
-            recyclerViewOrderDetail.run {
-
-                adapter = OrderDetailAdapter()
-                layoutManager = LinearLayoutManager(mainActivity)
             }
         }
 
@@ -137,14 +139,14 @@ class OrderDetailFragment : Fragment() {
         }
 
         override fun getItemCount(): Int {
-            return orderDetailViewModel.orderProductList.size
+            return orderProductList1.size
         }
 
         override fun onBindViewHolder(holder: OrderDetailViewHolder, position: Int) {
-            holder.textViewRowPaymentTitle.text=orderDetailViewModel.orderProductList[position].orderProductName
-            holder.textViewRowPaymentContent.text=orderDetailViewModel.orderProductList[position].orderProductPrice+"원"
-            holder.textViewRowPaymentCount.text=orderDetailViewModel.orderProductList[position].orderProductCount+"개"
-            CartRepository.getProductFirstImage(orderDetailViewModel.orderProductList[position].orderProductImage){
+            holder.textViewRowPaymentTitle.text=orderDetailViewModel.orderProductList.value?.get(position)!!.orderProductName
+            holder.textViewRowPaymentContent.text=orderDetailViewModel.orderProductList.value?.get(position)!!.orderProductPrice+"원"
+            holder.textViewRowPaymentCount.text=orderDetailViewModel.orderProductList.value?.get(position)!!.orderProductCount+"개"
+            CartRepository.getProductFirstImage(orderDetailViewModel.orderProductList.value?.get(position)!!.orderProductImage){
                 Glide.with(mainActivity).load(it.result)
                     .into(holder.imageViewRowPayment)
             }
@@ -155,6 +157,10 @@ class OrderDetailFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         mainActivity.activityMainBinding.bottomNavigationViewMain.visibility = View.VISIBLE
+    }
+
+    override fun onDetach() {
+        super.onDetach()
     }
 
 }

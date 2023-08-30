@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layoutInnerProduct"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -53,19 +54,6 @@
             app:layout_constraintStart_toEndOf="@+id/imageViewRowPurchaseHistoryItemProduct"
             app:layout_constraintTop_toBottomOf="@id/textViewRowPurchaseHistoryItemPrice" />
 
-        <TextView
-            android:id="@+id/textViewRowPurchaseHistoryItemState"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:layout_marginEnd="10dp"
-            android:text="배송중"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/highLightColor"
-            android:textStyle="bold"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/textViewRowPurchaseHistoryItemName" />
 
         <TextView
             android:id="@+id/textViewRowPurchaseHistoryItemStateDone"

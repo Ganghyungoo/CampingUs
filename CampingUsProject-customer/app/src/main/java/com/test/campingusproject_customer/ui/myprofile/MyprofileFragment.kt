@@ -4,26 +4,19 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.os.SystemClock
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import com.test.campingusproject_customer.R
 import com.test.campingusproject_customer.databinding.FragmentMyprofileBinding
 import com.test.campingusproject_customer.repository.CustomerUserRepository
 import com.test.campingusproject_customer.ui.main.MainActivity
 import java.lang.NullPointerException
-import kotlin.concurrent.thread
 
 class MyprofileFragment : Fragment() {
     lateinit var fragmentMyprofileBinding: FragmentMyprofileBinding
@@ -35,6 +28,7 @@ class MyprofileFragment : Fragment() {
     ): View? {
         mainActivity = activity as MainActivity
         fragmentMyprofileBinding = FragmentMyprofileBinding.inflate(layoutInflater)
+
 
         val sharedPreferences = mainActivity.getSharedPreferences("customer_user_info", Context.MODE_PRIVATE)
         val userId =  sharedPreferences.getString("customerUserId", null).toString()
