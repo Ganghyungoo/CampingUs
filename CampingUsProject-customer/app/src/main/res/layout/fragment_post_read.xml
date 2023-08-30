@@ -14,13 +14,14 @@
         android:background="@color/white"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme" >
+
         <TextView
             android:id="@+id/textViewPostReadToolbarTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="TextView"
-            android:textSize="18sp" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
     </com.google.android.material.appbar.MaterialToolbar>
 

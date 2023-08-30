@@ -12,9 +12,17 @@
         android:id="@+id/toolbarInquiry"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme" />
+        android:theme="@style/Theme.CampingUs.Toolbar">
+
+        <TextView
+            android:id="@+id/textViewToolbarTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="상품 문의 작성"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+    </com.google.android.material.appbar.MaterialToolbar>
 
     <TextView
         android:id="@+id/textViewInquiryProductName"
@@ -30,7 +38,6 @@
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:layout_margin="10dp"
-        android:background="@color/subColor"
         android:orientation="vertical">
 
         <com.google.android.material.textfield.TextInputLayout
@@ -40,14 +47,17 @@
             android:layout_marginTop="10dp"
             android:hint="내용을 입력하세요."
             android:transitionGroup="true"
+            app:boxStrokeColor="@color/highLightColor"
             app:counterEnabled="true"
-            app:counterMaxLength="300">
+            app:counterMaxLength="300"
+            app:hintTextColor="@color/highLightColor">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextTextInquiryContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
+                android:lines="1"
                 android:maxLength="300"
                 android:textSize="@dimen/text_size_2" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -59,6 +69,9 @@
         style="@style/Widget.Material3.Button.OutlinedButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="#000000" />
+        android:backgroundTint="@color/subColor"
+        android:text="작성 완료"
+        android:textColor="#000000"
+        android:textSize="@dimen/text_size_2" />
 
 </LinearLayout>

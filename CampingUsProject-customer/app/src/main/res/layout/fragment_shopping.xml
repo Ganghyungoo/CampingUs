@@ -20,15 +20,25 @@
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbarShopping"
+                style="@style/Theme.CampingUs.Toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/colorPrimary"
-                android:minHeight="?attr/actionBarSize" />
+                android:minHeight="?attr/actionBarSize"
+                app:menu="@menu/menu_cart">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="쇼핑"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+            </com.google.android.material.appbar.MaterialToolbar>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayoutShoppingSearch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
                 android:textColorHint="@color/soft_gray"
                 android:textCursorDrawable="@color/highLightColor"
                 android:transitionGroup="true"
@@ -41,10 +51,7 @@
                     android:id="@+id/textInputEditTextShoppingSearch"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginBottom="5dp"
+                    android:hint="검색어를 입력하세요"
                     android:inputType="text|textPersonName"
                     android:textCursorDrawable="@drawable/shape_text_input_edit_text" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -71,5 +78,6 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        android:backgroundTint="@color/mainColor"
         app:menu="@menu/menu_drawer_shopping" />
 </androidx.drawerlayout.widget.DrawerLayout>
