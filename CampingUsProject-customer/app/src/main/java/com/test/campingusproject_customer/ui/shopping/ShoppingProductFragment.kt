@@ -91,6 +91,12 @@ class ShoppingProductFragment : Fragment() {
         var productDiscountRate = productViewModel.productList.value?.get(position)!!.productDiscountRate
         var productCategory = productViewModel.productList.value?.get(position)!!.productCategory
 
+        // 다음화면으로 넘길 정보 미리 담기
+        newBundle.run {
+            putLong("productId", productId)
+            putString("productName", productName)
+        }
+
         fragmentShoppingProductBinding.run {
             //툴바
             toolbarShoppingProduct.run {
@@ -134,18 +140,13 @@ class ShoppingProductFragment : Fragment() {
             // 리뷰버튼 클릭시 화면 이동
             buttonToggleShoppingProductReview.run {
                 setOnClickListener {
-                    mainActivity.replaceFragment(MainActivity.REVIEW_FRAGMENT, true, true, null)
+                    mainActivity.replaceFragment(MainActivity.REVIEW_FRAGMENT, true, true, newBundle)
                 }
             }
 
-
             // 플로팅 버튼 클릭시 문의등록 화면 이동
-            floatingActionButtonShoppingProductInquriry.run {
+            floatingActionButtonShoppingProductInquiry.run {
                 setOnClickListener {
-                    newBundle.run {
-                        putLong("productId", productId)
-                        putString("productName", productName)
-                    }
                     mainActivity.replaceFragment(MainActivity.INQUIRY_FRAGMENT, true, true, newBundle)
                 }
             }
