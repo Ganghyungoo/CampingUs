@@ -2,7 +2,9 @@ package com.test.campingusproject_customer.ui.main
 
 import android.content.Context
 import android.graphics.Paint
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +17,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.test.campingusproject_customer.R
 import com.test.campingusproject_customer.databinding.FragmentHomeBinding
@@ -23,7 +28,9 @@ import com.test.campingusproject_customer.databinding.RowPopularsaleBinding
 import com.test.campingusproject_customer.databinding.RowRealtimerankBinding
 import com.test.campingusproject_customer.dataclassmodel.PostModel
 import com.test.campingusproject_customer.repository.CustomerUserRepository
+import com.test.campingusproject_customer.repository.ProductRepository
 import com.test.campingusproject_customer.viewmodel.PostViewModel
+import com.test.campingusproject_customer.viewmodel.ProductViewModel
 import java.lang.Integer.min
 
 class HomeFragment : Fragment() {
@@ -31,6 +38,9 @@ class HomeFragment : Fragment() {
     lateinit var mainActivity: MainActivity
     lateinit var callback: OnBackPressedCallback
     lateinit var postViewModel : PostViewModel
+
+    lateinit var productViewModel: ProductViewModel
+
     var postPopularList = mutableListOf<PostModel>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,6 +48,13 @@ class HomeFragment : Fragment() {
     ): View? {
         mainActivity = activity as MainActivity
         fragmentHomeBinding = FragmentHomeBinding.inflate(layoutInflater)
+
+        productViewModel = ViewModelProvider(mainActivity)[ProductViewModel::class.java]
+        productViewModel.run {
+            productList.observe(mainActivity) {
+                fragmentHomeBinding.recyclerViewPopularSale.adapter?.notifyDataSetChanged()
+            }
+        }
 
         postViewModel = ViewModelProvider(mainActivity)[PostViewModel::class.java]
         postViewModel.run {
@@ -62,6 +79,7 @@ class HomeFragment : Fragment() {
             }
             //인기특가 recyclreView
             recyclerViewPopularSale.run {
+                productViewModel.getAllProductDiscountData()
                 adapter = PopularSaleAdapter()
                 layoutManager = LinearLayoutManager(mainActivity,LinearLayoutManager.HORIZONTAL,false)
 
@@ -107,11 +125,15 @@ class HomeFragment : Fragment() {
 
             //인기특가 더보기 눌렀을 때
             textViewHomePopularSaleShowMore.setOnClickListener {
-                textViewHomeToolbarTitle.text = "인기특가 더보기"
+                val newBundle = Bundle()
+                newBundle.putString("saleStatus", "인기 특가")
+                mainActivity.replaceFragment(MainActivity.SHOPPING_FRAGMENT, false, true, newBundle)
             }
             //실시간랭킹 더보기 눌렀을 때
             textViewHomeRealTimeRankShowMore.setOnClickListener {
-                textViewHomeToolbarTitle.text = "실시간랭킹 더보기"
+                val newBundle = Bundle()
+                newBundle.putString("saleStatus", "실시간랭킹")
+                mainActivity.replaceFragment(MainActivity.SHOPPING_FRAGMENT, false, true, newBundle)
             }
             //인기게시판 더보기 눌렀을 때
             textViewHomePopularBoardShowMore.setOnClickListener {
@@ -156,17 +178,27 @@ class HomeFragment : Fragment() {
         }
 
         override fun getItemCount(): Int {
-            return 10
+            return productViewModel.productList.value?.size!!
         }
 
         override fun onBindViewHolder(holder: PopularSaleViewHolder, position: Int) {
             //holder.imageViewRowPopularSaleProductImage
-            holder.textViewRowPopularSaleProductName.text = "바람숭숭 텐트"
-            holder.textViewRowPopularSaleProductBrand.text = "모기장 전문점"
-            holder.textViewRowPopularSaleProductOriginalPrice.text = "1,000,000원"
+            holder.textViewRowPopularSaleProductName.text = productViewModel.productList.value?.get(position)?.productName
+            holder.textViewRowPopularSaleProductBrand.text = productViewModel.productList.value?.get(position)?.productBrand
+            holder.textViewRowPopularSaleProductOriginalPrice.text =
+                "정가 : ${productViewModel.productList.value?.get(position)?.productPrice?.toString()} 원"
             holder.textViewRowPopularSaleProductOriginalPrice.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG) //취소선 긋기(글자 중간에 줄 긋기)
-            holder.textViewRowPopularSaleProductDiscountPrice.text = "700,000원"
-            holder.textViewRowPopularSaleLike.text = "32"
+            holder.textViewRowPopularSaleProductDiscountPrice.text =
+                "할인가 : ${productViewModel.productList.value?.get(position)?.productPrice!! / productViewModel.productList.value?.get(position)?.productDiscountRate!!} 원"
+            holder.textViewRowPopularSaleLike.text = productViewModel.productList.value?.get(position)?.productRecommendationCount?.toString()
+            Log.d("productImage", "${productViewModel.productList.value?.get(position)?.productImage!!}")
+
+            ProductRepository.getProductFirstImage(productViewModel.productList.value?.get(position)?.productImage!!) { uri ->
+                Glide.with(mainActivity).load(uri.result)
+                    .override(200, 200)
+                    .into(holder.imageViewRowPopularSaleProductImage)
+            }
+
         }
 
     }
