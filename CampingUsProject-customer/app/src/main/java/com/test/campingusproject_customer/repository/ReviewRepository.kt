@@ -31,12 +31,20 @@ class ReviewRepository {
         // 리뷰를 DB에 추가하는 함수
         fun setReviewInfo(reviewModel : ReviewModel, callback1 : (Task<Void>) -> Unit){
             val database = FirebaseDatabase.getInstance()
-
             val productRef = database.getReference("ReviewData")
+
             productRef.push().setValue(reviewModel).addOnCompleteListener(callback1)
         }
 
-        //상품 이미지들을 업로드하는 함수
+        // productId로 접근하여 ReviewData의 정보 가져오기
+        fun getReviewInfo(productId: Long, callback1: (Task<DataSnapshot>) -> Unit) {
+            val database = FirebaseDatabase.getInstance()
+            val reviewRef = database.getReference("ReviewData")
+
+            reviewRef.orderByChild("reviewProductId").equalTo(productId.toDouble()).get().addOnCompleteListener(callback1)
+        }
+
+        // 상품 이미지들을 업로드하는 함수
         fun uploadImages(uploadUri : MutableList<Uri>, fileDir : String, callback1: (Task<UploadTask.TaskSnapshot>) -> Unit){
             val storage = FirebaseStorage.getInstance()
 
@@ -48,13 +56,40 @@ class ReviewRepository {
             }
         }
 
-        //상품의 대표이미지만 가져오는 함수
+        // 상품의 대표이미지만 가져오는 함수
         fun getProductFirstImage(fileDir:String, callback1: (Task<Uri>) -> Unit){
             val storage = FirebaseStorage.getInstance()
             val fileName = fileDir + "1.png"
 
             val imageRef = storage.reference.child(fileName)
             imageRef.downloadUrl.addOnCompleteListener(callback1)
+        }
+
+        // 사용자아이디로 사용자DB 접근
+        fun getUserData(userId : String, callback: (Task<DataSnapshot>) -> Unit){
+            val database = FirebaseDatabase.getInstance()
+
+            val customerUserRef = database.getReference("CustomerUsers")
+            customerUserRef.orderByChild("customerUserId").equalTo(userId)
+                .get().addOnCompleteListener(callback)
+        }
+
+        // 유저 프로필 이미지 가져오기
+        fun getUserProfileImage(fileDir:String, callback1: (Task<Uri>) -> Unit) {
+            val storage = FirebaseStorage.getInstance()
+
+            try {
+                val fileRef = storage.reference.child(fileDir)
+
+                fileRef.downloadUrl.addOnCompleteListener(callback1)
+            } catch (e: IllegalArgumentException) {
+            }
+        }
+
+        // 상품의 리뷰 이미지를 전부 가져오는 함수
+        fun getAllReviewImage() {
+            val storage = FirebaseStorage.getInstance()
+
         }
     }
 }

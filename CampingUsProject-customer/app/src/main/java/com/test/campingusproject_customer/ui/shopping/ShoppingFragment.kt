@@ -90,12 +90,10 @@ class ShoppingFragment : Fragment() {
 
             // 리사이클러뷰
             recyclerViewShoppingProduct.run {
-                recyclerViewShoppingProduct.run {
-                    productViewModel.getAllProductData()
+                productViewModel.getAllProductData()
 
-                    adapter = ShoppingProductAdapter()
-                    layoutManager = GridLayoutManager(context, 3)
-                }
+                adapter = ShoppingProductAdapter()
+                layoutManager = GridLayoutManager(context, 3)
             }
 
             // 드루어 레이아웃
@@ -220,22 +218,6 @@ class ShoppingFragment : Fragment() {
         }
 
         override fun onBindViewHolder(holder: ShoppingProductAdapter.ShoppingProductViewHolder, position: Int) {
-//            newBundle.run {
-//                // 상품 id만 번들로 저장하여 다음화면에 넘겨줌.
-//                putInt("productId", productViewModel.productList.value?.get(position)!!.productId.toInt())
-//                putString("productSellerId", productViewModel.productList.value?.get(position)!!.productSellerId)
-//                putString("productName", productViewModel.productList.value?.get(position)!!.productName)
-//                putLong("productPrice", productViewModel.productList.value?.get(position)!!.productPrice)
-//                putString("productImage", productViewModel.productList.value?.get(position)!!.productImage)
-//                putString("productInfo", productViewModel.productList.value?.get(position)!!.productInfo)
-//                putLong("productCount", productViewModel.productList.value?.get(position)!!.productCount)
-//                putBoolean("productSellingStatus", productViewModel.productList.value?.get(position)!!.productSellingStatus)
-//                putLong("productDiscountRate", productViewModel.productList.value?.get(position)!!.productDiscountRate)
-//                putLong("productRecommendationCount", productViewModel.productList.value?.get(position)!!.productRecommendationCount)
-//                putString("productBrand", productViewModel.productList.value?.get(position)!!.productBrand)
-//                putString("productCategory", productViewModel.productList.value?.get(position)!!.productCategory)
-//            }
-
             // 이미지
             // 상품에 등록된 이미지 경로로 첫 번째 이미지만 불러와 표시
             ProductRepository.getProductFirstImage(productViewModel.productList.value?.get(position)?.productImage!!){ uri->
@@ -270,7 +252,7 @@ class ShoppingFragment : Fragment() {
                     .into(holder.imageViewShoppingImage)
             }
             // 상품 이름
-            holder.textViewShoppingName.text = productViewModel.productList.value?.get(position)?.productName
+            holder.textViewShoppingName.text = productViewModel.productList.value?.get(position)!!.productName
 
             // 상품 가격
             if(productViewModel.productList.value?.get(position)?.productSellingStatus == false) {

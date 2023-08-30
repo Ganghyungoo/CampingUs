@@ -20,6 +20,9 @@ class ReviewDetailFragment : Fragment() {
         fragmentReviewDetailBinding = FragmentReviewDetailBinding.inflate(layoutInflater)
         mainActivity = activity as MainActivity
 
+        // 번들 객체로 아이템 인덱스 가져오기
+        val position = arguments?.getLong("adapterPosition")!!
+
         fragmentReviewDetailBinding.run {
             materialToolbarReviewDetail.run {
                 title = "상품 리뷰"
