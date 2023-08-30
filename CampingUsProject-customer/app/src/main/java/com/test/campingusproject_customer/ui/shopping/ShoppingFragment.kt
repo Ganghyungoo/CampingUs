@@ -62,6 +62,8 @@ class ShoppingFragment : Fragment() {
         mainActivity = activity as MainActivity
         fragmentShoppingBinding = FragmentShoppingBinding.inflate(layoutInflater)
 
+        mainActivity.activityMainBinding.bottomNavigationViewMain.selectedItemId = R.id.menuItemShopping
+
         // 상품 뷰모델 객체 생성
         productViewModel = ViewModelProvider(mainActivity)[ProductViewModel::class.java]
 
@@ -79,7 +81,12 @@ class ShoppingFragment : Fragment() {
         fragmentShoppingBinding.run {
             // 툴바
             toolbarShopping.run {
-                title = "쇼핑"
+
+                setOnMenuItemClickListener {
+                    //장바구니로 가기
+                    mainActivity.replaceFragment(MainActivity.CART_FRAGMENT, true, true, null)
+                    true
+                }
 
                 // drawerLayout 설정
                 setNavigationIcon(R.drawable.menu_24px)
