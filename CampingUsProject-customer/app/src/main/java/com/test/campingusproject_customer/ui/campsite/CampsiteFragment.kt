@@ -403,24 +403,85 @@ class CampsiteFragment : Fragment(), OnMapReadyCallback, Overlay.OnClickListener
             ).apply {
                 setView(dialogBinding.root)
                 setTitle("캠핑장 정보")
-                Glide.with(mainActivity).load(marker.사진).error(R.drawable.ic_launcher_background).into(dialogBinding.imageViewCampsite)
+                Glide.with(mainActivity).load(marker.사진).error(R.drawable.error_24px).into(dialogBinding.imageViewCampsite)
                 dialogBinding.textViewCampsiteName.text = marker.캠핑장이름
-                dialogBinding.textViewCampsiteAddress.text = marker.주소
-                dialogBinding.textViewCampsiteNumber.text = marker.전화번호
-                dialogBinding.textViewCampsiteDetail.text = marker.시설소개
-                dialogBinding.textViewCampsiteEnv.text = marker.주변환경
-                dialogBinding.textViewCampsiteForm.text = marker.형태
-                dialogBinding.textViewCampsiteFacilities.text = marker.편의시설
-                dialogBinding.textViewCampsiteFun.text = marker.놀거리
-                dialogBinding.textViewCampsiteAnimal.text = marker.애완동물여부
-                dialogBinding.textViewCampsiteUrl.run {
-                    text = marker.홈페이지
-                    setTextColor(Color.BLUE)
-                    setOnClickListener {
-                        val intent= Intent(Intent.ACTION_VIEW, Uri.parse(marker.홈페이지))
-                        startActivity(intent)
+
+                if(marker.주소.isEmpty()){
+                    dialogBinding.textViewCampsiteAddress.visibility = View.GONE
+                }else{
+                    dialogBinding.textViewCampsiteAddress.text = marker.주소
+                }
+
+                if(marker.전화번호.isEmpty()){
+                    dialogBinding.textViewCampsiteNumber.visibility = View.GONE
+                }else{
+                    dialogBinding.textViewCampsiteNumber.text = marker.전화번호
+                }
+
+                if(marker.시설소개.isEmpty()){
+                    dialogBinding.textViewCampsiteDetail.visibility = View.GONE
+                }else{
+                    dialogBinding.textViewCampsiteDetail.text = marker.시설소개
+                }
+
+                if(marker.주변환경.isEmpty()){
+                    dialogBinding.textViewCampsiteEnv.visibility = View.GONE
+                    dialogBinding.tv1.visibility = View.GONE
+                    dialogBinding.tv2.visibility = View.GONE
+                    dialogBinding.l1.visibility = View.GONE
+                }else{
+                    dialogBinding.textViewCampsiteEnv.text = marker.주변환경
+                }
+
+                if(marker.형태.isEmpty()){
+                    dialogBinding.textViewCampsiteForm.visibility = View.GONE
+                    dialogBinding.tv3.visibility = View.GONE
+                    dialogBinding.tv4.visibility = View.GONE
+                    dialogBinding.l2.visibility = View.GONE
+                }else{
+                    dialogBinding.textViewCampsiteForm.text = marker.형태
+                }
+
+                if(marker.편의시설.isEmpty()){
+                    dialogBinding.textViewCampsiteFacilities.visibility = View.GONE
+                    dialogBinding.tv5.visibility = View.GONE
+                    dialogBinding.tv6.visibility = View.GONE
+                    dialogBinding.l3.visibility = View.GONE
+                }else{
+                    dialogBinding.textViewCampsiteFacilities.text = marker.편의시설
+                }
+
+                if(marker.놀거리.isEmpty()){
+                    dialogBinding.textViewCampsiteFun.visibility = View.GONE
+                    dialogBinding.tv7.visibility = View.GONE
+                    dialogBinding.tv8.visibility = View.GONE
+                    dialogBinding.l4.visibility = View.GONE
+                }else{
+                    dialogBinding.textViewCampsiteFun.text = marker.놀거리
+                }
+
+                if(marker.애완동물여부.isEmpty()){
+                    dialogBinding.textViewCampsiteAnimal.visibility = View.GONE
+                    dialogBinding.tv9.visibility = View.GONE
+                    dialogBinding.tv10.visibility = View.GONE
+                    dialogBinding.l5.visibility = View.GONE
+                }else{
+                    dialogBinding.textViewCampsiteAnimal.text = marker.애완동물여부
+                }
+
+                if(marker.홈페이지.isEmpty()){
+                    dialogBinding.textViewCampsiteUrl.visibility = View.GONE
+                }else{
+                    dialogBinding.textViewCampsiteUrl.run {
+                        text = marker.홈페이지
+                        setTextColor(Color.BLUE)
+                        setOnClickListener {
+                            val intent= Intent(Intent.ACTION_VIEW, Uri.parse(marker.홈페이지))
+                            startActivity(intent)
+                        }
                     }
                 }
+
                 setPositiveButton("닫기", null)
             }
             builder.show()

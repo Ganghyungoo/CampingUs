@@ -19,14 +19,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                app:srcCompat="@drawable/ic_launcher_background" />
+                android:layout_marginTop="20dp"
+                android:minWidth="100dp"
+                android:minHeight="100dp"
+                app:srcCompat="@drawable/error_24px" />
 
             <TextView
                 android:id="@+id/textViewCampsiteName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="5dp"
+                android:layout_margin="10dp"
                 android:text="강현구의 캠핑장"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
@@ -35,8 +38,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
+                android:layout_margin="10dp"
                 android:text="인천 서구 명가골로 34번길 7-2"
+                android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
             <TextView
@@ -53,7 +57,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="5dp"
+                android:layout_margin="10dp"
                 android:text="사이트"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
@@ -67,118 +71,156 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
             <LinearLayout
+                android:id="@+id/l1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="80dp"
+                    android:id="@+id/tv1"
+                    android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="주변환경" />
+                    android:text="주변환경"
+                    android:textSize="@dimen/text_size_2" />
+
                 <TextView
+                    android:id="@+id/tv2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=":"/>
+                    android:text=":" />
 
                 <TextView
                     android:id="@+id/textViewCampsiteEnv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:layout_marginLeft="7dp"
+                    android:text="TextView"
+                    android:textSize="@dimen/text_size_2" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/l2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="80dp"
+                    android:id="@+id/tv3"
+                    android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="캠핑장 형태" />
+                    android:text="캠핑장 형태"
+                    android:textSize="@dimen/text_size_2" />
+
                 <TextView
+                    android:id="@+id/tv4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=":"/>
+                    android:text=":" />
 
                 <TextView
                     android:id="@+id/textViewCampsiteForm"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:layout_marginLeft="7dp"
+                    android:text="TextView"
+                    android:textSize="@dimen/text_size_2" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/l3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="80dp"
+                    android:id="@+id/tv5"
+                    android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="편의 시설" />
+                    android:text="편의 시설"
+                    android:textSize="@dimen/text_size_2" />
+
                 <TextView
+                    android:id="@+id/tv6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=":"/>
+                    android:text=":" />
 
                 <TextView
                     android:id="@+id/textViewCampsiteFacilities"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:layout_marginLeft="7dp"
+                    android:text="TextView"
+                    android:textSize="@dimen/text_size_2" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/l4"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="80dp"
+                    android:id="@+id/tv7"
+                    android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="놀거리" />
+                    android:text="놀거리"
+                    android:textSize="@dimen/text_size_2" />
+
                 <TextView
+                    android:id="@+id/tv8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=":"/>
+                    android:text=":" />
 
                 <TextView
                     android:id="@+id/textViewCampsiteFun"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:layout_marginLeft="7dp"
+                    android:text="TextView"
+                    android:textSize="@dimen/text_size_2" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/l5"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tv9"
+                    android:layout_width="110dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="애완동물 입장: " />
+                    android:text="애완동물 입장"
+                    android:textSize="@dimen/text_size_2" />
+
                 <TextView
+                    android:id="@+id/tv10"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=":"/>
+                    android:text=":" />
 
                 <TextView
                     android:id="@+id/textViewCampsiteAnimal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:layout_marginLeft="7dp"
+                    android:text="TextView"
+                    android:textSize="@dimen/text_size_2" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
