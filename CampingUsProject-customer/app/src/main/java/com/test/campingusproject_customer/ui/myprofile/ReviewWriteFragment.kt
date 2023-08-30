@@ -80,7 +80,9 @@ class ReviewWriteFragment : Fragment() {
 
         // 번들 객체로 상품 id 가져오기
         //var productId = arguments?.getInt("productId")
-        var productId = 48 // 테스트를 위해서 임이로 id값 지정
+
+        // 테스트를 위해서 임이로 id값 지정
+        var productId = 47
 
         // 좋아요 수 데이터 가져오기
         productViewModel.getOneProductData(productId.toLong())
@@ -90,7 +92,7 @@ class ReviewWriteFragment : Fragment() {
         albumLauncher = albumSetting()
 
         fragmentReviewWriteBinding.run {
-            var starScore = 0.0F                 // 별점
+            var starScore = 0L                 // 별점
             var recommendationCheck = false      // 추천 눌렀는지 확인
             
             // 툴바
@@ -113,7 +115,7 @@ class ReviewWriteFragment : Fragment() {
             // 레이팅바 (별점)
             ratingBarReviewWrite.run {
                 setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
-                    starScore = rating
+                    starScore = rating.toLong()
                 }
             }
 
@@ -175,7 +177,7 @@ class ReviewWriteFragment : Fragment() {
                             textInputLayoutReviewWrite.error = null
                         }
 
-                        if(starScore == 0F) {
+                        if(starScore == 0L) {
                             // 다이얼로그
                             val builder = MaterialAlertDialogBuilder(mainActivity,R.style.ThemeOverlay_App_MaterialAlertDialog)
                             builder.run {
