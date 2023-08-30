@@ -206,4 +206,9 @@ class MyPostListFragment : Fragment() {
             holder.textViewRowMypostListComment.text = postViewModel.postDataList.value?.get(position)?.postCommentCount.toString()
         }
     }
+
+    override fun onPause() {
+        super.onPause()
+        postViewModel.postDataList.value?.clear()
+    }
 }

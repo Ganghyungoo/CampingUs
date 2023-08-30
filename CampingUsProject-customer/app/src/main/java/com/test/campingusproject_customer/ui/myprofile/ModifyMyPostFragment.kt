@@ -47,6 +47,7 @@ class ModifyMyPostFragment : Fragment() {
     ): View? {
         mainActivity = activity as MainActivity
         fragmentModifyMyPostBinding = FragmentModifyMyPostBinding.inflate(layoutInflater)
+        mainActivity.activityMainBinding.bottomNavigationViewMain.visibility = View.GONE
 
         postViewModel = ViewModelProvider(mainActivity)[PostViewModel::class.java]
         postViewModel.run {
@@ -226,5 +227,11 @@ class ModifyMyPostFragment : Fragment() {
                 .override(500, 500)
                 .into(holder.imageViewRowPostImage)
         }
+    }
+    override fun onPause() {
+        super.onPause()
+        postViewModel.postDataList.value?.clear()
+        postViewModel.getPostPopularAll()
+        mainActivity.activityMainBinding.bottomNavigationViewMain.visibility = View.VISIBLE
     }
 }

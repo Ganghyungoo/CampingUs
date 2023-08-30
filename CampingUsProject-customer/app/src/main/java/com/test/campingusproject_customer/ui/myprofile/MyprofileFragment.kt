@@ -9,18 +9,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.test.campingusproject_customer.R
 import com.test.campingusproject_customer.databinding.FragmentMyprofileBinding
 import com.test.campingusproject_customer.repository.CustomerUserRepository
 import com.test.campingusproject_customer.ui.main.MainActivity
+import com.test.campingusproject_customer.viewmodel.PostViewModel
 import java.lang.NullPointerException
 
 class MyprofileFragment : Fragment() {
     lateinit var fragmentMyprofileBinding: FragmentMyprofileBinding
     lateinit var mainActivity: MainActivity
     lateinit var callback: OnBackPressedCallback
+    lateinit var postViewModel: PostViewModel
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -31,6 +37,8 @@ class MyprofileFragment : Fragment() {
         val sharedPreferences = mainActivity.getSharedPreferences("customer_user_info", Context.MODE_PRIVATE)
         val userId =  sharedPreferences.getString("customerUserId", null).toString()
         var userProfileImage = sharedPreferences.getString("customerUserProfileImage", null)
+
+        postViewModel = ViewModelProvider(mainActivity)[PostViewModel::class.java]
 
         loginStatusCheck(sharedPreferences)
 
@@ -178,5 +186,10 @@ class MyprofileFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         callback.remove()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        postViewModel.postDataList.value?.clear()
     }
 }

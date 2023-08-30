@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -53,6 +54,8 @@ class PostReadFragment : Fragment() {
     ): View? {
         mainActivity = activity as MainActivity
         fragmentPostReadBinding = FragmentPostReadBinding.inflate(layoutInflater)
+
+        mainActivity.activityMainBinding.bottomNavigationViewMain.visibility = View.GONE
 
         val sharedPreferences = mainActivity.getSharedPreferences("customer_user_info", Context.MODE_PRIVATE)
         val userId =  sharedPreferences.getString("customerUserId", null).toString()
@@ -278,5 +281,9 @@ class PostReadFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         callback.remove()
+    }
+    override fun onPause() {
+        super.onPause()
+        mainActivity.activityMainBinding.bottomNavigationViewMain.visibility = View.VISIBLE
     }
 }

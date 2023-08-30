@@ -68,12 +68,10 @@ class ComunityFragment : Fragment() {
             }
         }
 
-        if(postType == 1L){
-            fragmentComunityBinding.navigationViewComunity.setCheckedItem(R.id.item_coumnity_popular)
-        }
-        else{
-            fragmentComunityBinding.navigationViewComunity.setCheckedItem(itemList[postType.toInt()])
-        }
+        postViewModel.postDataList.value?.clear()
+        fragmentComunityBinding.navigationViewComunity.setCheckedItem(R.id.item_coumnity_popular)
+        postViewModel.getPostPopularAll()
+
         postViewModel.resetImageList()
 
         //홈에서 인기 게시글 더보기 눌렀을 때
@@ -181,8 +179,7 @@ class ComunityFragment : Fragment() {
                     //인기 게시판
                     R.id.item_coumnity_popular ->{
                         textViewToolbarTitle.text = "인기 게시판"
-                        if(postType != 1L)
-                            postViewModel.getPostPopularAll()
+                        postViewModel.getPostPopularAll()
                         postType = 1L
                         setNavigationIcon(R.id.item_coumnity_popular)
                         drawerLayoutComunity.close()
