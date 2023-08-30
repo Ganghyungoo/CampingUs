@@ -17,7 +17,7 @@ class OrderDetailViewModel : ViewModel() {
     val orderStatus = MutableLiveData<String>()//배송상태
 
     //제품 리스트
-    val orderProductList = mutableListOf<OrderProductModel>()
+    var orderProductList = MutableLiveData<MutableList<OrderProductModel>>()
 
 
     fun fetchOrderInfo(orderId: String) {
@@ -52,13 +52,25 @@ class OrderDetailViewModel : ViewModel() {
 
 
                     totalPrice += (orderProductCount.toInt()*orderProductPrice.toInt())
-                    val orderProductModel=OrderProductModel(orderId,orderProductName,orderProductCount,orderProductPrice,orderProductImage)
+                    val orderProductModel=OrderProductModel(orderId,orderProductName,orderProductCount,orderProductPrice,orderProductImage,"결제 완료")
                     tempList.add(orderProductModel)
                 }
-                orderProductList.addAll(tempList)
+                orderProductList.value=tempList
                 orderTotalPrice.value=totalPrice.toString()
             }
         }
+    }
+
+    fun reset(){
+        orderDeliveryReceiverPhone.value = ""
+        orderDeliveryReceiver.value = ""
+        orderUserAddress.value = ""
+        orderUserName.value = ""
+        orderUserPhone.value = ""
+        orderMeans.value = ""
+        orderTotalPrice.value = ""
+        orderStatus.value = ""
+        orderProductList=MutableLiveData<MutableList<OrderProductModel>>()
     }
 
 

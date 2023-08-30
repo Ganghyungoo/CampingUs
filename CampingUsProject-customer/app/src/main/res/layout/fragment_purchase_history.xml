@@ -22,22 +22,17 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
     </com.google.android.material.appbar.MaterialToolbar>
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+
+
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewPurchaseHistory"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="10dp" />
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+
+
 
 
 </LinearLayout>

@@ -45,7 +45,6 @@ class CartViewModel() : ViewModel() {
     }
 
     fun getProductData(cartProductId: Long, tempList2: MutableList<CartProductModel>) {
-
         CartRepository.getProductData(cartProductId) {
             if(it.result.exists() == true) {
                 for (c2 in it.result.children) {
@@ -61,6 +60,4 @@ class CartViewModel() : ViewModel() {
             cartProductList.value = tempList2
         }
     }
-
-
 }
