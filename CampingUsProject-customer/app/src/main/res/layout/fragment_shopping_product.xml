@@ -296,7 +296,7 @@
                     app:layout_constraintTop_toBottomOf="@id/textViewShoppingProductReviewTitle" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/floatingActionButtonShoppingProductInquriry"
+                    android:id="@+id/floatingActionButtonShoppingProductInquiry"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="24dp"
@@ -310,6 +310,8 @@
                     app:layout_constraintEnd_toEndOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+
         </LinearLayout>
     </ScrollView>
 
