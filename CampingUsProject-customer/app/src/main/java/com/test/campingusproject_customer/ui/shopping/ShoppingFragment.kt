@@ -64,6 +64,9 @@ class ShoppingFragment : Fragment() {
 
         mainActivity.activityMainBinding.bottomNavigationViewMain.selectedItemId = R.id.menuItemShopping
 
+        val sharedPreferences = mainActivity.getSharedPreferences("customer_user_info", Context.MODE_PRIVATE)
+        val userId =  sharedPreferences.getString("customerUserId", null).toString()
+
         // 상품 뷰모델 객체 생성
         productViewModel = ViewModelProvider(mainActivity)[ProductViewModel::class.java]
 
@@ -108,7 +111,7 @@ class ShoppingFragment : Fragment() {
                 itemIconTintList
                 //헤더 설정
                 val headerShoppingBinding = HeaderShoppingBinding.inflate(inflater)
-                headerShoppingBinding.textViewShoppingHeaderUserName.text = "김민우 님"
+                headerShoppingBinding.textViewShoppingHeaderUserName.text = if(userId=="null") "비회원" else userId
                 addHeaderView(headerShoppingBinding.root)
 
                 // 항목 선택 시 동작 리스너
