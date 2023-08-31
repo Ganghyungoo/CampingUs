@@ -10,7 +10,8 @@
         android:id="@+id/imageViewRowPopularSaleProductImage"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        app:srcCompat="@mipmap/ic_launcher" />
+        android:maxWidth="100dp"
+        android:maxHeight="100dp" />
 
     <LinearLayout
         android:layout_width="100dp"
@@ -21,14 +22,18 @@
             android:id="@+id/textViewRowPopularSaleProductName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:maxLines="1"
+            android:singleLine="true"
             android:text="TextView"
             android:textColor="@color/highLightColor"
-            android:textSize="13sp" />
+            android:textSize="@dimen/text_size_3" />
 
         <TextView
             android:id="@+id/textViewRowPopularSaleProductBrand"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:text="TextView"
             android:textColor="@color/highLightColor"
             android:textSize="11sp" />
@@ -37,6 +42,7 @@
             android:id="@+id/textViewRowPopularSaleProductOriginalPrice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:text="TextView"
             android:textColor="@color/highLightColor"
             android:textSize="11sp" />
@@ -45,6 +51,7 @@
             android:id="@+id/textViewRowPopularSaleProductDiscountPrice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:text="TextView"
             android:textColor="@color/highLightColor"
             android:textSize="11sp" />
@@ -55,6 +62,7 @@
         android:id="@+id/textViewRowPopularSaleLike"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
         android:drawableLeft="@drawable/favorite_fill_24px"
         android:gravity="center"
         android:text="TextView"

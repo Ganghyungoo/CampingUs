@@ -33,7 +33,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="TextView"
-                    android:textSize="18sp" />
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
             </com.google.android.material.appbar.MaterialToolbar>
 
@@ -65,6 +65,7 @@
                         android:layout_marginTop="5dp"
                         android:layout_marginRight="5dp"
                         android:layout_marginBottom="5dp"
+                        android:hint="검색어를 입력하세요"
                         android:inputType="text"
                         android:textCursorDrawable="@drawable/shape_text_input_edit_text" />
                 </com.google.android.material.textfield.TextInputLayout>

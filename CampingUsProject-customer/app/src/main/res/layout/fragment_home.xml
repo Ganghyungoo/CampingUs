@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="TextView"
-            android:textSize="18sp" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
     </com.google.android.material.appbar.MaterialToolbar>
 
     <androidx.core.widget.NestedScrollView
