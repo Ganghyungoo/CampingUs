@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -26,6 +27,7 @@ import com.test.campingusproject_customer.databinding.RowReviewImageBinding
 import com.test.campingusproject_customer.repository.ReviewRepository
 import com.test.campingusproject_customer.ui.main.MainActivity
 import com.test.campingusproject_customer.viewmodel.ReviewViewModel
+import kotlinx.coroutines.runBlocking
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -56,18 +58,26 @@ class ReviewFragment : Fragment() {
         reviewViewModel.run {
             reviewList.observe(mainActivity) {
                 fragmentReviewBinding.recyclerViewRowReview.adapter?.notifyDataSetChanged()
+                //상품 Id로 모든 리뷰 이미지 가져오기
+                reviewViewModel.getAllImages(it)
+            }
+            reviewImageList.observe(mainActivity){
+                Log.d("reviewImageListCount", "${it.size}")
+                fragmentReviewBinding.recyclerViewRowReviewImage.adapter?.notifyDataSetChanged()
             }
         }
 
         // 번들 객체로 상품 id 가져오기
         val productId = arguments?.getLong("productId")!!
 
-        // 상품 Id로 리뷰작성 DB 가져오기
-        reviewViewModel.getReviewInfo(productId)
+        runBlocking {
+            // 상품 Id로 리뷰작성 DB 가져오기
+            reviewViewModel.getReviewInfo(productId)
+        }
+
 
         fragmentReviewBinding.run {
             toolbarReview.run {
-                title = "상품 리뷰"
 
                 // 백버튼
                 setNavigationIcon(R.drawable.arrow_back_24px)
@@ -83,9 +93,14 @@ class ReviewFragment : Fragment() {
 
                 // 리뷰 총 별점
                 // 반올림 하기 위한 함수
-                val bd = BigDecimal(reviewTotalRatingScore / reviewCount)
-                val rounded = bd.setScale(1, RoundingMode.HALF_UP)
-                textViewReviewScore.text = rounded.toDouble().toString()
+                if(reviewCount!=0){
+                    val bd = BigDecimal(reviewTotalRatingScore / reviewCount)
+                    val rounded = bd.setScale(1, RoundingMode.HALF_UP)
+                    textViewReviewScore.text = rounded.toDouble().toString()
+                }else{
+                    textViewReviewScore.text = "0.0"
+                }
+
 
                 // 총 별점에 따른 레이팅바 표현
             }, 1500)
@@ -108,27 +123,44 @@ class ReviewFragment : Fragment() {
 
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             }
+
+            recyclerViewRowReviewImage.run {
+                adapter = ReviewImageAdapter()
+                layoutManager = LinearLayoutManager(mainActivity,LinearLayoutManager.HORIZONTAL,false)
+            }
         }
 
         return fragmentReviewBinding.root
     }
 
-    // 리뷰이미지 리사이클러뷰 어댑터 - 지은님 화이팅~~~~~~
+    // 리뷰이미지 리사이클러뷰 어댑터
     inner class ReviewImageAdapter: RecyclerView.Adapter<ReviewImageAdapter.ReviewImageViewHolder>() {
         inner class ReviewImageViewHolder(rowReviewImageBinding: RowReviewImageBinding) :RecyclerView.ViewHolder(rowReviewImageBinding.root) {
+            val imageViewRowReviewImage : ImageView
 
+            init {
+                imageViewRowReviewImage = rowReviewImageBinding.imageViewRowReviewImage
+            }
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewImageViewHolder {
-            TODO("Not yet implemented")
+            val rowReviewImageBinding = RowReviewImageBinding.inflate(layoutInflater)
+
+            rowReviewImageBinding.root.layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+            return ReviewImageViewHolder(rowReviewImageBinding)
         }
 
         override fun getItemCount(): Int {
-            TODO("Not yet implemented")
+            return reviewViewModel.reviewImageList.value?.size!!
         }
 
         override fun onBindViewHolder(holder: ReviewImageViewHolder, position: Int) {
-            TODO("Not yet implemented")
+            Glide.with(mainActivity).load(reviewViewModel.reviewImageList.value?.get(position))
+                .override(500, 500)
+                .into(holder.imageViewRowReviewImage)
         }
     }
 
