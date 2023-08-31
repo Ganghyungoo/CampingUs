@@ -134,12 +134,14 @@ class HomeFragment : Fragment() {
             //인기특가 더보기 눌렀을 때
             textViewHomePopularSaleShowMore.setOnClickListener {
                 val newBundle = Bundle()
+                mainActivity.activityMainBinding.bottomNavigationViewMain.selectedItemId = R.id.menuItemShopping
                 newBundle.putString("saleStatus", "인기 특가")
                 mainActivity.replaceFragment(MainActivity.SHOPPING_FRAGMENT, false, true, newBundle)
             }
             //실시간랭킹 더보기 눌렀을 때
             textViewHomeRealTimeRankShowMore.setOnClickListener {
                 val newBundle = Bundle()
+                mainActivity.activityMainBinding.bottomNavigationViewMain.selectedItemId = R.id.menuItemShopping
                 newBundle.putString("saleStatus", "실시간랭킹")
                 mainActivity.replaceFragment(MainActivity.SHOPPING_FRAGMENT, false, true, newBundle)
             }

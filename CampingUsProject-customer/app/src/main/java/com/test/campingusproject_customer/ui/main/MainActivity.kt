@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity() {
     var currentFragment = 0
     var selectMenu = 0
 
+
     companion object {
         val HOME_FRAGMENT = "HomeFragment"
         val SHOPPING_FRAGMENT = "ShoppingFragment"

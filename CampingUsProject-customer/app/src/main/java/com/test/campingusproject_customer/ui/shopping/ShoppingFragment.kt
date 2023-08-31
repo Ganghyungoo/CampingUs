@@ -3,6 +3,7 @@ package com.test.campingusproject_customer.ui.shopping
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -54,6 +55,10 @@ class ShoppingFragment : Fragment() {
         R.id.itemShoppingSeasonalItems,
         R.id.itemShoppingContainer
     )
+    companion object{
+        var token=-1
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,7 +67,10 @@ class ShoppingFragment : Fragment() {
         mainActivity = activity as MainActivity
         fragmentShoppingBinding = FragmentShoppingBinding.inflate(layoutInflater)
 
-        mainActivity.activityMainBinding.bottomNavigationViewMain.selectedItemId = R.id.menuItemShopping
+
+
+//
+
 
         // 상품 뷰모델 객체 생성
         productViewModel = ViewModelProvider(mainActivity)[ProductViewModel::class.java]
@@ -97,10 +105,30 @@ class ShoppingFragment : Fragment() {
 
             // 리사이클러뷰
             recyclerViewShoppingProduct.run {
-                productViewModel.getAllProductData()
-
+                Log.d("testt","천장 번들:${arguments?.getString("saleStatus")}")
+                if(arguments?.getString("saleStatus")=="인기 특가"){
+                    productViewModel.getAllProductDiscountData()
+                    toolBarName.setText("인기특가")
+                    Log.d("testt","선택된 메뉴:인기특가")
+                }
+                else if(arguments?.getString("saleStatus")=="실시간랭킹"){
+                    productViewModel.getAllProductRealTimeRankingData()
+                    toolBarName.setText("실시간랭킹")
+                    mainActivity.activityMainBinding.bottomNavigationViewMain.selectedItemId = R.id.menuItemShopping
+                    token=1
+                    Log.d("testt","선택된 메뉴:실랭")
+                }else if(arguments?.getString("saleStatus")==null){
+                    if(token==1){
+                        toolBarName.setText("실시간랭킹")
+                        token=-1
+                    }
+                    productViewModel.getAllProductData()
+                    Log.d("testt","선택된 메뉴:전체")
+                    Log.d("testt","그와중 번들 값:${arguments?.getString("saleStatus")}")
+                }
                 adapter = ShoppingProductAdapter()
                 layoutManager = GridLayoutManager(context, 3)
+                Log.d("testt","바닥 번들:${arguments?.getString("saleStatus")}")
             }
 
             // 드루어 레이아웃
@@ -181,6 +209,8 @@ class ShoppingFragment : Fragment() {
                     true
                 }
             }
+
+
         }
 
         return fragmentShoppingBinding.root

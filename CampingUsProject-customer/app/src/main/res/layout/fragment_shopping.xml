@@ -27,6 +27,7 @@
                 app:menu="@menu/menu_cart">
 
                 <TextView
+                    android:id="@+id/toolBarName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
