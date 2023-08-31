@@ -85,7 +85,6 @@ class ShoppingFragment : Fragment() {
         fragmentShoppingBinding.run {
             // 툴바
             toolbarShopping.run {
-
                 setOnMenuItemClickListener {
                     //장바구니로 가기
                     mainActivity.replaceFragment(MainActivity.CART_FRAGMENT, true, true, null)
@@ -270,13 +269,13 @@ class ShoppingFragment : Fragment() {
                 holder.textViewShoppingPrice.text = "품절"
             } else if (productViewModel.productList.value?.get(position)!!.productDiscountRate != 0L) {
                 // 할인율 계산
+                var productPrice = productViewModel.productList.value?.get(position)!!.productPrice
                 var discountRate = productViewModel.productList.value?.get(position)!!.productDiscountRate * 0.01
+                val result = (productPrice - (productPrice * discountRate)).toInt()
 
-                val result = (productViewModel.productList.value?.get(position)!!.productPrice * discountRate).toInt().toString()
-
-                holder.textViewShoppingPrice.text = " ${ result } 원"
+                holder.textViewShoppingPrice.text = "$result 원"
             } else {
-                holder.textViewShoppingPrice.text = " ${ productViewModel.productList.value?.get(position)?.productPrice.toString() } 원"
+                holder.textViewShoppingPrice.text = "${productViewModel.productList.value?.get(position)?.productPrice} 원"
             }
 
             // 좋아요 클릭시

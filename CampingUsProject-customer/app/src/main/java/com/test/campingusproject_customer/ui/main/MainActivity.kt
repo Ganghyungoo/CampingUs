@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.textfield.TextInputEditText
+import com.test.campRingusproject_customer.ui.review.ReviewDetailFragment
 import com.test.campingusproject_customer.R
 import com.test.campingusproject_customer.databinding.ActivityMainBinding
 import com.test.campingusproject_customer.repository.CustomerUserRepository
@@ -38,7 +38,6 @@ import com.test.campingusproject_customer.ui.user.LoginFragment
 import com.test.campingusproject_customer.ui.payment.CartFragment
 import com.test.campingusproject_customer.ui.payment.OrderDetailFragment
 import com.test.campingusproject_customer.ui.payment.PaymentFragment
-import com.test.campingusproject_customer.ui.review.ReviewDetailFragment
 import com.test.campingusproject_customer.ui.review.ReviewFragment
 import kotlin.concurrent.thread
 

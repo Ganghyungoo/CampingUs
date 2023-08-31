@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -44,7 +43,6 @@ class ReviewFragment : Fragment() {
     var reviewCount = 0         // 리뷰 전체 숫자
     var reviewTotalRatingScore = 0.0       // 별점 총 점수
 
-
     var seekbarZero = 0
     var seekbarOne = 0
     var seekbarTwo = 0
@@ -71,7 +69,6 @@ class ReviewFragment : Fragment() {
 
             }
             reviewImageList.observe(mainActivity){
-                Log.d("reviewImageListCount", "${it.size}")
                 fragmentReviewBinding.recyclerViewRowReviewImage.adapter?.notifyDataSetChanged()
             }
         }
@@ -87,6 +84,7 @@ class ReviewFragment : Fragment() {
 
         fragmentReviewBinding.run {
             toolbarReview.run {
+                title = "상품 리뷰"
 
                 // 백버튼
                 setNavigationIcon(R.drawable.arrow_back_24px)
@@ -147,12 +145,9 @@ class ReviewFragment : Fragment() {
                 // 총 별점에 따른 레이팅바 표현
             }, 1500)
 
-
-
-
-
             recyclerViewRowReview.run {
                 adapter = ReviewAdapter()
+
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             }
 
@@ -270,47 +265,6 @@ class ReviewFragment : Fragment() {
                     }
                 }
             }
-        }
-    }
-
-    // SeekBar 터치 사용 막기
-    inner class TouchinessSeekBar : androidx.appcompat.widget.AppCompatSeekBar {
-        private var seek: Int
-
-        constructor(context: Context) : super(context)
-        constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-        constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
-            context,
-            attrs,
-            defStyle
-        )
-
-        init {
-            seek = 0
-
-            thumb = ColorDrawable(Color.TRANSPARENT) //터치아이콘 숨기기
-            setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
-                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, user: Boolean) {
-                    //사용자 조작이면 예전값으로 되돌림
-                    if (user) {
-                        seekBar?.progress = seek
-                    }
-                }
-
-                override fun onStartTrackingTouch(seekBar: SeekBar?) {
-
-                }
-
-                override fun onStopTrackingTouch(seekBar: SeekBar?) {
-
-                }
-            })
-        }
-
-        override fun setProgress(progress: Int) {
-            super.setProgress(progress)
-            //현재값 저장
-            seek = progress
         }
     }
 }
