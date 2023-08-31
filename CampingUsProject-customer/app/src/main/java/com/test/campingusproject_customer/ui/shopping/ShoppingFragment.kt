@@ -3,6 +3,7 @@ package com.test.campingusproject_customer.ui.shopping
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -19,6 +20,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.google.android.material.navigation.NavigationView
 import com.test.campingusproject_customer.R
 import com.test.campingusproject_customer.databinding.FragmentShoppingBinding
 import com.test.campingusproject_customer.databinding.HeaderShoppingBinding
@@ -115,17 +117,17 @@ class ShoppingFragment : Fragment() {
                 addHeaderView(headerShoppingBinding.root)
 
                 // 항목 선택 시 동작 리스너
-                setNavigationItemSelectedListener {
+                setNavigationItemSelectedListener{
                     when(it.itemId) {
                         // 특별
                         R.id.itemShoppingRealTimeRanking -> { // 실시간 랭킹
-                            toolbartextview.text = "실시간 랭킹"
+                            toolbartextview.setText("실시간 랭킹")
                             getProductRealTimeRankingData()
                             setNavigationIcon(it)
                             drawerLayoutShopping.close()
                         }
                         R.id.itemShoppingPopularitySale -> { // 인기특가
-                            toolbartextview.text = "인기특가"
+                            toolbartextview.setText("인기특가")
                             getProductDisCountData()
                             setNavigationIcon(it)
                             drawerLayoutShopping.close()
@@ -133,49 +135,49 @@ class ShoppingFragment : Fragment() {
 
                         // 캠핑용품
                         R.id.itemShoppingTentAndTarp -> { // 텐트 / 타프
-                            toolbartextview.text = "텐트 / 타프"
+                            toolbartextview.setText("텐트 / 타프")
                             getProductCategoryData("텐트 / 타프")
                             setNavigationIcon(it)
                             drawerLayoutShopping.close()
                         }
                         R.id.itemShoppingSleepingBagAndMat -> { // 침낭 / 매트
-                            toolbartextview.text = "침낭 / 매트"
+                            toolbartextview.setText("침낭 / 매트")
                             getProductCategoryData("침낭 / 매트")
                             setNavigationIcon(it)
                             drawerLayoutShopping.close()
                         }
                         R.id.itemShoppingTableAndChair -> { // 테이블 / 의자
-                            toolbartextview.text = "테이블 / 의자"
+                            toolbartextview.setText("테이블 / 의자")
                             getProductCategoryData("테이블 / 의자")
                             setNavigationIcon(it)
                             drawerLayoutShopping.close()
                         }
                         R.id.itemShoppingLanternAndLight -> { // 랜턴 / 조명
-                            toolbartextview.text = "랜턴 / 조명"
+                            toolbartextview.setText("랜턴 / 조명")
                             getProductCategoryData("랜턴 / 조명")
                             setNavigationIcon(it)
                             drawerLayoutShopping.close()
                         }
                         R.id.itemShoppingKitchen -> { // 키친
-                            toolbartextview.text = "키친"
+                            toolbartextview.setText("키친")
                             getProductCategoryData("키친")
                             setNavigationIcon(it)
                             drawerLayoutShopping.close()
                         }
                         R.id.itemShoppingBrazierAndGrill -> { // 화로 / 그릴
-                            toolbartextview.text = "화로 / 그릴"
+                            toolbartextview.setText("화로 / 그릴")
                             getProductCategoryData("화로 / 그릴")
                             setNavigationIcon(it)
                             drawerLayoutShopping.close()
                         }
                         R.id.itemShoppingSeasonalItems -> { // 계절용품
-                            toolbartextview.text = "계절용품"
+                            toolbartextview.setText("계절용품")
                             getProductCategoryData("계절용품")
                             setNavigationIcon(it)
                             drawerLayoutShopping.close()
                         }
                         R.id.itemShoppingContainer -> { // 용기
-                            toolbartextview.text = "용기"
+                            toolbartextview.setText("용기")
                             getProductCategoryData("용기")
                             setNavigationIcon(it)
                             drawerLayoutShopping.close()
