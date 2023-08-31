@@ -23,6 +23,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.google.android.material.divider.MaterialDividerItemDecoration
+import com.google.android.material.navigation.NavigationView
 import com.test.campingusproject_customer.R
 import com.test.campingusproject_customer.databinding.ActivityMainBinding
 import com.test.campingusproject_customer.databinding.FragmentComunityBinding
@@ -184,6 +185,12 @@ class HomeFragment : Fragment() {
                 textViewRowPopularSaleProductOriginalPrice = rowPopularsaleBinding.textViewRowPopularSaleProductOriginalPrice
                 textViewRowPopularSaleProductDiscountPrice = rowPopularsaleBinding.textViewRowPopularSaleProductDiscountPrice
                 textViewRowPopularSaleLike = rowPopularsaleBinding.textViewRowPopularSaleLike
+
+                rowPopularsaleBinding.root.setOnClickListener {
+                    val newBundle = Bundle()
+                    newBundle.putString("saleStatus", "인기 특가")
+                    mainActivity.replaceFragment(MainActivity.SHOPPING_FRAGMENT, false, true, newBundle)
+                }
             }
         }
 
