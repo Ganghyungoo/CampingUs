@@ -90,7 +90,7 @@ class PurchaseHistoryFragment : Fragment() {
                 //백버튼 설정
                 setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
                 setNavigationOnClickListener {
-                    mainActivity.removeFragment(MainActivity.CART_FRAGMENT)
+                    mainActivity.removeFragment(MainActivity.PURCHASE_HISTORY_FRAGMENT)
                 }
             }
 

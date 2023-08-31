@@ -43,7 +43,14 @@ class ReviewFragment : Fragment() {
     
     var reviewCount = 0         // 리뷰 전체 숫자
     var reviewTotalRatingScore = 0.0       // 별점 총 점수
-    
+
+
+    var seekbarZero = 0
+    var seekbarOne = 0
+    var seekbarTwo = 0
+    var seekbarThree = 0
+    var seekbarFour = 0
+    var seekbarFive = 0
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -60,6 +67,7 @@ class ReviewFragment : Fragment() {
                 fragmentReviewBinding.recyclerViewRowReview.adapter?.notifyDataSetChanged()
                 //상품 Id로 모든 리뷰 이미지 가져오기
                 reviewViewModel.getAllImages(it)
+
             }
             reviewImageList.observe(mainActivity){
                 Log.d("reviewImageListCount", "${it.size}")
@@ -101,26 +109,49 @@ class ReviewFragment : Fragment() {
                     textViewReviewScore.text = "0.0"
                 }
 
+                for(idx in 0 until reviewViewModel.reviewList.value?.size!!){
+                    when(reviewViewModel.reviewList.value?.get(idx)?.reviewRating){
+                    0L -> seekbarZero++
+                    1L -> seekbarOne++
+                    2L -> seekbarTwo++
+                    3L -> seekbarThree++
+                    4L -> seekbarFour++
+                    5L -> seekbarFive++
+                    }
+                }
+
+                linearLayoutReviewSeekBarGroup.run {
+                    seekBar5Review.run {
+                        isEnabled= false
+                        progress = if(seekbarFive==0) 0 else (100 * (reviewCount/seekbarFive))
+                    }
+                    seekBar4Review.run {
+                        isEnabled= false
+                        progress = if(seekbarFour==0) 0 else (100 * (reviewCount/seekbarFour))
+                    }
+                    seekBar3Review.run {
+                        isEnabled= false
+                        progress = if(seekbarThree==0) 0 else (100 * (reviewCount/seekbarThree))
+                    }
+                    seekBar2Review.run {
+                        isEnabled= false
+                        progress = if(seekbarTwo==0) 0 else (100 * (reviewCount/seekbarTwo))
+                    }
+                    seekBar1Review.run {
+                        isEnabled= false
+                        progress = if(seekbarOne==0) 0 else (100 * (reviewCount/seekbarOne))
+                    }
+                }
 
                 // 총 별점에 따른 레이팅바 표현
             }, 1500)
 
-            linearLayoutReviewSeekBarGroup.run {
-                seekBar5Review.run {
-                }
-                seekBar4Review.run {
-                }
-                seekBar3Review.run {
-                }
-                seekBar2Review.run {
-                }
-                seekBar1Review.run {
-                }
-            }
+
+
+
 
             recyclerViewRowReview.run {
                 adapter = ReviewAdapter()
-
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             }
 
