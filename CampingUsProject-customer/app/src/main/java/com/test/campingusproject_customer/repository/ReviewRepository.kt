@@ -38,6 +38,14 @@ class ReviewRepository {
             productRef.push().setValue(reviewModel).addOnCompleteListener(callback1)
         }
 
+        // 리뷰 정보 전체를 가져오는 함수
+        fun getAllReviewInfo(callback1: (Task<DataSnapshot>) -> Unit) {
+            val database = FirebaseDatabase.getInstance()
+            val reviewRef = database.getReference("ReviewData")
+
+            reviewRef.orderByChild("reviewId").get().addOnCompleteListener(callback1)
+        }
+
         // productId로 접근하여 ReviewData의 정보 가져오기
         fun getReviewInfo(productId: Long, callback1: (Task<DataSnapshot>) -> Unit) {
             val database = FirebaseDatabase.getInstance()
@@ -74,7 +82,7 @@ class ReviewRepository {
             }
         }
 
-        // 상품의 대표이미지만 가져오는 함수
+        // 상품의 대표이미지(첫번째)만 가져오는 함수
         fun getProductFirstImage(fileDir:String, callback1: (Task<Uri>) -> Unit){
             val storage = FirebaseStorage.getInstance()
             val fileName = fileDir + "1.png"
