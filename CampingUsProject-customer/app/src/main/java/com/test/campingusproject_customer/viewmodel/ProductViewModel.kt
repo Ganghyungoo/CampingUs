@@ -97,30 +97,32 @@ class ProductViewModel : ViewModel() {
         val tempList = mutableListOf<ProductModel>()
 
         ProductRepository.getAllProductData {
-            for(c1 in it.result.children){
-                val productId = c1.child("productId").value as Long
-                val productSellerId = c1.child("productSellerId").value as String
-                val productName = c1.child("productName").value as String
-                val productPrice = c1.child("productPrice").value as Long
-                val productImage = c1.child("productImage").value as String
-                val productInfo = c1.child("productInfo").value as String
-                val productCount = c1.child("productCount").value as Long
-                val productSellingStatus = c1.child("productSellingStatus").value as Boolean
-                val productDiscountRate = c1.child("productDiscountRate").value as Long
-                val productRecommendationCount = c1.child("productRecommendationCount").value as Long
-                val productBrand = c1.child("productBrand").value as String
-                val productKeyword = c1.child("productKeywordList").value as HashMap<String, Boolean>
-                val productCategory = c1.child("productCategory").value as String
+            if(it.result.exists()){
+                for(c1 in it.result.children){
+                    val productId = c1.child("productId").value as Long
+                    val productSellerId = c1.child("productSellerId").value as String
+                    val productName = c1.child("productName").value as String
+                    val productPrice = c1.child("productPrice").value as Long
+                    val productImage = c1.child("productImage").value as String
+                    val productInfo = c1.child("productInfo").value as String
+                    val productCount = c1.child("productCount").value as Long
+                    val productSellingStatus = c1.child("productSellingStatus").value as Boolean
+                    val productDiscountRate = c1.child("productDiscountRate").value as Long
+                    val productRecommendationCount = c1.child("productRecommendationCount").value as Long
+                    val productBrand = c1.child("productBrand").value as String
+                    val productKeyword = c1.child("productKeywordList").value as HashMap<String, Boolean>
+                    val productCategory = c1.child("productCategory").value as String
 
-                val product = ProductModel(productId, productSellerId, productName, productPrice, productImage,
-                    productInfo, productCount, productSellingStatus, productDiscountRate, productRecommendationCount,
-                    productBrand, productKeyword, productCategory)
-                if(productDiscountRate != 0L) {
-                    tempList.add(product)
+                    val product = ProductModel(productId, productSellerId, productName, productPrice, productImage,
+                        productInfo, productCount, productSellingStatus, productDiscountRate, productRecommendationCount,
+                        productBrand, productKeyword, productCategory)
+                    if(productDiscountRate != 0L) {
+                        tempList.add(product)
+                    }
                 }
-            }
 
-            productList.value = tempList
+                productList.value = tempList
+            }
         }
     }
 

@@ -15,6 +15,14 @@
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:menu="@menu/menu_cart">
+
+        <TextView
+            android:id="@+id/textViewToolbarTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="내정보"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
     </com.google.android.material.appbar.MaterialToolbar>
 
     <ScrollView
@@ -36,7 +44,8 @@
                 android:layout_marginBottom="10dp"
                 android:clickable="true"
                 android:gravity="right"
-                android:text="수정하기"
+                android:padding="5dp"
+                android:text="> 수정하기"
                 android:textColor="@color/gray" />
 
             <LinearLayout
@@ -93,7 +102,7 @@
                             android:drawableTint="@color/highLightColor"
                             android:text="TextView"
                             android:textColor="@color/highLightColor"
-                            android:textSize="14sp" />
+                            android:textSize="@dimen/text_size_2" />
 
                         <TextView
                             android:id="@+id/textViewPhoneNumberText"
@@ -118,7 +127,7 @@
                             android:drawableTint="@color/highLightColor"
                             android:text="TextView"
                             android:textColor="@color/highLightColor"
-                            android:textSize="14sp" />
+                            android:textSize="@dimen/text_size_2" />
 
                     </LinearLayout>
 
@@ -147,7 +156,7 @@
                     android:drawableTint="@color/highLightColor"
                     android:text="TextView"
                     android:textColor="@color/highLightColor"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/text_size_2" />
             </LinearLayout>
 
             <LinearLayout
@@ -166,7 +175,7 @@
                     android:drawableTint="@color/highLightColor"
                     android:text="구매내역"
                     android:textColor="@color/highLightColor"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/text_size_2" />
 
                 <View
                     android:id="@+id/divider3"
@@ -184,7 +193,7 @@
                     android:drawableTint="@color/highLightColor"
                     android:text="문의내역"
                     android:textColor="@color/highLightColor"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/text_size_2" />
 
                 <View
                     android:id="@+id/divider4"
@@ -202,7 +211,7 @@
                     android:drawableTint="@color/highLightColor"
                     android:text="내가 쓴 글"
                     android:textColor="@color/highLightColor"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/text_size_2" />
 
                 <View
                     android:id="@+id/divider5"
@@ -220,7 +229,7 @@
                     android:drawableTint="@color/highLightColor"
                     android:text="로그아웃"
                     android:textColor="@color/highLightColor"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/text_size_2" />
 
                 <View
                     android:id="@+id/divider6"
