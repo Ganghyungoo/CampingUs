@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -42,40 +43,14 @@ class ShoppingProductFragment : Fragment() {
         fragmentShoppingProductBinding = FragmentShoppingProductBinding.inflate(layoutInflater)
         mainActivity = activity as MainActivity
 
-        // 상품 뷰모델 객체 생성
-        productViewModel = ViewModelProvider(mainActivity)[ProductViewModel::class.java]
-
-        productViewModel.run {
-            productName.observe(mainActivity) {
-                fragmentShoppingProductBinding.textViewShoppingProductName.text = it
-            }
-            productPrice.observe(mainActivity) {
-                fragmentShoppingProductBinding.textViewShoppingProductPrice.text = it.toString()
-            }
-            productInfo.observe(mainActivity) {
-                fragmentShoppingProductBinding.textViewShoppingProductExplanationDetailContent.text = it
-            }
-            productCount.observe(mainActivity) {
-                fragmentShoppingProductBinding.textViewShoppingProductNumber.text = "총 판매수량 : $it"
-            }
-            productDiscountRate.observe(mainActivity) {
-                if(productDiscountRate.value == 0L) {
-                    fragmentShoppingProductBinding.textViewShoppingProductSale.visibility = View.INVISIBLE
-                }
-            }
-            productCategory.observe(mainActivity) {
-                fragmentShoppingProductBinding.textViewShoppingProductCategory.text = it
-            }
-
-            productImageList.observe(mainActivity) { uriList ->
-                productImages = uriList
-                fragmentShoppingProductBinding.recyclerViewShoppingProductImage.adapter?.notifyDataSetChanged()
-            }
-        }
-
         // 회원 이름 가져오기
         val sharedPreferences = mainActivity.getSharedPreferences("customer_user_info", Context.MODE_PRIVATE)
         val productUserName = sharedPreferences.getString("customerUserName", null)!!
+
+
+
+        // 상품 뷰모델 객체 생성
+        productViewModel = ViewModelProvider(mainActivity)[ProductViewModel::class.java]
 
         // 번들 객체로 position 값 가져와 상품 id 가져오기
         val position = arguments?.getInt("adapterPosition")!!
@@ -84,17 +59,41 @@ class ShoppingProductFragment : Fragment() {
         // 뷰모델 상품 정보 가져오기
         productViewModel.getOneProductData(productId)
 
-        var productName = productViewModel.productList.value?.get(position)!!.productName
-        var productPrice =productViewModel.productList.value?.get(position)!!.productPrice
-        var productInfo = productViewModel.productList.value?.get(position)!!.productInfo
-        var productCount = productViewModel.productList.value?.get(position)!!.productCount
-        var productDiscountRate = productViewModel.productList.value?.get(position)!!.productDiscountRate
-        var productCategory = productViewModel.productList.value?.get(position)!!.productCategory
+        var name = productViewModel.productList.value?.get(position)!!.productName
+        var price =productViewModel.productList.value?.get(position)!!.productPrice
+        var info = productViewModel.productList.value?.get(position)!!.productInfo
+        var count = productViewModel.productList.value?.get(position)!!.productCount
+        var discountRate = productViewModel.productList.value?.get(position)!!.productDiscountRate
+        var category = productViewModel.productList.value?.get(position)!!.productCategory
 
-        // 다음화면으로 넘길 정보 미리 담기
-        newBundle.run {
-            putLong("productId", productId)
-            putString("productName", productName)
+        productViewModel.run {
+            productName.observe(mainActivity) {
+                name = it
+            }
+            productPrice.observe(mainActivity) {
+                price = it
+            }
+            productInfo.observe(mainActivity) {
+                info = it
+            }
+            productCount.observe(mainActivity) {
+                count = it
+            }
+            productDiscountRate.observe(mainActivity) {
+                if(productDiscountRate.value == 0L) {
+                    fragmentShoppingProductBinding.textViewShoppingProductSale.visibility = View.INVISIBLE
+                } else {
+                    discountRate = it
+                }
+            }
+            productCategory.observe(mainActivity) {
+                category = it
+            }
+
+            productImageList.observe(mainActivity) { uriList ->
+                productImages = uriList
+                fragmentShoppingProductBinding.recyclerViewShoppingProductImage.adapter?.notifyDataSetChanged()
+            }
         }
 
         fragmentShoppingProductBinding.run {
@@ -140,17 +139,19 @@ class ShoppingProductFragment : Fragment() {
             // 리뷰버튼 클릭시 화면 이동
             buttonToggleShoppingProductReview.run {
                 setOnClickListener {
+                    newBundle.run {
+                        putLong("productId", productId)
+                    }
                     mainActivity.replaceFragment(MainActivity.REVIEW_FRAGMENT, true, true, newBundle)
                 }
             }
-
 
             // 플로팅 버튼 클릭시 문의등록 화면 이동
             floatingActionButtonShoppingProductInquiry.run {
                 setOnClickListener {
                     newBundle.run {
                         putLong("productId", productId)
-                        putString("productName", productName)
+                        putString("productName", name)
                         putString("productImage", productViewModel.productImage.value)
                     }
                     mainActivity.replaceFragment(MainActivity.INQUIRY_FRAGMENT, true, true, newBundle)
@@ -165,15 +166,20 @@ class ShoppingProductFragment : Fragment() {
                 layoutManager = LinearLayoutManager(mainActivity, RecyclerView.HORIZONTAL, false)
             }
 
-            textViewShoppingProductName.text = productName!!
-            textViewShoppingProductNumber.text = productCount.toString()
-            if (productDiscountRate == 0L) {
+            textViewShoppingProductName.text = name!!
+            textViewShoppingProductNumber.text = "총 판매수량 : $count"
+            if (discountRate == 0L) {
                 textViewShoppingProductSale.visibility = View.INVISIBLE
+            } else {
+                // 할인 계산
+                val result = (price - (price * (discountRate *0.01))).toInt()
+                Log.d("ㅁㅇresult", result.toString())
+                textViewShoppingProductPrice.text = "$result 원"
             }
-            textViewShoppingProductPrice.text = productPrice.toString() + " 원"
+
             textViewShoppingProductSellerName.text = productUserName
-            textViewShoppingProductCategory.text = productCategory
-            textViewShoppingProductExplanationDetailContent.text = productInfo
+            textViewShoppingProductCategory.text = category
+            textViewShoppingProductExplanationDetailContent.text = info
         }
         return fragmentShoppingProductBinding.root
     }
