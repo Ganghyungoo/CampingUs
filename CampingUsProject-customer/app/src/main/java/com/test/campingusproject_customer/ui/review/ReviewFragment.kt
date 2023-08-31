@@ -37,7 +37,7 @@ class ReviewFragment : Fragment() {
     lateinit var reviewViewModel: ReviewViewModel
 
     // 다음화면으로 보낼 정보를 담는 번들
-    lateinit var newBundle: Bundle
+    var newBundle = Bundle()
     
     var reviewCount = 0         // 리뷰 전체 숫자
     var reviewTotalRatingScore = 0.0       // 별점 총 점수
@@ -83,9 +83,13 @@ class ReviewFragment : Fragment() {
 
                 // 리뷰 총 별점
                 // 반올림 하기 위한 함수
-                val bd = BigDecimal(reviewTotalRatingScore / reviewCount)
-                val rounded = bd.setScale(1, RoundingMode.HALF_UP)
-                textViewReviewScore.text = rounded.toDouble().toString()
+                if(reviewCount!=0){
+                    val bd = BigDecimal(reviewTotalRatingScore / reviewCount)
+                    val rounded = bd.setScale(1, RoundingMode.HALF_UP)
+                    textViewReviewScore.text = rounded.toDouble().toString()
+                }else{
+                    textViewReviewScore.text = "0.0"
+                }
 
                 // 총 별점에 따른 레이팅바 표현
             }, 1500)
