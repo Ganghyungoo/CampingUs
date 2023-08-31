@@ -143,7 +143,7 @@ class ReviewFragment : Fragment() {
             init {
                 imageViewReviewProfileImage = rowReviewBinding.imageViewReviewProfileImage
                 textViewReviewProfileName = rowReviewBinding.textViewReviewProfileName
-                RatingBarReviewProfile = rowReviewBinding.RatingBarReviewProfile
+                RatingBarReviewProfile = rowReviewBinding.RatingBarReview
                 textViewReviewContent = rowReviewBinding.textViewReviewContent
 
                 rowReviewBinding.root.setOnClickListener {
