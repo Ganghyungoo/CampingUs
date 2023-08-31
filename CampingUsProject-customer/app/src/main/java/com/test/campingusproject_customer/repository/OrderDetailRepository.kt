@@ -20,5 +20,12 @@ class OrderDetailRepository {
             customerOrderRef.orderByChild("orderId").equalTo(orderId).get().addOnCompleteListener(callback)
         }
 
+        //사용자 아이디에 맞는 주문 정보를 불러오는 메서드
+        fun getOrderInfoByUserId(orderUserId:String,callback: (Task<DataSnapshot>) -> Unit){
+            val database = FirebaseDatabase.getInstance()
+            val customerOrderRef = database.getReference("OrderData")
+            customerOrderRef.orderByChild("orderUserId").equalTo(orderUserId).get().addOnCompleteListener(callback)
+        }
+
     }
 }

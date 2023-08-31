@@ -5,5 +5,6 @@ data class OrderProductModel (
     val orderProductName : String,      //상품 이름
     val orderProductCount : String,     //상품 개수
     val orderProductPrice : String,     //상품 가격
-    val orderProductImage : String      //상품 이미지
+    val orderProductImage : String,      //상품 이미지
+    val orderProductState : String      //배송상태..?
 )

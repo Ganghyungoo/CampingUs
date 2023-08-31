@@ -75,7 +75,7 @@ class PaymentFragment : Fragment() {
                 Log.d("productList", "$productImage")
 
                 val orderProduct = OrderProductModel(orderId, productName!!, productCount.toString(),
-                    productPrice.toString(), productImage.toString())
+                    productPrice.toString(), productImage.toString(),"결제 완료")
 
                 orderproductList.add(orderProduct)
             }
