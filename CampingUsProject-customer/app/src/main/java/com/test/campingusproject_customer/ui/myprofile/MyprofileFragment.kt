@@ -61,7 +61,6 @@ class MyprofileFragment : Fragment() {
 
 
             materialToolbarMyProfile.run {
-                title = "내정보"
                 //장바구니 가는 버튼
                 setOnMenuItemClickListener {
                     mainActivity.replaceFragment(MainActivity.CART_FRAGMENT, true, true, null)

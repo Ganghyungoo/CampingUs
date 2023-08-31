@@ -95,7 +95,6 @@ class ModifyMyprofileFragment : Fragment() {
             }
 
             materialToolbarModifyMyProfile.run {
-                title = "회원 정보 수정"
                 setNavigationIcon(R.drawable.arrow_back_24px)
                 setNavigationOnClickListener {
                     mainActivity.removeFragment(MainActivity.MODIFY_MYPROFILE_FRAGMENT)

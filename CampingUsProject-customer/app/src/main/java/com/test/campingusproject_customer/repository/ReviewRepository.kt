@@ -1,10 +1,12 @@
 package com.test.campingusproject_customer.repository
 
 import android.net.Uri
+import android.util.Log
 import com.google.android.gms.tasks.Task
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import com.test.campingusproject_customer.dataclassmodel.ReviewModel
 
@@ -42,6 +44,22 @@ class ReviewRepository {
             val reviewRef = database.getReference("ReviewData")
 
             reviewRef.orderByChild("reviewProductId").equalTo(productId.toDouble()).get().addOnCompleteListener(callback1)
+        }
+
+        fun getAllImages(fileDir: String, callback: (StorageReference) -> Unit){
+            val storage = FirebaseStorage.getInstance()
+            val dirPath = fileDir.substring(0, fileDir.length-1)
+
+            val imageRef = storage.reference.child(dirPath)
+            imageRef.listAll()
+                .addOnCompleteListener { task->
+                    if(task.isSuccessful){
+                        task.result.items.forEach {
+                            Log.d("imageTest", "${it.downloadUrl}")
+                            callback(it)
+                        }
+                    }
+                }
         }
 
         // 상품 이미지들을 업로드하는 함수
@@ -84,12 +102,6 @@ class ReviewRepository {
                 fileRef.downloadUrl.addOnCompleteListener(callback1)
             } catch (e: IllegalArgumentException) {
             }
-        }
-
-        // 상품의 리뷰 이미지를 전부 가져오는 함수
-        fun getAllReviewImage() {
-            val storage = FirebaseStorage.getInstance()
-
         }
     }
 }

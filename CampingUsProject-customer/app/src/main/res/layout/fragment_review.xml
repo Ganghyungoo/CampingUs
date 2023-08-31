@@ -24,7 +24,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
     </com.google.android.material.appbar.MaterialToolbar>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -96,7 +96,10 @@
                             android:id="@+id/seekBar5Review"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@null" />
+                            android:background="@null"
+                            android:clickable="false"
+                            android:focusable="false"
+                            android:max="100" />
 
                     </LinearLayout>
 
@@ -115,7 +118,10 @@
                         <SeekBar
                             android:id="@+id/seekBar4Review"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:clickable="false"
+                            android:focusable="false"
+                            android:max="100"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -133,7 +139,10 @@
                         <SeekBar
                             android:id="@+id/seekBar3Review"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:clickable="false"
+                            android:focusable="false"
+                            android:max="100"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -151,7 +160,10 @@
                         <SeekBar
                             android:id="@+id/seekBar2Review"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:clickable="false"
+                            android:focusable="false"
+                            android:max="100"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -169,7 +181,10 @@
                         <SeekBar
                             android:id="@+id/seekBar1Review"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:clickable="false"
+                            android:focusable="false"
+                            android:max="100"/>
                     </LinearLayout>
 
                 </LinearLayout>
@@ -195,10 +210,12 @@
                 android:id="@+id/recyclerViewRowReview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="10dp" />
+                android:layout_margin="10dp"
+                android:nestedScrollingEnabled="true"
+                android:overScrollMode="never" />
 
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 
 </LinearLayout>
