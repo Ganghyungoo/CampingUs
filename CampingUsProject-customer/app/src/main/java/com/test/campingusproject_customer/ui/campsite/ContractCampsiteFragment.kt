@@ -20,6 +20,7 @@ import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.Overlay
+import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
 import com.test.campingusproject_customer.R
 import com.test.campingusproject_customer.databinding.DialogContractMarkerBinding
@@ -74,10 +75,10 @@ class ContractCampsiteFragment : Fragment(), OnMapReadyCallback, Overlay.OnClick
         contractNaverMap = p0
         contractNaverMap.run {
             val cameraPosition = CameraPosition(
-                LatLng(37.863271880138626, 127.55924650457162 ), // 대상 지점
+                LatLng(37.863271880138626, 127.55924650457162), // 대상 지점
                 5.0, // 줌 레벨
             )
-            this.cameraPosition=cameraPosition
+            this.cameraPosition = cameraPosition
         }
         addMaker()
         Log.d("testt", "제휴캠핑장")
@@ -134,7 +135,8 @@ class ContractCampsiteFragment : Fragment(), OnMapReadyCallback, Overlay.OnClick
             "불가능",
             "https://gocamping.or.kr/upload/camp/100139/thumb/thumb_720_9142QBZ77gMJkUVceP6sChUZ.jpg", // 전화번호
             "전남 강진군 강진읍 해강로 1038-30",
-            "342-2234-2322"
+            "342-2234-2322",
+            "asdlfkja24dfds"
         )
 
         val contractCampsite2 = ContractCampsite(
@@ -150,7 +152,8 @@ class ContractCampsiteFragment : Fragment(), OnMapReadyCallback, Overlay.OnClick
             "불가능",
             "https://gocamping.or.kr/upload/camp/100140/thumb/thumb_720_8297QNOce95heDJ3zC0ckN3i.jpg",
             "경북 포항시 남구 호미곶면 해맞이로46번길 134", // 전화번호
-            "324-2434-2342"
+            "324-2434-2342",
+            "sdf35232ff"
         )
         val contractCampsite3 = ContractCampsite(
             "(주)웨이브파크", // 이름
@@ -166,7 +169,7 @@ class ContractCampsiteFragment : Fragment(), OnMapReadyCallback, Overlay.OnClick
             "https://gocamping.or.kr/upload/camp/100140/thumb/thumb_720_8297QNOce95heDJ3zC0ckN3i.jpg",
             "경기 시흥시 거북섬둘레길 42 (정왕동)", // 주소
             "031-431-9600", // 사진
-
+            "sFscr456g"
         )
 
         val contractCampsite4 = ContractCampsite(
@@ -183,6 +186,7 @@ class ContractCampsiteFragment : Fragment(), OnMapReadyCallback, Overlay.OnClick
             "https://gocamping.or.kr/upload/camp/7820/thumb/thumb_720_7251NMu6XG2K0Vcx0GAJRi82.jpg", // 사진
             "경기도 양평군 옥천면 옥천창말길 18-80", // 주소
             "353-5655-5433",//전화번호
+            "sorigfusrn333"
         )
         val contractCampsite5 = ContractCampsite(
             "더플래츠 글래핑",
@@ -198,7 +202,7 @@ class ContractCampsiteFragment : Fragment(), OnMapReadyCallback, Overlay.OnClick
             "https://gocamping.or.kr/upload/camp/100157/thumb/thumb_720_4171F1hFJPWjyR98neEXsjS4.jpg",
             "경기 가평군 상면 수목원로 181-28",
             "010-7384-8008",
-
+            "2fdvkd33"
             )
 
         val contractCampsite6 = ContractCampsite(
@@ -215,6 +219,7 @@ class ContractCampsiteFragment : Fragment(), OnMapReadyCallback, Overlay.OnClick
             "https://gocamping.or.kr/upload/camp/100231/thumb/thumb_720_5031zWs3pLvMY7zBvq7xHILf.jpg",
             "강원 원주시 호저면 산현리 513-17",
             "050-7384-8308",
+            "ldjxcmnwse"
         )
         val contractCampsite7 = ContractCampsite(
             "담터 오지 글램핑",
@@ -230,6 +235,7 @@ class ContractCampsiteFragment : Fragment(), OnMapReadyCallback, Overlay.OnClick
             "https://gocamping.or.kr/upload/camp/100626/thumb/thumb_720_1463Us2FzlIPJ6skhPG0WUZR.jpg",
             "강원 철원군 동송읍 담터길 350",
             "503-2234-4432",
+            "xkaxjdhwl"
         )
 
         val contractCampsite8 = ContractCampsite(
@@ -246,6 +252,7 @@ class ContractCampsiteFragment : Fragment(), OnMapReadyCallback, Overlay.OnClick
             "https://gocamping.or.kr/upload/camp/119/thumb/thumb_720_0396NsoXOTrOqtQoch9B7Ewf.jpg",
             "경기 포천시 이동면 금강로 5846",
             "400-2345-3322",
+            "rrkdklscvl"
         )
 
         val contractCampsite9 = ContractCampsite(
@@ -262,6 +269,7 @@ class ContractCampsiteFragment : Fragment(), OnMapReadyCallback, Overlay.OnClick
             "https://gocamping.or.kr/upload/camp/7103/thumb/thumb_720_9252NdzZEO7fhEVGdNgteCdv.jpg",
             "경기 포천시 이동면 금강로 5846",
             "400-3445-3322",
+            "mimiminu"
         )
 
         val contractCampsite10 = ContractCampsite(
@@ -278,6 +286,7 @@ class ContractCampsiteFragment : Fragment(), OnMapReadyCallback, Overlay.OnClick
             "https://gocamping.or.kr/upload/camp/7112/thumb/thumb_720_69658K2KCWUZozqzZv8JJbRc.jpg",
             "몽산포 금강로 5846",
             "400-2345-3322",
+            "yongjinzzang243"
         )
 
         val contractCampsite11 = ContractCampsite(
@@ -294,6 +303,7 @@ class ContractCampsiteFragment : Fragment(), OnMapReadyCallback, Overlay.OnClick
             "https://gocamping.or.kr/upload/camp/7103/thumb/thumb_720_9252NdzZEO7fhEVGdNgteCdv.jpg",
             "전남 강진군 강진읍 해강로 1038-30",
             "400-2345-3322",
+            "donggulVoiceMan"
         )
 
         val contractCampsite12 = ContractCampsite(
@@ -310,6 +320,7 @@ class ContractCampsiteFragment : Fragment(), OnMapReadyCallback, Overlay.OnClick
             "https://gocamping.or.kr/upload/camp/100005/thumb/thumb_720_9424zPdiOBNO3Idt0Yr8NXRr.jpg",
             "경기 포천시 이동면 금강로 5846",
             "400-2345-3322",
+            "gilju543"
         )
         contractList.add(contractCampsite1)
         contractList.add(contractCampsite2)
@@ -333,6 +344,7 @@ class ContractCampsiteFragment : Fragment(), OnMapReadyCallback, Overlay.OnClick
             marker.tag = info
             marker.map = contractNaverMap
             marker.zIndex = 1
+            marker.icon = OverlayImage.fromResource(R.drawable.icons8_camping_48)
             markerList.add(marker)
             marker.setOnClickListener(this)
             Log.d("testt", "마커 추가 중")
@@ -348,26 +360,96 @@ class ContractCampsiteFragment : Fragment(), OnMapReadyCallback, Overlay.OnClick
                 R.style.ThemeOverlay_App_MaterialAlertDialog
             ).apply {
                 setView(dialogBinding.root)
-                setTitle("캠핑장 정보")
-                Glide.with(mainActivity).load(marker.사진).error(R.drawable.ic_launcher_background).into(dialogBinding.imageViewCampsite)
+                setTitle("제휴 캠핑장 정보")
+                Glide.with(mainActivity).load(marker.사진).error(R.drawable.error_24px)
+                    .into(dialogBinding.imageViewCampsite)
                 dialogBinding.textViewCampsiteName.text = marker.이름
-                dialogBinding.textViewCampsiteAddress.text = marker.주소
-                dialogBinding.textViewCampsiteNumber.text = marker.연락처
-                dialogBinding.textViewCampsiteDetail.text = marker.설명
-                dialogBinding.textViewCampsiteEnv.text = marker.환경
-                dialogBinding.textViewCampsiteForm.text = marker.형태
-                dialogBinding.textViewCampsiteFacilities.text = marker.편의시설
-                dialogBinding.textViewCampsiteFun.text = marker.놀거리
-                dialogBinding.textViewCampsiteAnimal.text = marker.애완동물
-                dialogBinding.textViewCampsiteUrl.run {
-                    text = marker.홈페이지
-                    setTextColor(Color.BLUE)
-                    setOnClickListener {
-                        val intent= Intent(Intent.ACTION_VIEW, Uri.parse(marker.홈페이지))
-                        startActivity(intent)
+
+                if (marker.주소.isEmpty()) {
+                    dialogBinding.textViewCampsiteAddress.visibility = View.GONE
+                } else {
+                    dialogBinding.textViewCampsiteAddress.text = marker.주소
+                }
+
+                if (marker.연락처.isEmpty()) {
+                    dialogBinding.textViewCampsiteNumber.visibility = View.GONE
+                } else {
+                    dialogBinding.textViewCampsiteNumber.text = marker.연락처
+                }
+
+                if (marker.설명.isEmpty()) {
+                    dialogBinding.textViewCampsiteDetail.visibility = View.GONE
+                } else {
+                    dialogBinding.textViewCampsiteDetail.text = marker.설명
+                }
+
+                if (marker.환경.isEmpty()) {
+                    dialogBinding.textViewCampsiteEnv.visibility = View.GONE
+                    dialogBinding.tv1.visibility = View.GONE
+                    dialogBinding.tv2.visibility = View.GONE
+                    dialogBinding.l1.visibility = View.GONE
+                } else {
+                    dialogBinding.textViewCampsiteEnv.text = marker.환경
+                }
+
+                if (marker.형태.isEmpty()) {
+                    dialogBinding.textViewCampsiteForm.visibility = View.GONE
+                    dialogBinding.tv3.visibility = View.GONE
+                    dialogBinding.tv4.visibility = View.GONE
+                    dialogBinding.l2.visibility = View.GONE
+                } else {
+                    dialogBinding.textViewCampsiteForm.text = marker.형태
+                }
+
+                if (marker.편의시설.isEmpty()) {
+                    dialogBinding.textViewCampsiteFacilities.visibility = View.GONE
+                    dialogBinding.tv5.visibility = View.GONE
+                    dialogBinding.tv6.visibility = View.GONE
+                    dialogBinding.l3.visibility = View.GONE
+                } else {
+                    dialogBinding.textViewCampsiteFacilities.text = marker.편의시설
+                }
+
+                if (marker.놀거리.isEmpty()) {
+                    dialogBinding.textViewCampsiteFun.visibility = View.GONE
+                    dialogBinding.tv7.visibility = View.GONE
+                    dialogBinding.tv8.visibility = View.GONE
+                    dialogBinding.l4.visibility = View.GONE
+                } else {
+                    dialogBinding.textViewCampsiteFun.text = marker.놀거리
+                }
+
+                if (marker.애완동물.isEmpty()) {
+                    dialogBinding.textViewCampsiteAnimal.visibility = View.GONE
+                    dialogBinding.tv9.visibility = View.GONE
+                    dialogBinding.tv10.visibility = View.GONE
+                    dialogBinding.l5.visibility = View.GONE
+                } else {
+                    dialogBinding.textViewCampsiteAnimal.text = marker.애완동물
+                }
+
+                if (marker.홈페이지.isEmpty()) {
+                    dialogBinding.textViewCampsiteUrl.visibility = View.GONE
+                } else {
+                    dialogBinding.textViewCampsiteUrl.run {
+                        text = marker.홈페이지
+                        setTextColor(Color.BLUE)
+                        setOnClickListener {
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(marker.홈페이지))
+                            startActivity(intent)
+                        }
+                    }
+                }
+                if (marker.제휴코드.isEmpty()) {
+                    dialogBinding.textViewCampsiteCode.visibility = View.GONE
+                } else {
+                    dialogBinding.textViewCampsiteCode.run {
+                        text = marker.제휴코드
+                        setTextColor(Color.RED)
                     }
                 }
                 setPositiveButton("닫기", null)
+                setNegativeButton("예약하러 가기",null)
             }
             builder.show()
         }

@@ -14,4 +14,5 @@ data class ContractCampsite(
     var 사진:String,
     var 주소:String,
     var 연락처:String,
+    var 제휴코드:String
 )
