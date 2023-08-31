@@ -42,6 +42,8 @@ class ShoppingProductFragment : Fragment() {
         fragmentShoppingProductBinding = FragmentShoppingProductBinding.inflate(layoutInflater)
         mainActivity = activity as MainActivity
 
+        mainActivity.activityMainBinding.bottomNavigationViewMain.visibility = View.VISIBLE
+
         // 상품 뷰모델 객체 생성
         productViewModel = ViewModelProvider(mainActivity)[ProductViewModel::class.java]
 

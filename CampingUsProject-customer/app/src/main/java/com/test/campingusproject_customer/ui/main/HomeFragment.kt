@@ -207,10 +207,10 @@ class HomeFragment : Fragment() {
             holder.textViewRowPopularSaleProductName.text = productViewModel.productList.value?.get(position)?.productName
             holder.textViewRowPopularSaleProductBrand.text = productViewModel.productList.value?.get(position)?.productBrand
             holder.textViewRowPopularSaleProductOriginalPrice.text =
-                "정가 : ${productViewModel.productList.value?.get(position)?.productPrice?.toString()} 원"
+                "정가 ${productViewModel.productList.value?.get(position)?.productPrice?.toString()}원"
             holder.textViewRowPopularSaleProductOriginalPrice.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG) //취소선 긋기(글자 중간에 줄 긋기)
             holder.textViewRowPopularSaleProductDiscountPrice.text =
-                "할인가 : ${productViewModel.productList.value?.get(position)?.productPrice!! / productViewModel.productList.value?.get(position)?.productDiscountRate!!} 원"
+                "할인가 ${productViewModel.productList.value?.get(position)?.productPrice!! * (100L-productViewModel.productList.value?.get(position)?.productDiscountRate!!)}원"
             holder.textViewRowPopularSaleLike.text = productViewModel.productList.value?.get(position)?.productRecommendationCount?.toString()
             Log.d("productImage", "${productViewModel.productList.value?.get(position)?.productImage!!}")
 

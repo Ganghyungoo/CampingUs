@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="150dp"
+    android:layout_height="wrap_content"
+    android:gravity="center"
     android:orientation="vertical"
     android:padding="10dp">
 
@@ -27,7 +28,7 @@
             android:singleLine="true"
             android:text="TextView"
             android:textColor="@color/highLightColor"
-            android:textSize="@dimen/text_size_3" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/textViewRowPopularSaleProductBrand"
@@ -36,7 +37,7 @@
             android:layout_marginTop="4dp"
             android:text="TextView"
             android:textColor="@color/highLightColor"
-            android:textSize="11sp" />
+            android:textSize="@dimen/text_size_3" />
 
         <TextView
             android:id="@+id/textViewRowPopularSaleProductOriginalPrice"
@@ -52,9 +53,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
+            android:singleLine="true"
             android:text="TextView"
             android:textColor="@color/highLightColor"
-            android:textSize="11sp" />
+            android:textSize="@dimen/text_size_3" />
 
     </LinearLayout>
 
@@ -62,6 +64,8 @@
         android:id="@+id/textViewRowPopularSaleLike"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginLeft="5dp"
         android:layout_marginTop="7dp"
         android:drawableLeft="@drawable/favorite_fill_24px"
         android:gravity="center"
