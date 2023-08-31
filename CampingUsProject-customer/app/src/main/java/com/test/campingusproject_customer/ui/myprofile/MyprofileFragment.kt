@@ -87,6 +87,7 @@ class MyprofileFragment : Fragment() {
             textViewMyProfilePurchaseDetails.run {
                 setOnClickListener {
                     mainActivity.replaceFragment(MainActivity.PURCHASE_HISTORY_FRAGMENT, true, true, null)
+                    mainActivity.activityMainBinding.bottomNavigationViewMain.visibility=View.GONE
                 }
             }
 

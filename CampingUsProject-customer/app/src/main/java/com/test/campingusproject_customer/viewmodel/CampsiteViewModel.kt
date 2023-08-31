@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.test.campingusproject_customer.dataclassmodel.ApiResponse
+import com.test.campingusproject_customer.dataclassmodel.ContractCampsite
 import com.test.campingusproject_customer.dataclassmodel.Items
 import com.test.campingusproject_customer.repository.CampingService
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -17,7 +18,7 @@ import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Response
 
-class CampsiteViewModel: ViewModel() {
+class CampsiteViewModel : ViewModel() {
     //레트로핏을 실행 메서드
     val campingService = CampingService.getCampingService()
 
@@ -33,34 +34,43 @@ class CampsiteViewModel: ViewModel() {
 
     var dataInfo = MutableLiveData<ApiResponse>()//불러온 데이터 상태
 
-    var campsiteLoadError= MutableLiveData<String>()//데이터 오류를 식별하기위한 변수
+    var campsiteLoadError = MutableLiveData<String>()//데이터 오류를 식별하기위한 변수
 
 //    var loading= MutableLiveData<Boolean>()// 데이터 로딩중인지에 대한 정보(프로그래스바에 사용됨.)
 
 
-
-//이거 나오면 좋은거임
-    fun fetchCampsites(page:Int,latitude:String,longitude:String){
+    //이거 나오면 좋은거임
+    fun fetchCampsites(page: Int, latitude: String, longitude: String) {
         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
             try {
                 withContext(Dispatchers.Main) {
-                    val call = campingService.getCampSiteList(100,page,"AND","CampingUs","hojdaAj28uKSvkkT5O01VLlmsMbVDxwWfk5norTQMAdtVK6+18evQogPO5ix63vdVPoPG6hGVUGv2iZ3nKzJvA==","json",longitude,latitude,"20000")
-                    call.enqueue(object :retrofit2.Callback<ApiResponse>{
+                    val call = campingService.getCampSiteList(
+                        100,
+                        page,
+                        "AND",
+                        "CampingUs",
+                        "hojdaAj28uKSvkkT5O01VLlmsMbVDxwWfk5norTQMAdtVK6+18evQogPO5ix63vdVPoPG6hGVUGv2iZ3nKzJvA==",
+                        "json",
+                        longitude,
+                        latitude,
+                        "20000"
+                    )
+                    call.enqueue(object : retrofit2.Callback<ApiResponse> {
                         override fun onResponse(
                             call: Call<ApiResponse>,
                             response: Response<ApiResponse>,
                         ) {
-                            if(response.isSuccessful){
-                                dataInfo.value=response.body()
-                                campSites.value=response.body()?.response?.body?.items
+                            if (response.isSuccessful) {
+                                dataInfo.value = response.body()
+                                campSites.value = response.body()?.response?.body?.items
 
-                            }else{
-                                Log.d("testt","통신은 성공했지만 데이터를 불러오진 못했습니다")
+                            } else {
+                                Log.d("testt", "통신은 성공했지만 데이터를 불러오진 못했습니다")
                             }
                         }
 
                         override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
-                            Log.d("testt","통신 자체를 실패했습니다")
+                            Log.d("testt", "통신 자체를 실패했습니다")
                         }
 
                     })
@@ -75,29 +85,37 @@ class CampsiteViewModel: ViewModel() {
 
     }
 
-    fun fetchSearchedCampsites(page:Int,inputKeyWord:String){
+    fun fetchSearchedCampsites(page: Int, inputKeyWord: String) {
         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
             try {
                 withContext(Dispatchers.Main) {
-                    val call = campingService.getCampSiteSearch(3000,page,"AND","CampingUs","hojdaAj28uKSvkkT5O01VLlmsMbVDxwWfk5norTQMAdtVK6+18evQogPO5ix63vdVPoPG6hGVUGv2iZ3nKzJvA==","json",inputKeyWord)
-                    call.enqueue(object :retrofit2.Callback<ApiResponse>{
+                    val call = campingService.getCampSiteSearch(
+                        3000,
+                        page,
+                        "AND",
+                        "CampingUs",
+                        "hojdaAj28uKSvkkT5O01VLlmsMbVDxwWfk5norTQMAdtVK6+18evQogPO5ix63vdVPoPG6hGVUGv2iZ3nKzJvA==",
+                        "json",
+                        inputKeyWord
+                    )
+                    call.enqueue(object : retrofit2.Callback<ApiResponse> {
                         override fun onResponse(
                             call: Call<ApiResponse>,
                             response: Response<ApiResponse>,
                         ) {
-                            if(response.isSuccessful){
-                                Log.d("testt","통신중")
-                                dataInfo.value=response.body()
-                                campSites.value=response.body()?.response?.body?.items
-                            }else{
-                                Log.d("testt","통신은 성공했지만 데이터를 불러오진 못했습니다")
+                            if (response.isSuccessful) {
+                                Log.d("testt", "통신중")
+                                dataInfo.value = response.body()
+                                campSites.value = response.body()?.response?.body?.items
+                            } else {
+                                Log.d("testt", "통신은 성공했지만 데이터를 불러오진 못했습니다")
 
                             }
                         }
 
                         override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
 //                            Log.d("testt","통신 자체를 실패했습니다")
-                            campsiteLoadError.value =""
+                            campsiteLoadError.value = ""
 
                         }
 
@@ -113,17 +131,21 @@ class CampsiteViewModel: ViewModel() {
 
     }
 
-    fun onError(message: String){
+
+
+    fun onError(message: String) {
 
 //        loading.value = false
     }
-    fun resetData(){
-        job=null
+
+    fun resetData() {
+        job = null
         dataInfo = MutableLiveData<ApiResponse>()
         campSites = MutableLiveData<Items>()
     }
+
     override fun onCleared() {
         super.onCleared()
-        Log.d("testt","뷰모델 삭제")
+        Log.d("testt", "뷰모델 삭제")
     }
 }
