@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.test.campingusproject_customer.dataclassmodel.ProductModel
 import com.test.campingusproject_customer.repository.ProductRepository
+import kotlin.math.absoluteValue
 
 class ProductViewModel : ViewModel() {
     val productList = MutableLiveData<MutableList<ProductModel>>()
@@ -20,6 +21,9 @@ class ProductViewModel : ViewModel() {
     val productRecommendationCount = MutableLiveData<Long>()
     val productBrand = MutableLiveData<String>()
     val productCategory = MutableLiveData<String>()
+    val productSellerId = MutableLiveData<String>()
+    val productSellerName = MutableLiveData<String>()
+    val productId_ = MutableLiveData<Long>()
 
     val productKeywordList = MutableLiveData<HashMap<String, Boolean>>()
 
@@ -174,6 +178,8 @@ class ProductViewModel : ViewModel() {
                 productBrand.value = c1.child("productBrand").value as String
                 productKeywordList.value = c1.child("productKeywordList").value as HashMap<String, Boolean>
                 productCategory.value = c1.child("productCategory").value as String
+                productSellerId.value = c1.child("productSellerId").value as String
+                productId_.value = c1.child("productId").value as Long
 
                 productImageList.value?.clear()
                 ProductRepository.getProductImages(productImage.value.toString()){ storageRef->
@@ -185,6 +191,17 @@ class ProductViewModel : ViewModel() {
                             productImageList.value = updatedList
                         }
                     }
+                }
+            }
+        }
+    }
+
+    //제품 판매자 Id로 제품 판매자 이름값을 가져오는 메서드
+    fun getProductSellerName(sellerId : String){
+        ProductRepository.getProductSellerName(sellerId){
+            if(it.result.exists()){
+                for(c1 in it.result.children) {
+                    productSellerName.value = c1.child("sellerUserName").value as String
                 }
             }
         }

@@ -49,6 +49,14 @@ class ProductRepository {
             productRef.orderByChild("productId").equalTo(productId.toDouble()).get().addOnCompleteListener(callback1)
         }
 
+        //판매자의 정보 가져오는 함수
+        fun getProductSellerName(sellerId: String, callback1: (Task<DataSnapshot>) -> Unit){
+            val database = FirebaseDatabase.getInstance()
+
+            val sellerRef = database.getReference("SellerUsers")
+            sellerRef.orderByChild("sellerUserId").equalTo(sellerId).get().addOnCompleteListener(callback1)
+        }
+
         //해당하는 상품 이미지 전부 가져오는 함수
         fun getProductImages(fileDir: String, callback1: (StorageReference) -> Unit){
             val storage = FirebaseStorage.getInstance()
