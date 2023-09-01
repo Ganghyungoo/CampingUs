@@ -85,6 +85,7 @@ class CampsiteFragment : Fragment(), OnMapReadyCallback, Overlay.OnClickListener
             if (isGranted) {
                 // 권한이 허용되었으면
                 naverMap.locationTrackingMode = LocationTrackingMode.Follow
+                Log.d("zzz","권한 허용확인")
             } else {
                 // 권한이 거부 되었으면
                 naverMap.locationTrackingMode = LocationTrackingMode.None
@@ -117,6 +118,7 @@ class CampsiteFragment : Fragment(), OnMapReadyCallback, Overlay.OnClickListener
                         page = 1
                         searchTask = false
                         markerList.clear()
+                        Log.d("zzz","마커 추가")
                         //마커 찍기
                         addMaker()
                     }
@@ -174,6 +176,7 @@ class CampsiteFragment : Fragment(), OnMapReadyCallback, Overlay.OnClickListener
         val mapFragment = fm.findFragmentById(R.id.map) as MapFragment?
             ?: MapFragment.newInstance().also {
                 fm.beginTransaction().add(R.id.map, it).commit()
+                Log.d("zzz","맵 로딩")
             }
         //OnMapReadyCallback등록
         mapFragment.getMapAsync(this)
@@ -181,9 +184,20 @@ class CampsiteFragment : Fragment(), OnMapReadyCallback, Overlay.OnClickListener
         fragmentCampsiteBinding.run {
             //제휴 캠핑장 플로팅 바 클릭시
             buttonContractCampsite.setOnClickListener {
+                campList.clear()
+                //프래그 먼트 종료 시 위치 업데이트 중단
+                locationSource.deactivate()
+                //프래그먼트 종료 시 뷰모델 데이터 초기화
+                campsiteViewModel.resetData()
+                //프래그먼트 종료시 내부 맵 프래그먼트의 getMapAsync도 종료시키기 위해 맵 프래그먼트 수동 종료
+                val mapFragment =
+                    mainActivity.supportFragmentManager.findFragmentById(R.id.map) as MapFragment?
+                mapFragment?.let {
+                    mainActivity.supportFragmentManager.beginTransaction().remove(it).commit()
+                }
                 mainActivity.replaceFragment(
                     MainActivity.CONTRACT_CAMPSITE_FRAGMENT,
-                    false,
+                    true,
                     false,
                     null
                 )
@@ -256,10 +270,12 @@ class CampsiteFragment : Fragment(), OnMapReadyCallback, Overlay.OnClickListener
             fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
                 //location nullable 대응
                 if (location != null) {
+
                     myLatitude = location.latitude.toString()
                     myLongitude = location.longitude.toString()
                     //데이터 1차 호출
                     campsiteViewModel.fetchCampsites(page, myLatitude, myLongitude)
+                    Log.d("zzz","내위치 최초 식별후 데이터 읽기")
                 }
             }
         } else {
@@ -320,6 +336,7 @@ class CampsiteFragment : Fragment(), OnMapReadyCallback, Overlay.OnClickListener
         mapFragment?.let {
             mainActivity.supportFragmentManager.beginTransaction().remove(it).commit()
         }
+        Log.d("zzz","디테치")
     }
 
     inner class SearchedCampsiteAdapter :

@@ -21,6 +21,7 @@ import com.test.campingusproject_customer.databinding.RowPurchaseHistoryBinding
 import com.test.campingusproject_customer.databinding.RowPurchaseHistoryItemBinding
 import com.test.campingusproject_customer.dataclassmodel.OrderModel
 import com.test.campingusproject_customer.dataclassmodel.OrderProductModel
+import com.test.campingusproject_customer.repository.OrderDetailRepository
 import com.test.campingusproject_customer.ui.main.MainActivity
 import com.test.campingusproject_customer.viewmodel.CampsiteViewModel
 import com.test.campingusproject_customer.viewmodel.MyOrderListViewModel
@@ -31,59 +32,34 @@ class PurchaseHistoryFragment : Fragment() {
     lateinit var mainActivity: MainActivity
     lateinit var fragmentPurchaseHistoryBinding: FragmentPurchaseHistoryBinding
     lateinit var myOrderListViewModel: MyOrderListViewModel
-    lateinit var productList:MutableList<MutableList<OrderProductModel>>
-
-
-    val maxIdx:Int by lazy{
-        productList.size
-    }
-    companion object{
-        var nowIdx=0
-    }
-
-
-    var state = true
+    lateinit var orderList:MutableList<OrderModel>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-
         mainActivity = activity as MainActivity
         fragmentPurchaseHistoryBinding = FragmentPurchaseHistoryBinding.inflate(layoutInflater)
         myOrderListViewModel = ViewModelProvider(mainActivity)[MyOrderListViewModel::class.java]
-        myOrderListViewModel.run {
-            myOrderList.observe(mainActivity) {
-                Log.d("testt", "오더ㅋㅋㅋㅋ${it.size}")
-//                val adapter=fragmentPurchaseHistoryBinding.recyclerViewPurchaseHistory.adapter as PurchaseHistoryAdapter
-//                adapter.notifyDataSetChanged()
 
-                // 리사이클러 뷰
-
-            }
-            myOrderProductDoubleList.observe(mainActivity) {
-                Log.d("testt", "제품ㅋㅋㅋㅋ${it.size}")
-                productList=it
-
-                Log.d("testt", "아이디엑스${myOrderList.value?.size!!}")
-            }
-//            nowIdx=0
-            load.observe(mainActivity){
-
-            }
-        }
-        val sharedPreferences =
-            mainActivity.getSharedPreferences("customer_user_info", Context.MODE_PRIVATE)
-
-        myOrderListViewModel.fetchMyOrder(sharedPreferences.getString("customerUserId", null)!!)
+        //사용자의 구매내역을 위한 아이디 얻기
+        val sharedPreferences = mainActivity.getSharedPreferences("customer_user_info", Context.MODE_PRIVATE)
+        val myId=sharedPreferences.getString("customerUserId",null)
 
 
-        fragmentPurchaseHistoryBinding.run {
-
+        //콜백을 통해서 orderList가 완전히 초기화 되었을 때 리사이클러뷰 띄우기
+        fetchMyOrderList(myId!!) { fetchedOrderList ->
+            orderList= fetchedOrderList as MutableList<OrderModel>
             fragmentPurchaseHistoryBinding.recyclerViewPurchaseHistory.run {
                 adapter = PurchaseHistoryAdapter()
                 layoutManager = LinearLayoutManager(mainActivity)
             }
+        }
+
+
+        fragmentPurchaseHistoryBinding.run {
+
+
 
             // 툴바
             toolbarPayment.run {
@@ -99,44 +75,81 @@ class PurchaseHistoryFragment : Fragment() {
         return fragmentPurchaseHistoryBinding.root
     }
 
+    fun fetchMyOrderList(orderUserId: String, callback: (List<OrderModel>) -> Unit) {
+        val orderList = mutableListOf<OrderModel>()
+        OrderDetailRepository.getOrderInfoByUserId(orderUserId) { order ->
+            if (order.result.exists() == true) {
+                for (c1 in order.result.children) {
+                    val tempList= mutableListOf<OrderProductModel>()
+                    val orderUserId1 = c1.child("orderUserId").value as String
+                    val orderId = c1.child("orderId").value as String
+                    val orderDate = c1.child("orderDate").value as String
+                    val orderPayment = c1.child("orderPayment").value as String
+                    val orderStatus = c1.child("orderStatus").value as String
+                    val orderDeliveryRecipent = c1.child("orderDeliveryRecipent").value as String
+                    val orderDeliveryContact = c1.child("orderDeliveryContact").value as String
+                    val orderDeliveryAddress = c1.child("orderDeliveryAddress").value as String
+                    val orderCustomerUserName = c1.child("orderCustomerUserName").value as String
+                    val orderCustomerUserPhone = c1.child("orderCustomerUserPhone").value as String
+
+                    val myOrderInfo = OrderModel(orderUserId1, orderId, orderDate, orderPayment, orderStatus, orderDeliveryRecipent, orderDeliveryContact, orderDeliveryAddress, orderCustomerUserName, orderCustomerUserPhone
+                    )
+                    orderList.add(myOrderInfo)
+                }
+                callback(orderList) // orderList가 준비되었을 때 콜백 호출
+            }
+        }
+    }
+
+    fun getProductDataByOrderId(orderId: String,callback: (List<OrderProductModel>) -> Unit){
+        val productTempList = mutableListOf<OrderProductModel>()
+        OrderDetailRepository.getOrderedProductByOrderNum(orderId) { product ->
+            if (product.result.exists() == true) {
+                for (c2 in product.result.children) {
+                    val orderId2 = c2.child("orderId").value as String
+                    val orderProductName = c2.child("orderProductName").value as String
+                    val orderProductCount = c2.child("orderProductCount").value as String
+                    val orderProductPrice = c2.child("orderProductPrice").value as String
+                    val orderProductImage = c2.child("orderProductImage").value as String
+                    val orderProductState = c2.child("orderProductState").value as String
+                    val productObj = OrderProductModel(
+                        orderId2,
+                        orderProductName,
+                        orderProductCount,
+                        orderProductPrice,
+                        orderProductImage,
+                        orderProductState
+                    )
+                    productTempList.add(productObj)
+                }
+                callback(productTempList)
+            }
+        }
+    }
+
     // 구매내역 어댑터
-    inner class PurchaseHistoryAdapter() :
-        RecyclerView.Adapter<PurchaseHistoryFragment.PurchaseHistoryAdapter.PurchaseHistoryViewHolder>() {
+    inner class PurchaseHistoryAdapter() : RecyclerView.Adapter<PurchaseHistoryFragment.PurchaseHistoryAdapter.PurchaseHistoryViewHolder>() {
 
         inner class PurchaseHistoryViewHolder(rowPurchaseHistoryBinding: RowPurchaseHistoryBinding) :
             RecyclerView.ViewHolder(rowPurchaseHistoryBinding.root) {
+            //구매 날짜 텍스트
             val textViewRowPurchaseHistoryDate: TextView
+            //주문 상세보기 버튼
             val buttonRowPurchaseHistory: Button
-            val layoutInner:LinearLayout
-            var nowIdx2=0
+            //내부에 제품 쌓는 레이아웃
+            var layoutInner:LinearLayout
+
 
             init {
-
-                textViewRowPurchaseHistoryDate =
-                    rowPurchaseHistoryBinding.textViewRowPurchaseHistoryDate
+                //구매날짜 초기화
+                textViewRowPurchaseHistoryDate = rowPurchaseHistoryBinding.textViewRowPurchaseHistoryDate
+                //상세보기 버튼 초기화
                 buttonRowPurchaseHistory = rowPurchaseHistoryBinding.buttonRowPurchaseHistory
-                val bindObject=rowPurchaseHistoryBinding.LayoutInner
-                rowPurchaseHistoryBinding.root.setOnClickListener{
-                    Log.d("testt","가보자${myOrderListViewModel.myOrderProductDoubleList.value?.get(1)}")
-                }
-                Log.d("testt","가보자${productList}")
-
-                    if(nowIdx2 != maxIdx){
-                        for(idx in 0 until productList.get(nowIdx2).size){
-                            val innerProduct=RowPurchaseHistoryItemBinding.inflate(layoutInflater)
-                            innerProduct.textViewRowPurchaseHistoryItemName.text=productList.get(nowIdx2)?.get(idx)?.orderProductName
-                            innerProduct.textViewRowPurchaseHistoryItemNumber.text=productList.get(nowIdx2)?.get(idx)?.orderProductCount
-                            innerProduct.textViewRowPurchaseHistoryItemPrice.text=productList.get(nowIdx2)?.get(idx)?.orderProductPrice
-                            innerProduct.textViewRowPurchaseHistoryItemStateDone.text=productList.get(nowIdx2)?.get(idx)?.orderProductState
-                            Log.d("testt","ㄱㄱㄱㄱ${idx}}")
+                //레이아웃 초기화
+                val addViewLayout= rowPurchaseHistoryBinding.LayoutInner
 
 
-//                    innerProduct.textViewRowPurchaseHistoryItemName.text=productList[position].get(idx).orderProductName
-                            bindObject.addView(innerProduct.root)
-                        }
-                        nowIdx2=nowIdx2+1
-                    }
-                layoutInner=bindObject
+                layoutInner=rowPurchaseHistoryBinding.LayoutInner
             }
         }
 
@@ -155,17 +168,52 @@ class PurchaseHistoryFragment : Fragment() {
         }
 
         override fun getItemCount(): Int {
-            return myOrderListViewModel.myOrderList.value?.size!!
+            return orderList.size
 
         }
 
         override fun onBindViewHolder(holder: PurchaseHistoryViewHolder, position: Int) {
-//            holder.textViewRowPurchaseHistoryDate.text = orderList[position].orderDate
-            holder.textViewRowPurchaseHistoryDate.text = "으아아아아"
+
+            holder.textViewRowPurchaseHistoryDate.text = orderList[position].orderDate
             holder.buttonRowPurchaseHistory.setOnClickListener {
-//                mainActivity.replaceFragment(MainActivity.ORDER_DETAIL_FRAGMENT, true, true, null)
-                Log.d("testt","${myOrderListViewModel.myOrderProductDoubleList.value}")
+                val bundle=Bundle()
+                bundle.putString("orderId",orderList[position].orderId)
+                mainActivity.replaceFragment(MainActivity.ORDER_DETAIL_FRAGMENT,true,false,bundle)
             }
+            //콜백으로
+            getProductDataByOrderId(orderList[position].orderId){
+                val item= holder.layoutInner
+                for (product in it){
+                    val productItem=RowPurchaseHistoryItemBinding.inflate(layoutInflater)
+                    productItem.textViewRowPurchaseHistoryItemName.text=product.orderProductName
+                    productItem.textViewRowPurchaseHistoryItemPrice.text=product.orderProductPrice
+                    productItem.textViewRowPurchaseHistoryItemNumber.text=product.orderProductCount
+                    productItem.textViewRowPurchaseHistoryItemStateDone.text=product.orderProductState
+                    if (productItem.textViewRowPurchaseHistoryItemStateDone.text=="결제 완료"){
+                        productItem.textViewRowPurchaseHistoryItemReview.visibility=View.GONE
+                    }else{
+                        productItem.textViewRowPurchaseHistoryItemReview.text="리뷰 작성하기"
+                        productItem.textViewRowPurchaseHistoryItemReview.setOnClickListener {
+                            val bundle=Bundle()
+                            bundle.putString("orderId",product.orderId)
+                            bundle.putString("productName",product.orderProductName)
+                            mainActivity.replaceFragment(MainActivity.REVIEW_WRITE_FRAGMENT,true,false,bundle)
+                        }
+                    }
+
+
+                    val params = ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT
+                    )
+                    item.addView(productItem.root,params)
+                }
+                holder.layoutInner=item
+            }
+
+
+
+
         }
     }
 

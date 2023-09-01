@@ -83,9 +83,13 @@ class ReviewWriteFragment : Fragment() {
 
         // 테스트를 위해서 임이로 id값 지정
         var productId = 47
+        val orderId= arguments?.getString("orderId",null)
+        val productName= arguments?.getString("productName",null)
+        Log.d("xxx","${orderId}")
+        Log.d("xxx","${productName}")
 
         // 좋아요 수 데이터 가져오기
-        productViewModel.getOneProductData(productId.toLong())
+        productViewModel.getOneProductData(orderId!!.toLong())
         // reviewRecommendationCount = productViewModel.productRecommendationCount.value!!
 
         //앨범 런처 초기화
@@ -100,7 +104,7 @@ class ReviewWriteFragment : Fragment() {
                 //백버튼 설정
                 setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
                 setNavigationOnClickListener {
-                    mainActivity.removeFragment(MainActivity.CART_FRAGMENT)
+                    mainActivity.removeFragment(MainActivity.REVIEW_WRITE_FRAGMENT)
                 }
             }
 

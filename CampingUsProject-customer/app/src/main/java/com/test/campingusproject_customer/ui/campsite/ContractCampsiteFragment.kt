@@ -53,8 +53,9 @@ class ContractCampsiteFragment : Fragment(), OnMapReadyCallback, Overlay.OnClick
                     mainActivity.supportFragmentManager.findFragmentById(R.id.map_fragment) as MapFragment?
                 mapFragment?.let {
                     mainActivity.supportFragmentManager.beginTransaction().remove(it).commit()
+                    Log.d("zzz","맵 삭제")
                 }
-                mainActivity.replaceFragment(MainActivity.CAMPSITE_FRAGMENT, false, false, null)
+                mainActivity.removeFragment(MainActivity.CONTRACT_CAMPSITE_FRAGMENT)
             }
         }
         contractCampsiteList = mainActivity.fetchContractCampsite()
@@ -109,8 +110,9 @@ class ContractCampsiteFragment : Fragment(), OnMapReadyCallback, Overlay.OnClick
                     main.supportFragmentManager.findFragmentById(R.id.map_fragment) as MapFragment?
                 mapFragment?.let {
                     main.supportFragmentManager.beginTransaction().remove(it).commit()
+                    Log.d("zzz","맵프래그먼트 종ㄹ료")
                 }
-                main.replaceFragment(MainActivity.CAMPSITE_FRAGMENT, false, false, null)
+                main.removeFragment(MainActivity.CONTRACT_CAMPSITE_FRAGMENT)
 
             }
         }
