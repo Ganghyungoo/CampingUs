@@ -2,8 +2,10 @@ package com.test.campingusproject_customer.ui.shopping
 
 import android.content.Context
 import android.content.DialogInterface
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -68,6 +70,14 @@ class ShoppingProductFragment : Fragment() {
             }
             productCount.observe(mainActivity) {
                 fragmentShoppingProductBinding.textViewShoppingProductNumber.setText("남은 수량 : $it 개")
+
+                if(it == 0L){
+                    Log.d("countTest", "zero")
+                    fragmentShoppingProductBinding.buttonShoppingProductToBuy.isEnabled = false
+                    fragmentShoppingProductBinding.buttonShoppingProductToBuy.setTextColor(Color.GRAY)
+                    fragmentShoppingProductBinding.buttonShoppingProductToCart.isEnabled = false
+                    fragmentShoppingProductBinding.buttonShoppingProductToCart.setTextColor(Color.GRAY)
+                }
             }
             productSellerId.observe(mainActivity){
                 getProductSellerName(it)
@@ -169,19 +179,6 @@ class ShoppingProductFragment : Fragment() {
                 layoutManager = LinearLayoutManager(mainActivity, RecyclerView.HORIZONTAL, false)
             }
 
-//            textViewShoppingProductName.text = name!!
-//            textViewShoppingProductNumber.text = "총 판매수량 : $count"
-//            if (discountRate == 0L) {
-//                textViewShoppingProductSale.visibility = View.INVISIBLE
-//            } else {
-//                // 할인 계산
-//                val result = (price - (price * (discountRate *0.01))).toInt()
-//                textViewShoppingProductPrice.text = "$result 원"
-//            }
-
-//            textViewShoppingProductSellerName.text = productUserName
-//            textViewShoppingProductCategory.text = category
-//            textViewShoppingProductExplanationDetailContent.text = info
         }
         return fragmentShoppingProductBinding.root
     }
