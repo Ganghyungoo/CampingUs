@@ -143,7 +143,9 @@ class ShoppingProductFragment : Fragment() {
                     val newBundle = Bundle()
                     val strArray = arrayListOf<String>("1", productViewModel.productName.value.toString(),
                         productViewModel.productPrice.value.toString(), productViewModel.productDiscountRate.value.toString(),
-                        productViewModel.productImage.value.toString())
+                        productViewModel.productImage.value.toString(), productViewModel.productId_.value.toString(),
+                        productViewModel.productSellerId.value.toString()
+                    )
                     newBundle.putStringArrayList("strArray", strArray)
                     mainActivity.replaceFragment(MainActivity.PAYMENT_FRAGMENT, true, true, newBundle)
                 }
