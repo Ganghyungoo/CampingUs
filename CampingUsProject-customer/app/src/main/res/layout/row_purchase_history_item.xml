@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layoutInnerProduct"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@drawable/border"
         android:padding="20dp">
 
@@ -59,21 +59,20 @@
             android:id="@+id/textViewRowPurchaseHistoryItemStateDone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="25dp"
             android:text="배송 완료"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/highLightColor"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/textViewRowPurchaseHistoryItemName" />
+            app:layout_constraintTop_toBottomOf="@id/textViewRowPurchaseHistoryItemName" />
 
         <TextView
             android:id="@+id/textViewRowPurchaseHistoryItemReview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
             android:text="리뷰 작성하기"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/highLightColor"
@@ -83,9 +82,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="10dp" />
 
 
 </LinearLayout>

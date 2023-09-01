@@ -66,9 +66,6 @@ class PaymentFragment : Fragment() {
             Log.d("getProductId", "get")
             runBlocking {
                 getProductData(sharedPreference, orderProductId)    //원래 이게 그 장바구니랑 제품 상세화면에서 받은
-                //데이터를 orderproductList 이 변수에 저장하는 함수거든요? 근데 이때 orderProduct 객체를 만들어서 저 리스트에
-                //넣는거라서 productId가 파베에 저장되어있으니까 값 가져왔을때 객체 만들때 넘겨줘야해서 여기에 호출했는데
-                //작동을 안하느거같아요....
                 fragmentPaymentBinding.recyclerViewPaymentProduct.adapter?.notifyDataSetChanged()
                 Log.d("success", "hhh")
             }
@@ -144,8 +141,7 @@ class PaymentFragment : Fragment() {
                 OrderRepository.addOrderInfo(orderModel){
                     Log.d("FirebaseSave", "ordermodel저장")
                 }
-                //여기가 결제 버튼 클릭 리스너 내부인데
-                //여기서 아까 받아온 orderproductList를 전부 DB에 저장하거든요.....
+
                 for(item in orderproductList){
                     OrderRepository.addOrderProductInfo(item){
                         Log.d("FirebaseSave", "orderProductModel 저장")
@@ -234,7 +230,6 @@ class PaymentFragment : Fragment() {
                 val productName = productList[idx].productName
                 val productPrice = productList[idx].productPrice
                 val productImage = productList[idx].productImage
-                val productId = productList[idx].productId
                 val productSellerId = productList[idx].productSellerId
 
                 val orderProduct = OrderProductModel(orderId, orderProductId, productSellerId!!, orderDate,
@@ -253,7 +248,6 @@ class PaymentFragment : Fragment() {
             val productName = product[1]
             val productDiscountRate = product[3]
             val productImage = product[4]
-            val productId = product[5]
             val productSellerId = product[6]
 
             val productPrice = if(productDiscountRate.toLong() == 0L){

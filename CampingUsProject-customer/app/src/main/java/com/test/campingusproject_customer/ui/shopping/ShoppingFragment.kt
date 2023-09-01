@@ -56,6 +56,10 @@ class ShoppingFragment : Fragment() {
         R.id.itemShoppingSeasonalItems,
         R.id.itemShoppingContainer
     )
+    companion object{
+        var token=-1
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -102,8 +106,27 @@ class ShoppingFragment : Fragment() {
 
             // 리사이클러뷰
             recyclerViewShoppingProduct.run {
-                productViewModel.getAllProductData()
-
+                Log.d("testt","천장 번들:${arguments?.getString("saleStatus")}")
+                if(arguments?.getString("saleStatus")=="인기 특가"){
+                    productViewModel.getAllProductDiscountData()
+                    toolbartextview.setText("인기특가")
+                    Log.d("testt","선택된 메뉴:인기특가")
+                }
+                else if(arguments?.getString("saleStatus")=="실시간랭킹"){
+                    productViewModel.getAllProductRealTimeRankingData()
+                    toolbartextview.setText("실시간랭킹")
+                    mainActivity.activityMainBinding.bottomNavigationViewMain.selectedItemId = R.id.menuItemShopping
+                    token=1
+                    Log.d("testt","선택된 메뉴:실랭")
+                }else if(arguments?.getString("saleStatus")==null){
+                    if(token==1){
+                        toolbartextview.setText("실시간랭킹")
+                        token=-1
+                    }
+                    productViewModel.getAllProductData()
+                    Log.d("testt","선택된 메뉴:전체")
+                    Log.d("testt","그와중 번들 값:${arguments?.getString("saleStatus")}")
+                }
                 adapter = ShoppingProductAdapter()
                 layoutManager = GridLayoutManager(context, 3)
             }

@@ -119,6 +119,7 @@ class HomeFragment : Fragment() {
             //인기특가 더보기 눌렀을 때
             textViewHomePopularSaleShowMore.setOnClickListener {
                 val newBundle = Bundle()
+                mainActivity.activityMainBinding.bottomNavigationViewMain.selectedItemId = R.id.menuItemShopping
                 newBundle.putString("saleStatus", "인기 특가")
                 mainActivity.replaceFragment(MainActivity.SHOPPING_FRAGMENT, false, true, newBundle)
             }
@@ -277,7 +278,6 @@ class HomeFragment : Fragment() {
                 .into(holder.imageViewRowContractCampsiteImage)
         }
     }
-
 
     //인기게시판 리싸이클러뷰 어댑터
     inner class PopularBoardAdapter : RecyclerView.Adapter<PopularBoardAdapter.PopularBoardViewHolder>(){
