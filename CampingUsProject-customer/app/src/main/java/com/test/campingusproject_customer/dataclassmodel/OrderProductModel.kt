@@ -2,7 +2,7 @@ package com.test.campingusproject_customer.dataclassmodel
 
 data class OrderProductModel (
     val orderId : String,               //주문 ID
-    val orderProductId : Long,          //주문 상품 ID
+    val orderProductId : Long,          //주문 상품 고유 ID
     val orderSellerId : String,         //주문 상품 판매자 ID
     val orderDate : String,             //주문 날짜
     val orderUserId : String,           //유저ID

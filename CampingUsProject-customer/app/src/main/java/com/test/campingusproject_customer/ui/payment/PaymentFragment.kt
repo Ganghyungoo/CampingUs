@@ -1,6 +1,7 @@
 package com.test.campingusproject_customer.ui.payment
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -58,7 +59,20 @@ class PaymentFragment : Fragment() {
         //현재 로그인된 유저의 정보가 담긴 sharedPreference 객체
         val sharedPreference = mainActivity.getSharedPreferences("customer_user_info", Context.MODE_PRIVATE)
 
-        getProductData()
+        var orderProductId = 0L
+
+        OrderRepository.getProductId {
+            orderProductId = it.result.value as Long
+            Log.d("getProductId", "get")
+            runBlocking {
+                getProductData(sharedPreference, orderProductId)    //원래 이게 그 장바구니랑 제품 상세화면에서 받은
+                //데이터를 orderproductList 이 변수에 저장하는 함수거든요? 근데 이때 orderProduct 객체를 만들어서 저 리스트에
+                //넣는거라서 productId가 파베에 저장되어있으니까 값 가져왔을때 객체 만들때 넘겨줘야해서 여기에 호출했는데
+                //작동을 안하느거같아요....
+                fragmentPaymentBinding.recyclerViewPaymentProduct.adapter?.notifyDataSetChanged()
+                Log.d("success", "hhh")
+            }
+        }
 
         fragmentPaymentBinding.run {
             //주문 번호 설정
@@ -79,10 +93,7 @@ class PaymentFragment : Fragment() {
             //라디오 그룹 기본값 설정
             radioGroupPayment.check(R.id.radio_button_card)
 
-            //결제 금액 설정
-            val totalPrice = calTotalPrice()
-            textViewPaymentTotalCost.setText("$totalPrice 원")
-            buttonPaymentBuy.setText("$totalPrice 원 결제하기")
+
 
             // 툴바
             toolbarPayment.run {
@@ -133,13 +144,17 @@ class PaymentFragment : Fragment() {
                 OrderRepository.addOrderInfo(orderModel){
                     Log.d("FirebaseSave", "ordermodel저장")
                 }
-
+                //여기가 결제 버튼 클릭 리스너 내부인데
+                //여기서 아까 받아온 orderproductList를 전부 DB에 저장하거든요.....
                 for(item in orderproductList){
                     OrderRepository.addOrderProductInfo(item){
                         Log.d("FirebaseSave", "orderProductModel 저장")
+                        OrderRepository.setProductId(orderProductId+1){
+                            Log.d("FirebaseSave", "setProductId")
+                        }
                     }
                 }
-                
+
                 //장바구니 통해 결제페이지로 넘어왔을 경우만 결제 성공시 장바구니 초기화
                 if(arguments?.getIntArray("spinnerList")!=null){
                     CartRepository.removeAllCartData(sharedPreference.getString("customerUserId", null)!!)
@@ -204,7 +219,7 @@ class PaymentFragment : Fragment() {
         }
     }
 
-    fun getProductData(){
+    fun getProductData(sharedPreference : SharedPreferences, orderProductId: Long){
 
         //장바구니에서 bundle로 전달한 선택 상품 목록
         val spinnerList = arguments?.getIntArray("spinnerList")
@@ -219,16 +234,18 @@ class PaymentFragment : Fragment() {
                 val productName = productList[idx].productName
                 val productPrice = productList[idx].productPrice
                 val productImage = productList[idx].productImage
+                val productId = productList[idx].productId
+                val productSellerId = productList[idx].productSellerId
 
-                Log.d("productList", "$productCount")
-                Log.d("productList", "$productName")
-                Log.d("productList", "$productPrice")
-                Log.d("productList", "$productImage")
+                val orderProduct = OrderProductModel(orderId, orderProductId, productSellerId!!, orderDate,
+                    sharedPreference.getString("customerUserId", null)!!, productName!!,
+                    productCount.toString(), productPrice.toString(), productImage.toString(),
+                    "결제 완료")
 
-                val orderProduct = OrderProductModel(orderId, productName!!, productCount.toString(),
-                    productPrice.toString(), productImage.toString(),"결제 완료")
-
+                Log.d("저장", "저장전")
                 orderproductList.add(orderProduct)
+                Log.d("저장", "저장완")
+
             }
         }
         if(product != null){
@@ -236,6 +253,8 @@ class PaymentFragment : Fragment() {
             val productName = product[1]
             val productDiscountRate = product[3]
             val productImage = product[4]
+            val productId = product[5]
+            val productSellerId = product[6]
 
             val productPrice = if(productDiscountRate.toLong() == 0L){
                 product[2]
@@ -243,11 +262,17 @@ class PaymentFragment : Fragment() {
                 (product[2].toLong() - (product[2].toLong() * (productDiscountRate.toLong()*0.01))).toInt()
             }
 
-            val orderProduct = OrderProductModel(orderId, productName, productCount,
-                productPrice.toString(), productImage,"결제 완료")
-
+            val orderProduct = OrderProductModel(orderId, orderProductId, productSellerId,
+                orderDate, sharedPreference.getString("customerUserId", null)!!, productName,
+                productCount, productPrice.toString(), productImage,"결제 완료")
+            Log.d("저장", "저장전")
             orderproductList.add(orderProduct)
+            Log.d("저장", "저장완")
         }
+        //결제 금액 설정
+        val totalPrice = calTotalPrice()
+        fragmentPaymentBinding.textViewPaymentTotalCost.setText("$totalPrice 원")
+        fragmentPaymentBinding.buttonPaymentBuy.setText("$totalPrice 원 결제하기")
     }
 
     //textInputLayout 오류 표시 함수
@@ -278,8 +303,10 @@ class PaymentFragment : Fragment() {
 
     fun calTotalPrice() : Int{
         var totalPrice = 0
+        Log.d("size", orderproductList.size.toString())
         for(item in orderproductList){
             totalPrice += (item.orderProductPrice.toInt() * item.orderProductCount.toInt())
+            Log.d("item", item.orderProductPrice.toString())
         }
         return totalPrice
     }

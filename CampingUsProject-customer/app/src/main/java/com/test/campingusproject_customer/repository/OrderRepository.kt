@@ -24,5 +24,22 @@ class OrderRepository {
             orderProductRef.push().setValue(orderProductModel).addOnCompleteListener(callback)
         }
 
+        //상품 ID를 가져오는 함수
+        fun getProductId(callback: (Task<DataSnapshot>) -> Unit){
+            val database = FirebaseDatabase.getInstance()
+
+            val orderProductId = database.getReference("OrderProductId")
+            orderProductId.get().addOnCompleteListener(callback)
+        }
+
+        //상품 ID를 설정하는 함수
+        fun setProductId(orderProductId : Long, callback: (Task<Void>) -> Unit){
+            val database = FirebaseDatabase.getInstance()
+            val orderProductIdRef = database.getReference("OrderProductId")
+
+            orderProductIdRef.get().addOnCompleteListener {
+                it.result.ref.setValue(orderProductId).addOnCompleteListener(callback)
+            }
+        }
     }
 }

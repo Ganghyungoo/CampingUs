@@ -77,6 +77,11 @@ class ShoppingProductFragment : Fragment() {
                     fragmentShoppingProductBinding.buttonShoppingProductToBuy.setTextColor(Color.GRAY)
                     fragmentShoppingProductBinding.buttonShoppingProductToCart.isEnabled = false
                     fragmentShoppingProductBinding.buttonShoppingProductToCart.setTextColor(Color.GRAY)
+                }else{
+                    fragmentShoppingProductBinding.buttonShoppingProductToBuy.isEnabled = true
+                    fragmentShoppingProductBinding.buttonShoppingProductToBuy.setTextColor(Color.BLACK)
+                    fragmentShoppingProductBinding.buttonShoppingProductToCart.isEnabled = true
+                    fragmentShoppingProductBinding.buttonShoppingProductToCart.setTextColor(Color.BLACK)
                 }
             }
             productSellerId.observe(mainActivity){
