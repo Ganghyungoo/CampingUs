@@ -52,13 +52,17 @@ class MyOrderListViewModel: ViewModel() {
                             if (product.result.exists() == true) {
                                 for (c2 in product.result.children) {
                                     val orderId2 = c2.child("orderId").value as String
+                                    val orderProductId = c2.child("orderProductId").value as Long
+                                    val orderSellerId = c2.child("orderSellerId").value as String
+                                    val orderDate = c2.child("orderDate").value as String
+                                    val orderUserId = c2.child("orderUserId").value as String
                                     val orderProductName = c2.child("orderProductName").value as String
                                     val orderProductCount = c2.child("orderProductCount").value as String
                                     val orderProductPrice = c2.child("orderProductPrice").value as String
                                     val orderProductImage = c2.child("orderProductImage").value as String
                                     val orderProductState = c2.child("orderProductState").value as String
-                                    val productObj = OrderProductModel(orderId2, orderProductName, orderProductCount, orderProductPrice, orderProductImage, orderProductState
-                                    )
+                                    val productObj = OrderProductModel(orderId2, orderProductId, orderSellerId, orderDate, orderUserId,
+                                        orderProductName, orderProductCount, orderProductPrice, orderProductImage, orderProductState)
                                     tempList.add(productObj)
                                 }
                                 productList.add(tempList)

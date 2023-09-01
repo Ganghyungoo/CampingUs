@@ -44,7 +44,11 @@ class OrderDetailViewModel : ViewModel() {
         OrderDetailRepository.getOrderedProductByOrderNum(orderId) { product ->
             if (product.result.exists() == true) {
                 for (c1 in product.result.children) {
-                    val orderId=c1.child("orderId").value as String
+                    val orderId_=c1.child("orderId").value as String
+                    val orderProductId = c1.child("orderProductId").value as Long
+                    val orderSellerId = c1.child("orderSellerId").value as String
+                    val orderDate = c1.child("orderDate").value as String
+                    val orderUserId = c1.child("orderUserId").value as String
                     val orderProductName=c1.child("orderProductName").value as String
                     val orderProductCount=c1.child("orderProductCount").value as String
                     val orderProductPrice=c1.child("orderProductPrice").value as String
@@ -52,7 +56,9 @@ class OrderDetailViewModel : ViewModel() {
 
 
                     totalPrice += (orderProductCount.toInt()*orderProductPrice.toInt())
-                    val orderProductModel=OrderProductModel(orderId,orderProductName,orderProductCount,orderProductPrice,orderProductImage,"결제 완료")
+                    val orderProductModel=OrderProductModel(orderId_, orderProductId, orderSellerId,
+                    orderDate, orderUserId, orderProductName, orderProductCount, orderProductPrice,
+                    orderProductImage, "결제 완료")
                     tempList.add(orderProductModel)
                 }
                 orderProductList.value=tempList
