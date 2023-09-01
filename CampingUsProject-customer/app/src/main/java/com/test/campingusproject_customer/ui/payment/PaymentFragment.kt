@@ -58,28 +58,7 @@ class PaymentFragment : Fragment() {
         //현재 로그인된 유저의 정보가 담긴 sharedPreference 객체
         val sharedPreference = mainActivity.getSharedPreferences("customer_user_info", Context.MODE_PRIVATE)
 
-        //장바구니에서 bundle로 전달한 선택 상품 목록
-        val spinnerList = arguments?.getIntArray("spinnerList")
-        val productList = arguments?.getParcelableArrayList<CartProductModel>("productList")
-
-        if (productList != null) {
-            for (idx in 0 until spinnerList?.size!!){
-                val productCount = spinnerList[idx]
-                val productName = productList[idx].productName
-                val productPrice = productList[idx].productPrice
-                val productImage = productList[idx].productImage
-
-                Log.d("productList", "$productCount")
-                Log.d("productList", "$productName")
-                Log.d("productList", "$productPrice")
-                Log.d("productList", "$productImage")
-
-                val orderProduct = OrderProductModel(orderId, productName!!, productCount.toString(),
-                    productPrice.toString(), productImage.toString(),"결제 완료")
-
-                orderproductList.add(orderProduct)
-            }
-        }
+        getProductData()
 
         fragmentPaymentBinding.run {
             //주문 번호 설정
@@ -160,8 +139,11 @@ class PaymentFragment : Fragment() {
                         Log.d("FirebaseSave", "orderProductModel 저장")
                     }
                 }
-
-                CartRepository.removeAllCartData(sharedPreference.getString("customerUserId", null)!!)
+                
+                //장바구니 통해 결제페이지로 넘어왔을 경우만 결제 성공시 장바구니 초기화
+                if(arguments?.getIntArray("spinnerList")!=null){
+                    CartRepository.removeAllCartData(sharedPreference.getString("customerUserId", null)!!)
+                }
 
                 //주문번호 다음 페이지로 넘김
                 val newBundle = Bundle()
@@ -219,6 +201,52 @@ class PaymentFragment : Fragment() {
                     .into(holder.imageViewRowPayment)
             }
 
+        }
+    }
+
+    fun getProductData(){
+
+        //장바구니에서 bundle로 전달한 선택 상품 목록
+        val spinnerList = arguments?.getIntArray("spinnerList")
+        val productList = arguments?.getParcelableArrayList<CartProductModel>("productList")
+
+        //상품 상세 화면에서 bundle로 전달한 상품 정보
+        val product = arguments?.getStringArrayList("strArray")
+
+        if (productList != null) {
+            for (idx in 0 until spinnerList?.size!!){
+                val productCount = spinnerList[idx]
+                val productName = productList[idx].productName
+                val productPrice = productList[idx].productPrice
+                val productImage = productList[idx].productImage
+
+                Log.d("productList", "$productCount")
+                Log.d("productList", "$productName")
+                Log.d("productList", "$productPrice")
+                Log.d("productList", "$productImage")
+
+                val orderProduct = OrderProductModel(orderId, productName!!, productCount.toString(),
+                    productPrice.toString(), productImage.toString(),"결제 완료")
+
+                orderproductList.add(orderProduct)
+            }
+        }
+        if(product != null){
+            val productCount = product[0]
+            val productName = product[1]
+            val productDiscountRate = product[3]
+            val productImage = product[4]
+
+            val productPrice = if(productDiscountRate.toLong() == 0L){
+                product[2]
+            }else{
+                (product[2].toLong() - (product[2].toLong() * (productDiscountRate.toLong()*0.01))).toInt()
+            }
+
+            val orderProduct = OrderProductModel(orderId, productName, productCount,
+                productPrice.toString(), productImage,"결제 완료")
+
+            orderproductList.add(orderProduct)
         }
     }
 
