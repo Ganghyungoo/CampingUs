@@ -193,8 +193,11 @@ class PurchaseHistoryFragment : Fragment() {
                         productItem.textViewRowPurchaseHistoryItemReview.visibility=View.GONE
                     }else{
                         productItem.textViewRowPurchaseHistoryItemReview.text="리뷰 작성하기"
-                        productItem.textViewRowPurchaseHistoryItemStateDone.setOnClickListener {
-                            //리뷰 작성하는 화면으로 전환 민우님 관련
+                        productItem.textViewRowPurchaseHistoryItemReview.setOnClickListener {
+                            val bundle=Bundle()
+                            bundle.putString("orderId",product.orderId)
+                            bundle.putString("productName",product.orderProductName)
+                            mainActivity.replaceFragment(MainActivity.REVIEW_WRITE_FRAGMENT,true,false,bundle)
                         }
                     }
 
