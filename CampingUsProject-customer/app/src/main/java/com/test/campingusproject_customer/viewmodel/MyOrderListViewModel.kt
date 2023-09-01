@@ -13,7 +13,11 @@ class MyOrderListViewModel : ViewModel() {
 
     val myOrderList = MutableLiveData<MutableList<OrderModel>>()
     val myOrderProductDoubleList = MutableLiveData<MutableList<MutableList<OrderProductModel>>>()
-    val load = MutableLiveData<Boolean>(false)
+    val load=MutableLiveData<Boolean>(false)
+    init {
+        myOrderList.value = mutableListOf<OrderModel>()
+        myOrderProductDoubleList.value = mutableListOf<MutableList<OrderProductModel>>()
+    }
 
 
     //프리퍼런스에 내 아이디를 갖고 해당하는 주문목록을 가져오는 메서드

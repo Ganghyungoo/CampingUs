@@ -16,11 +16,15 @@ data class CartProductModel(
     var productPrice: Long,
     var productImage: String?,
     var productInfo: String?,
+    val productId : Long,
+    val productSellerId : String?
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readLong(),
         parcel.readString(),
+        parcel.readString(),
+        parcel.readLong(),
         parcel.readString()
     ) {
     }
@@ -30,6 +34,8 @@ data class CartProductModel(
         parcel.writeLong(productPrice)
         parcel.writeString(productImage)
         parcel.writeString(productInfo)
+        parcel.writeLong(productId)
+        parcel.writeString(productSellerId)
     }
 
     override fun describeContents(): Int {

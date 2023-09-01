@@ -1,6 +1,7 @@
 package com.test.campingusproject_customer.ui.payment
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -58,26 +59,15 @@ class PaymentFragment : Fragment() {
         //현재 로그인된 유저의 정보가 담긴 sharedPreference 객체
         val sharedPreference = mainActivity.getSharedPreferences("customer_user_info", Context.MODE_PRIVATE)
 
-        //장바구니에서 bundle로 전달한 선택 상품 목록
-        val spinnerList = arguments?.getIntArray("spinnerList")
-        val productList = arguments?.getParcelableArrayList<CartProductModel>("productList")
+        var orderProductId = 0L
 
-        if (productList != null) {
-            for (idx in 0 until spinnerList?.size!!){
-                val productCount = spinnerList[idx]
-                val productName = productList[idx].productName
-                val productPrice = productList[idx].productPrice
-                val productImage = productList[idx].productImage
-
-                Log.d("productList", "$productCount")
-                Log.d("productList", "$productName")
-                Log.d("productList", "$productPrice")
-                Log.d("productList", "$productImage")
-
-                val orderProduct = OrderProductModel(orderId, productName!!, productCount.toString(),
-                    productPrice.toString(), productImage.toString(),"결제 완료")
-
-                orderproductList.add(orderProduct)
+        OrderRepository.getProductId {
+            orderProductId = it.result.value as Long
+            Log.d("getProductId", "get")
+            runBlocking {
+                getProductData(sharedPreference, orderProductId)    //원래 이게 그 장바구니랑 제품 상세화면에서 받은
+                fragmentPaymentBinding.recyclerViewPaymentProduct.adapter?.notifyDataSetChanged()
+                Log.d("success", "hhh")
             }
         }
 
@@ -100,10 +90,7 @@ class PaymentFragment : Fragment() {
             //라디오 그룹 기본값 설정
             radioGroupPayment.check(R.id.radio_button_card)
 
-            //결제 금액 설정
-            val totalPrice = calTotalPrice()
-            textViewPaymentTotalCost.setText("$totalPrice 원")
-            buttonPaymentBuy.setText("$totalPrice 원 결제하기")
+
 
             // 툴바
             toolbarPayment.run {
@@ -158,10 +145,16 @@ class PaymentFragment : Fragment() {
                 for(item in orderproductList){
                     OrderRepository.addOrderProductInfo(item){
                         Log.d("FirebaseSave", "orderProductModel 저장")
+                        OrderRepository.setProductId(orderProductId+1){
+                            Log.d("FirebaseSave", "setProductId")
+                        }
                     }
                 }
 
-                CartRepository.removeAllCartData(sharedPreference.getString("customerUserId", null)!!)
+                //장바구니 통해 결제페이지로 넘어왔을 경우만 결제 성공시 장바구니 초기화
+                if(arguments?.getIntArray("spinnerList")!=null){
+                    CartRepository.removeAllCartData(sharedPreference.getString("customerUserId", null)!!)
+                }
 
                 //주문번호 다음 페이지로 넘김
                 val newBundle = Bundle()
@@ -222,6 +215,60 @@ class PaymentFragment : Fragment() {
         }
     }
 
+    fun getProductData(sharedPreference : SharedPreferences, orderProductId: Long){
+
+        //장바구니에서 bundle로 전달한 선택 상품 목록
+        val spinnerList = arguments?.getIntArray("spinnerList")
+        val productList = arguments?.getParcelableArrayList<CartProductModel>("productList")
+
+        //상품 상세 화면에서 bundle로 전달한 상품 정보
+        val product = arguments?.getStringArrayList("strArray")
+
+        if (productList != null) {
+            for (idx in 0 until spinnerList?.size!!){
+                val productCount = spinnerList[idx]
+                val productName = productList[idx].productName
+                val productPrice = productList[idx].productPrice
+                val productImage = productList[idx].productImage
+                val productSellerId = productList[idx].productSellerId
+
+                val orderProduct = OrderProductModel(orderId, orderProductId, productSellerId!!, orderDate,
+                    sharedPreference.getString("customerUserId", null)!!, productName!!,
+                    productCount.toString(), productPrice.toString(), productImage.toString(),
+                    "결제 완료")
+
+                Log.d("저장", "저장전")
+                orderproductList.add(orderProduct)
+                Log.d("저장", "저장완")
+
+            }
+        }
+        if(product != null){
+            val productCount = product[0]
+            val productName = product[1]
+            val productDiscountRate = product[3]
+            val productImage = product[4]
+            val productSellerId = product[6]
+
+            val productPrice = if(productDiscountRate.toLong() == 0L){
+                product[2]
+            }else{
+                (product[2].toLong() - (product[2].toLong() * (productDiscountRate.toLong()*0.01))).toInt()
+            }
+
+            val orderProduct = OrderProductModel(orderId, orderProductId, productSellerId,
+                orderDate, sharedPreference.getString("customerUserId", null)!!, productName,
+                productCount, productPrice.toString(), productImage,"결제 완료")
+            Log.d("저장", "저장전")
+            orderproductList.add(orderProduct)
+            Log.d("저장", "저장완")
+        }
+        //결제 금액 설정
+        val totalPrice = calTotalPrice()
+        fragmentPaymentBinding.textViewPaymentTotalCost.setText("$totalPrice 원")
+        fragmentPaymentBinding.buttonPaymentBuy.setText("$totalPrice 원 결제하기")
+    }
+
     //textInputLayout 오류 표시 함수
     fun textInputLayoutEmptyError(textInputLayout: TextInputLayout, errorMessage : String){
         textInputLayout.run {
@@ -250,8 +297,10 @@ class PaymentFragment : Fragment() {
 
     fun calTotalPrice() : Int{
         var totalPrice = 0
+        Log.d("size", orderproductList.size.toString())
         for(item in orderproductList){
             totalPrice += (item.orderProductPrice.toInt() * item.orderProductCount.toInt())
+            Log.d("item", item.orderProductPrice.toString())
         }
         return totalPrice
     }

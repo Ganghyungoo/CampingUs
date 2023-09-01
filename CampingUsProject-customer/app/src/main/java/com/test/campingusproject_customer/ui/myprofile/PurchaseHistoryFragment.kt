@@ -113,14 +113,16 @@ class PurchaseHistoryFragment : Fragment() {
                     val orderProductPrice = c2.child("orderProductPrice").value as String
                     val orderProductImage = c2.child("orderProductImage").value as String
                     val orderProductState = c2.child("orderProductState").value as String
+                    val orderProductId = c2.child("orderProductId").value as Long
+                    val orderSellerId = c2.child("orderSellerId").value as String
+                    val orderDate = c2.child("orderDate").value as String
+                    val orderUserId = c2.child("orderUserId").value as String
+
                     val productObj = OrderProductModel(
-                        orderId2,
-                        orderProductName,
-                        orderProductCount,
-                        orderProductPrice,
-                        orderProductImage,
-                        orderProductState
-                    )
+                        orderId2, orderProductId, orderSellerId, orderDate, orderUserId,
+                        orderProductName, orderProductCount, orderProductPrice, orderProductImage,
+                        orderProductState)
+
                     productTempList.add(productObj)
                 }
                 callback(productTempList)
