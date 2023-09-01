@@ -3,6 +3,7 @@ package com.test.campingusproject_customer.ui.shopping
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -108,18 +109,18 @@ class ShoppingFragment : Fragment() {
                 Log.d("testt","천장 번들:${arguments?.getString("saleStatus")}")
                 if(arguments?.getString("saleStatus")=="인기 특가"){
                     productViewModel.getAllProductDiscountData()
-                    toolBarName.setText("인기특가")
+                    toolbartextview.setText("인기특가")
                     Log.d("testt","선택된 메뉴:인기특가")
                 }
                 else if(arguments?.getString("saleStatus")=="실시간랭킹"){
                     productViewModel.getAllProductRealTimeRankingData()
-                    toolBarName.setText("실시간랭킹")
+                    toolbartextview.setText("실시간랭킹")
                     mainActivity.activityMainBinding.bottomNavigationViewMain.selectedItemId = R.id.menuItemShopping
                     token=1
                     Log.d("testt","선택된 메뉴:실랭")
                 }else if(arguments?.getString("saleStatus")==null){
                     if(token==1){
-                        toolBarName.setText("실시간랭킹")
+                        toolbartextview.setText("실시간랭킹")
                         token=-1
                     }
                     productViewModel.getAllProductData()
