@@ -100,7 +100,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:layout_marginTop="10dp"
-                    android:text="5791000원"
+                    android:text="0000000원"
                     android:textColor="#FF0000"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"

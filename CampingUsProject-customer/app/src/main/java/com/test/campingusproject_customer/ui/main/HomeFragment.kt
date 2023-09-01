@@ -23,13 +23,15 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.google.android.material.divider.MaterialDividerItemDecoration
+import com.google.android.material.navigation.NavigationView
 import com.test.campingusproject_customer.R
 import com.test.campingusproject_customer.databinding.ActivityMainBinding
 import com.test.campingusproject_customer.databinding.FragmentComunityBinding
 import com.test.campingusproject_customer.databinding.FragmentHomeBinding
 import com.test.campingusproject_customer.databinding.RowBoardBinding
+import com.test.campingusproject_customer.databinding.RowContractCampsiteBinding
 import com.test.campingusproject_customer.databinding.RowPopularsaleBinding
-import com.test.campingusproject_customer.databinding.RowRealtimerankBinding
+import com.test.campingusproject_customer.dataclassmodel.ContractCampsite
 import com.test.campingusproject_customer.dataclassmodel.PostModel
 import com.test.campingusproject_customer.repository.CustomerUserRepository
 import com.test.campingusproject_customer.repository.ProductRepository
@@ -48,6 +50,8 @@ class HomeFragment : Fragment() {
     lateinit var productViewModel: ProductViewModel
 
     var postPopularList = mutableListOf<PostModel>()
+    var contractCampsiteList = mutableListOf<ContractCampsite>()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -74,6 +78,8 @@ class HomeFragment : Fragment() {
         postViewModel.resetPostList()
         postViewModel.getPostPopularAll()
 
+        contractCampsiteList = mainActivity.fetchContractCampsite()
+
         mainActivity.activityMainBinding.bottomNavigationViewMain.selectedItemId = R.id.menuItemHome
 
         fragmentHomeBinding.run {
@@ -91,29 +97,15 @@ class HomeFragment : Fragment() {
                 adapter = PopularSaleAdapter()
                 layoutManager = LinearLayoutManager(mainActivity,LinearLayoutManager.HORIZONTAL,false)
 
-                //구분선 추가
-                val divider = MaterialDividerItemDecoration(mainActivity, LinearLayoutManager.HORIZONTAL)
-                divider.run {
-                    setDividerColorResource(mainActivity, R.color.subColor)
-                    dividerInsetStart = 30
-                    dividerInsetEnd = 30
-                }
-                addItemDecoration(divider)
+                addItemDecoration(createDivider())
             }
 
-            //실시간 랭킹 recyclreView
-            recyclerViewRealTimeRank.run {
-                adapter = RealTimeRankAdapter()
+            //제휴 캠핑장 recyclerView
+            recyclerViewContractCampsite.run{
+                adapter = ContractCampsiteAdapter()
                 layoutManager = LinearLayoutManager(mainActivity,LinearLayoutManager.HORIZONTAL,false)
 
-                //구분선 추가
-                val divider = MaterialDividerItemDecoration(mainActivity, LinearLayoutManager.HORIZONTAL)
-                divider.run {
-                    setDividerColorResource(mainActivity, R.color.subColor)
-                    dividerInsetStart = 30
-                    dividerInsetEnd = 30
-                }
-                addItemDecoration(divider)
+                addItemDecoration(createDivider())
             }
 
             //인기 게시글 recyclreView
@@ -121,14 +113,7 @@ class HomeFragment : Fragment() {
                 adapter = PopularBoardAdapter()
                 layoutManager = LinearLayoutManager(mainActivity)
 
-                //구분선 추가
-                val divider = MaterialDividerItemDecoration(mainActivity, LinearLayoutManager.VERTICAL)
-                divider.run {
-                    setDividerColorResource(mainActivity, R.color.subColor)
-                    dividerInsetStart = 30
-                    dividerInsetEnd = 30
-                }
-                addItemDecoration(divider)
+                addItemDecoration(createDivider())
             }
 
             //인기특가 더보기 눌렀을 때
@@ -138,13 +123,12 @@ class HomeFragment : Fragment() {
                 newBundle.putString("saleStatus", "인기 특가")
                 mainActivity.replaceFragment(MainActivity.SHOPPING_FRAGMENT, false, true, newBundle)
             }
-            //실시간랭킹 더보기 눌렀을 때
-            textViewHomeRealTimeRankShowMore.setOnClickListener {
-                val newBundle = Bundle()
-                mainActivity.activityMainBinding.bottomNavigationViewMain.selectedItemId = R.id.menuItemShopping
-                newBundle.putString("saleStatus", "실시간랭킹")
-                mainActivity.replaceFragment(MainActivity.SHOPPING_FRAGMENT, false, true, newBundle)
+
+            //제휴캠핑장 더보기 눌렀을 때
+            textViewHomeContractCampsiteMore.setOnClickListener {
+                mainActivity.replaceFragment(MainActivity.CONTRACT_CAMPSITE_FRAGMENT, true, false, null)
             }
+
             //인기게시판 더보기 눌렀을 때
             textViewHomePopularBoardShowMore.setOnClickListener {
                 val sharedPreferences = mainActivity.getSharedPreferences("customer_user_info", Context.MODE_PRIVATE)
@@ -186,6 +170,12 @@ class HomeFragment : Fragment() {
                 textViewRowPopularSaleProductOriginalPrice = rowPopularsaleBinding.textViewRowPopularSaleProductOriginalPrice
                 textViewRowPopularSaleProductDiscountPrice = rowPopularsaleBinding.textViewRowPopularSaleProductDiscountPrice
                 textViewRowPopularSaleLike = rowPopularsaleBinding.textViewRowPopularSaleLike
+
+                rowPopularsaleBinding.root.setOnClickListener {
+                    val newBundle = Bundle()
+                    newBundle.putString("saleStatus", "인기 특가")
+                    mainActivity.replaceFragment(MainActivity.SHOPPING_FRAGMENT, false, true, newBundle)
+                }
             }
         }
 
@@ -205,14 +195,21 @@ class HomeFragment : Fragment() {
         }
 
         override fun onBindViewHolder(holder: PopularSaleViewHolder, position: Int) {
+            // 가격
+            val price = productViewModel.productList.value?.get(position)?.productPrice!!
+            // 할인율
+            val discountRate = productViewModel.productList.value?.get(position)?.productDiscountRate!!
+            // 결과값
+            val result = (price - (price * (discountRate * 0.01))).toInt().toString()
+
             //holder.imageViewRowPopularSaleProductImage
             holder.textViewRowPopularSaleProductName.text = productViewModel.productList.value?.get(position)?.productName
             holder.textViewRowPopularSaleProductBrand.text = productViewModel.productList.value?.get(position)?.productBrand
             holder.textViewRowPopularSaleProductOriginalPrice.text =
-                "정가 : ${productViewModel.productList.value?.get(position)?.productPrice?.toString()} 원"
+                "정가 : $price 원"
             holder.textViewRowPopularSaleProductOriginalPrice.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG) //취소선 긋기(글자 중간에 줄 긋기)
             holder.textViewRowPopularSaleProductDiscountPrice.text =
-                "할인가 : ${productViewModel.productList.value?.get(position)?.productPrice!! / productViewModel.productList.value?.get(position)?.productDiscountRate!!} 원"
+                "할인가 : $result 원"
             holder.textViewRowPopularSaleLike.text = productViewModel.productList.value?.get(position)?.productRecommendationCount?.toString()
             Log.d("productImage", "${productViewModel.productList.value?.get(position)?.productImage!!}")
 
@@ -226,45 +223,59 @@ class HomeFragment : Fragment() {
 
     }
 
-    //실시간랭킹 리싸이클러뷰 어댑터
-    inner class RealTimeRankAdapter : RecyclerView.Adapter<RealTimeRankAdapter.RealTimeRankViewHolder>(){
-        inner class RealTimeRankViewHolder(rowRealtimerankBinding: RowRealtimerankBinding) : RecyclerView.ViewHolder(rowRealtimerankBinding.root) {
-            val imageViewRowRealTimeRankProductImage : ImageView //제품 사진
-            val textViewRowRealTimeRankProductName : TextView // 제품 이름
-            val textViewRowRealTimeRankProductBrand : TextView // 제품 브랜드
-            val textViewRowRealTimeRankProductPrice : TextView // 제품 가격
-            val textViewRowRealTimeRankLike : TextView // 제품 추천 수
+    //제휴캠핑장 어댑터
+    inner class ContractCampsiteAdapter : RecyclerView.Adapter<ContractCampsiteAdapter.ContractCampsiteViewHolder>(){
+
+        inner class ContractCampsiteViewHolder (rowContractCampsiteBinding: RowContractCampsiteBinding) : RecyclerView.ViewHolder(rowContractCampsiteBinding.root){
+            val imageViewRowContractCampsiteImage : ImageView
+            val textViewRowContractCampsiteName : TextView
+            val textViewRowContractCampsiteValue : TextView
+            val textViewRowContractCampsitePhone : TextView
+            val textViewRowContractCampsiteAddress : TextView
 
             init {
-                imageViewRowRealTimeRankProductImage = rowRealtimerankBinding.imageViewRowRealTimeRankProductImage
-                textViewRowRealTimeRankProductName = rowRealtimerankBinding.textViewRowRealTimeRankProductName
-                textViewRowRealTimeRankProductBrand = rowRealtimerankBinding.textViewRowRealTimeRankProductBrand
-                textViewRowRealTimeRankProductPrice = rowRealtimerankBinding.textViewRowRealTimeRankProductPrice
-                textViewRowRealTimeRankLike = rowRealtimerankBinding.textViewRowRealTimeRankLike
+                imageViewRowContractCampsiteImage = rowContractCampsiteBinding.imageViewRowContractCampsiteImage
+                textViewRowContractCampsiteName = rowContractCampsiteBinding.textViewRowContractCampsiteName
+                textViewRowContractCampsiteValue = rowContractCampsiteBinding.textViewRowContractCampsiteValue
+                textViewRowContractCampsitePhone = rowContractCampsiteBinding.textViewRowContractCampsitePhone
+                textViewRowContractCampsiteAddress = rowContractCampsiteBinding.textViewRowContractCampsiteAddress
+
+                rowContractCampsiteBinding.root.setOnClickListener {
+                    val newBundle = Bundle()
+                    newBundle.putString("latitude", contractCampsiteList[adapterPosition].위도)
+                    newBundle.putString("longitude", contractCampsiteList[adapterPosition].경도)
+                    mainActivity.replaceFragment(MainActivity.CONTRACT_CAMPSITE_FRAGMENT, true, false, newBundle)
+                }
             }
         }
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RealTimeRankViewHolder {
-            val rowRealtimerankBinding = RowRealtimerankBinding.inflate(layoutInflater)
+        override fun onCreateViewHolder(
+            parent: ViewGroup,
+            viewType: Int
+        ): ContractCampsiteViewHolder {
+            val rowContractCampsiteBinding = RowContractCampsiteBinding.inflate(layoutInflater)
 
-            rowRealtimerankBinding.root.layoutParams = ViewGroup.LayoutParams(
+            rowContractCampsiteBinding.root.layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
 
-            return RealTimeRankViewHolder(rowRealtimerankBinding)
+            return ContractCampsiteViewHolder(rowContractCampsiteBinding)
         }
 
         override fun getItemCount(): Int {
             return 10
         }
 
-        override fun onBindViewHolder(holder: RealTimeRankViewHolder, position: Int) {
-            //holder.imageViewRowRealTimeRankProductImage
-            holder.textViewRowRealTimeRankProductName.text = "바람막이 텐트"
-            holder.textViewRowRealTimeRankProductBrand.text = "악어가죽 텐트 전문점"
-            holder.textViewRowRealTimeRankProductPrice.text = "999,999,999원"
-            holder.textViewRowRealTimeRankLike.text = "${99 - position}"
+        override fun onBindViewHolder(holder: ContractCampsiteViewHolder, position: Int) {
+            holder.textViewRowContractCampsiteName.text = contractCampsiteList[position].이름
+            holder.textViewRowContractCampsiteValue.text = contractCampsiteList[position].형태
+            holder.textViewRowContractCampsitePhone.text = contractCampsiteList[position].연락처
+            holder.textViewRowContractCampsiteAddress.text = contractCampsiteList[position].주소
+            Glide.with(mainActivity).load(contractCampsiteList[position].사진)
+                .override(500, 500)
+                .centerCrop()
+                .into(holder.imageViewRowContractCampsiteImage)
         }
     }
 
@@ -350,6 +361,17 @@ class HomeFragment : Fragment() {
             holder.textVewRowBoardWriteDate.text = postPopularList[position].postWriteDate
             holder.textViewRowBoardComment.text = postPopularList[position].postCommentCount.toString()
         }
+    }
+
+    fun createDivider() : MaterialDividerItemDecoration{
+        //구분선 추가
+        val divider = MaterialDividerItemDecoration(mainActivity, LinearLayoutManager.HORIZONTAL)
+        divider.run {
+            setDividerColorResource(mainActivity, R.color.subColor)
+            dividerInsetStart = 30
+            dividerInsetEnd = 30
+        }
+        return divider
     }
 
     //뒤로가기 버튼 눌렀을 때 동작할 코드 onDetech까지

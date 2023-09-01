@@ -10,6 +10,8 @@
         android:layout_width="68dp"
         android:layout_height="68dp"
         android:layout_margin="5dp"
+        android:maxWidth="68dp"
+        android:maxHeight="68dp"
         app:srcCompat="@drawable/account_circle_24px" />
 
     <LinearLayout
@@ -25,6 +27,8 @@
             android:layout_marginTop="10dp"
             android:layout_weight="1"
             android:gravity="center_vertical"
+            android:maxLines="1"
+            android:singleLine="true"
             android:text="TextView"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textColor="@color/highLightColor"
@@ -36,6 +40,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:layout_weight="1"
+            android:maxLines="1"
+            android:singleLine="true"
             android:text="TextView"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textColor="@color/highLightColor"

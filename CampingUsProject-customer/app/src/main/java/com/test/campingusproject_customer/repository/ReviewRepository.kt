@@ -1,10 +1,12 @@
 package com.test.campingusproject_customer.repository
 
 import android.net.Uri
+import android.util.Log
 import com.google.android.gms.tasks.Task
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import com.test.campingusproject_customer.dataclassmodel.ReviewModel
 
@@ -36,12 +38,36 @@ class ReviewRepository {
             productRef.push().setValue(reviewModel).addOnCompleteListener(callback1)
         }
 
+        // 리뷰 정보 전체를 가져오는 함수
+        fun getAllReviewInfo(callback1: (Task<DataSnapshot>) -> Unit) {
+            val database = FirebaseDatabase.getInstance()
+            val reviewRef = database.getReference("ReviewData")
+
+            reviewRef.orderByChild("reviewId").get().addOnCompleteListener(callback1)
+        }
+
         // productId로 접근하여 ReviewData의 정보 가져오기
         fun getReviewInfo(productId: Long, callback1: (Task<DataSnapshot>) -> Unit) {
             val database = FirebaseDatabase.getInstance()
             val reviewRef = database.getReference("ReviewData")
 
             reviewRef.orderByChild("reviewProductId").equalTo(productId.toDouble()).get().addOnCompleteListener(callback1)
+        }
+
+        fun getAllImages(fileDir: String, callback: (StorageReference) -> Unit){
+            val storage = FirebaseStorage.getInstance()
+            val dirPath = fileDir.substring(0, fileDir.length-1)
+
+            val imageRef = storage.reference.child(dirPath)
+            imageRef.listAll()
+                .addOnCompleteListener { task->
+                    if(task.isSuccessful){
+                        task.result.items.forEach {
+                            Log.d("imageTest", "${it.downloadUrl}")
+                            callback(it)
+                        }
+                    }
+                }
         }
 
         // 상품 이미지들을 업로드하는 함수
@@ -56,7 +82,7 @@ class ReviewRepository {
             }
         }
 
-        // 상품의 대표이미지만 가져오는 함수
+        // 상품의 대표이미지(첫번째)만 가져오는 함수
         fun getProductFirstImage(fileDir:String, callback1: (Task<Uri>) -> Unit){
             val storage = FirebaseStorage.getInstance()
             val fileName = fileDir + "1.png"
@@ -84,12 +110,6 @@ class ReviewRepository {
                 fileRef.downloadUrl.addOnCompleteListener(callback1)
             } catch (e: IllegalArgumentException) {
             }
-        }
-
-        // 상품의 리뷰 이미지를 전부 가져오는 함수
-        fun getAllReviewImage() {
-            val storage = FirebaseStorage.getInstance()
-
         }
     }
 }
