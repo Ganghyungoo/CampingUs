@@ -217,9 +217,9 @@ class PaymentFragment : Fragment() {
 
         if (productList != null) {
 
-            for (idx in 0 until spinnerList?.size!!){
+            var orderProductId = OrderRepository.getProductId().value as Long
 
-                val orderProductId = OrderRepository.getProductId().value as Long
+            for (idx in 0 until spinnerList?.size!!){
 
                 val productCount = spinnerList[idx]
                 val productName = productList[idx].productName
@@ -229,7 +229,7 @@ class PaymentFragment : Fragment() {
 
                 Log.d("orderProductId저장된 값", "$orderProductId")
 
-                val orderProduct = OrderProductModel(orderId, orderProductId, productSellerId!!, orderDate,
+                val orderProduct = OrderProductModel(orderId, orderProductId++, productSellerId!!, orderDate,
                     sharedPreference.getString("customerUserId", null)!!, productName!!,
                     productCount.toString(), productPrice.toString(), productImage.toString(),
                     "결제 완료")
@@ -238,8 +238,8 @@ class PaymentFragment : Fragment() {
                 orderproductList.add(orderProduct)
                 Log.d("저장", "저장완")
 
-                OrderRepository.setProductId(orderProductId+1L)
             }
+            OrderRepository.setProductId(orderProductId)
         }
         if(product != null){
 
