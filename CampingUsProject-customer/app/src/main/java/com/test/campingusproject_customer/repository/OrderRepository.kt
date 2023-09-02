@@ -5,6 +5,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.FirebaseDatabase
 import com.test.campingusproject_customer.dataclassmodel.OrderModel
 import com.test.campingusproject_customer.dataclassmodel.OrderProductModel
+import kotlinx.coroutines.tasks.await
 
 class OrderRepository {
     companion object{
@@ -25,20 +26,20 @@ class OrderRepository {
         }
 
         //상품 ID를 가져오는 함수
-        fun getProductId(callback: (Task<DataSnapshot>) -> Unit){
+        suspend fun getProductId() : DataSnapshot{
             val database = FirebaseDatabase.getInstance()
 
             val orderProductId = database.getReference("OrderProductId")
-            orderProductId.get().addOnCompleteListener(callback)
+            return orderProductId.get().await()
         }
 
         //상품 ID를 설정하는 함수
-        fun setProductId(orderProductId : Long, callback: (Task<Void>) -> Unit){
+        fun setProductId(orderProductId : Long){
             val database = FirebaseDatabase.getInstance()
             val orderProductIdRef = database.getReference("OrderProductId")
 
             orderProductIdRef.get().addOnCompleteListener {
-                it.result.ref.setValue(orderProductId).addOnCompleteListener(callback)
+                it.result.ref.setValue(orderProductId)
             }
         }
     }
