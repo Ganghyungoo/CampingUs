@@ -3,6 +3,7 @@ package com.test.campingusproject_seller.ui.product
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -235,6 +236,7 @@ class ManageProductFragment : Fragment() {
 
             // 체크박스의 개수를 구한다.
             val checkBoxCount = productViewModel.productList.value?.size!!
+            Log.d("testt","$checkBoxCount")
             // 체크되어 있는 체크박스의 개수
             var checkedCount = 0
 
