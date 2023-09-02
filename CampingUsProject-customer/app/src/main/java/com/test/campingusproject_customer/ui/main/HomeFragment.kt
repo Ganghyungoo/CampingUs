@@ -33,6 +33,7 @@ import com.test.campingusproject_customer.databinding.RowContractCampsiteBinding
 import com.test.campingusproject_customer.databinding.RowPopularsaleBinding
 import com.test.campingusproject_customer.dataclassmodel.ContractCampsite
 import com.test.campingusproject_customer.dataclassmodel.PostModel
+import com.test.campingusproject_customer.dataclassmodel.ProductModel
 import com.test.campingusproject_customer.repository.CustomerUserRepository
 import com.test.campingusproject_customer.repository.ProductRepository
 import com.test.campingusproject_customer.viewmodel.PostViewModel
@@ -65,8 +66,11 @@ class HomeFragment : Fragment() {
 
         productViewModel = ViewModelProvider(mainActivity)[ProductViewModel::class.java]
         productViewModel.run {
-            productList.observe(mainActivity) {
-                fragmentHomeBinding.recyclerViewPopularSale.adapter?.notifyDataSetChanged()
+            productList.observe(mainActivity) { itemList ->
+                if(itemList != null){
+                    Log.d("itemListNotNull", "${itemList.size}")
+                    (fragmentHomeBinding.recyclerViewPopularSale.adapter as? PopularSaleAdapter)?.updateItemList(itemList)
+                }
             }
         }
 
@@ -114,7 +118,7 @@ class HomeFragment : Fragment() {
                 adapter = PopularSaleAdapter()
                 layoutManager = LinearLayoutManager(mainActivity,LinearLayoutManager.HORIZONTAL,false)
 
-                addItemDecoration(createDivider())
+                //addItemDecoration(createDivider())
             }
 
             //제휴 캠핑장 recyclerView
@@ -122,7 +126,7 @@ class HomeFragment : Fragment() {
                 adapter = ContractCampsiteAdapter()
                 layoutManager = LinearLayoutManager(mainActivity,LinearLayoutManager.HORIZONTAL,false)
 
-                addItemDecoration(createDivider())
+                //addItemDecoration(createDivider())
             }
 
             //인기 게시글 recyclreView
@@ -175,6 +179,29 @@ class HomeFragment : Fragment() {
     }
     //인기특가 리싸이클러뷰 어댑터
     inner class PopularSaleAdapter : RecyclerView.Adapter<PopularSaleAdapter.PopularSaleViewHolder>(){
+
+        //뷰모델 라이브데이터를 받는 어댑터 내부 List 선언
+        private var itemList : List<ProductModel> = emptyList()
+
+        //뷰모델 값이 변경되면 호출되어 itemList를 갱신하는 함수
+        fun updateItemList(newList : List<ProductModel>){
+            //받은 데이터를 정렬
+            val itemList = newList.sortedWith(
+                compareBy(
+                    {-it.productRecommendationCount},   //추천 수 내림차순
+                    {it.productPrice},                  //가격 오름차순
+                    {it.productName}                    //이름 오름차순
+                )
+            )
+            //최대 10개만 반환한다.
+            this.itemList = if(itemList.size >10){
+                itemList.slice(0 until 10)
+            }else{
+                itemList
+            }
+            notifyDataSetChanged()
+        }
+
         inner class PopularSaleViewHolder(rowPopularsaleBinding: RowPopularsaleBinding) : RecyclerView.ViewHolder(rowPopularsaleBinding.root) {
             val imageViewRowPopularSaleProductImage : ImageView //제품 사진
             val textViewRowPopularSaleProductName : TextView // 제품 이름
@@ -211,29 +238,29 @@ class HomeFragment : Fragment() {
         }
 
         override fun getItemCount(): Int {
-            return productViewModel.productList.value?.size!!
+            return itemList.size
         }
 
         override fun onBindViewHolder(holder: PopularSaleViewHolder, position: Int) {
             // 가격
-            val price = productViewModel.productList.value?.get(position)?.productPrice!!
+            val price = itemList[position].productPrice
             // 할인율
-            val discountRate = productViewModel.productList.value?.get(position)?.productDiscountRate!!
+            val discountRate = itemList[position].productDiscountRate!!
             // 결과값
             val result = (price - (price * (discountRate * 0.01))).toInt().toString()
 
             //holder.imageViewRowPopularSaleProductImage
-            holder.textViewRowPopularSaleProductName.text = productViewModel.productList.value?.get(position)?.productName
-            holder.textViewRowPopularSaleProductBrand.text = productViewModel.productList.value?.get(position)?.productBrand
+            holder.textViewRowPopularSaleProductName.text = itemList[position].productName
+            holder.textViewRowPopularSaleProductBrand.text = itemList[position].productBrand
             holder.textViewRowPopularSaleProductOriginalPrice.text =
                 "정가 : $price 원"
             holder.textViewRowPopularSaleProductOriginalPrice.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG) //취소선 긋기(글자 중간에 줄 긋기)
             holder.textViewRowPopularSaleProductDiscountPrice.text =
                 "할인가 : $result 원"
-            holder.textViewRowPopularSaleLike.text = productViewModel.productList.value?.get(position)?.productRecommendationCount?.toString()
-            Log.d("productImage", "${productViewModel.productList.value?.get(position)?.productImage!!}")
+            holder.textViewRowPopularSaleLike.text = itemList[position].productRecommendationCount?.toString()
+            Log.d("productImage", "${itemList[position].productImage!!}")
 
-            ProductRepository.getProductFirstImage(productViewModel.productList.value?.get(position)?.productImage!!) { uri ->
+            ProductRepository.getProductFirstImage(itemList[position].productImage!!) { uri ->
                 Glide.with(mainActivity).load(uri.result)
                     .override(200, 200)
                     .into(holder.imageViewRowPopularSaleProductImage)
@@ -388,7 +415,7 @@ class HomeFragment : Fragment() {
 
     fun createDivider() : MaterialDividerItemDecoration{
         //구분선 추가
-        val divider = MaterialDividerItemDecoration(mainActivity, LinearLayoutManager.HORIZONTAL)
+        val divider = MaterialDividerItemDecoration(mainActivity, LinearLayoutManager.VERTICAL)
         divider.run {
             setDividerColorResource(mainActivity, R.color.subColor)
             dividerInsetStart = 30
