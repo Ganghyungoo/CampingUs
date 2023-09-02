@@ -61,6 +61,8 @@ class HomeFragment : Fragment() {
         fragmentComunityBinding = FragmentComunityBinding.inflate(layoutInflater)
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
 
+        mainActivity.activityMainBinding.bottomNavigationViewMain.visibility = View.VISIBLE
+
         productViewModel = ViewModelProvider(mainActivity)[ProductViewModel::class.java]
         productViewModel.run {
             productList.observe(mainActivity) {
@@ -86,9 +88,24 @@ class HomeFragment : Fragment() {
             materialToolbarHomeFragment.run {
                 textViewHomeToolbarTitle.text = "CampingUs"
                 setOnMenuItemClickListener {
-                    //장바구니로 가기
-                    mainActivity.replaceFragment(MainActivity.CART_FRAGMENT, true, true, null)
-                    true
+                    val sharedPreferences = mainActivity.getSharedPreferences("customer_user_info", Context.MODE_PRIVATE)
+                    if(CustomerUserRepository.checkLoginStatus(sharedPreferences)) {
+                        //장바구니로 가기
+                        mainActivity.replaceFragment(MainActivity.CART_FRAGMENT, true, true, null)
+                        true
+                    }
+                    else{
+                        MaterialAlertDialogBuilder(mainActivity,R.style.ThemeOverlay_App_MaterialAlertDialog).run {
+                            setTitle("접근 권한 없음")
+                            setMessage("로그인이 필요한 서비스입니다.")
+                            setPositiveButton("취소", null)
+                            setNegativeButton("확인"){ dialogInterface: DialogInterface, i: Int ->
+                                mainActivity.replaceFragment(MainActivity.LOGIN_FRAGMENT, true, true, null)
+                            }
+                            show()
+                        }
+                        false
+                    }
                 }
             }
             //인기특가 recyclreView
@@ -135,9 +152,12 @@ class HomeFragment : Fragment() {
                 if(CustomerUserRepository.checkLoginStatus(sharedPreferences) == false) {
                     val builder = MaterialAlertDialogBuilder(mainActivity, R.style.ThemeOverlay_App_MaterialAlertDialog)
                     builder.run {
-                        setTitle("로그인 필요")
-                        setMessage("로그인이 필요합니다.")
-                        setPositiveButton("닫기") { dialogInterface: DialogInterface, i: Int -> }
+                        setTitle("접근 권한 없음")
+                        setMessage("로그인이 필요한 서비스입니다.")
+                        setPositiveButton("취소", null)
+                        setNegativeButton("확인"){ dialogInterface: DialogInterface, i: Int ->
+                            mainActivity.replaceFragment(MainActivity.LOGIN_FRAGMENT, true, true, null)
+                        }
                         show()
                     }
 
@@ -302,9 +322,12 @@ class HomeFragment : Fragment() {
                     if(CustomerUserRepository.checkLoginStatus(sharedPreferences) == false) {
                         val builder = MaterialAlertDialogBuilder(mainActivity, R.style.ThemeOverlay_App_MaterialAlertDialog)
                         builder.run {
-                            setTitle("로그인 필요")
-                            setMessage("로그인이 필요합니다.")
-                            setPositiveButton("닫기") { dialogInterface: DialogInterface, i: Int -> }
+                            setTitle("접근 권한 없음")
+                            setMessage("로그인이 필요한 서비스입니다.")
+                            setPositiveButton("취소", null)
+                            setNegativeButton("확인"){ dialogInterface: DialogInterface, i: Int ->
+                                mainActivity.replaceFragment(MainActivity.LOGIN_FRAGMENT, true, true, null)
+                            }
                             show()
                         }
                     }
