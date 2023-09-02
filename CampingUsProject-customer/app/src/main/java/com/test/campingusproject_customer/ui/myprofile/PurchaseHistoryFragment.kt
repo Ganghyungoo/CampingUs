@@ -1,6 +1,7 @@
 package com.test.campingusproject_customer.ui.myprofile
 
 import android.content.Context
+import android.graphics.Color
 import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
@@ -194,7 +195,12 @@ class PurchaseHistoryFragment : Fragment() {
                     if (productItem.textViewRowPurchaseHistoryItemStateDone.text=="결제 완료"){
                         productItem.textViewRowPurchaseHistoryItemReview.visibility=View.GONE
                     }else{
+                        if(product.reviewState){
+                            productItem.textViewRowPurchaseHistoryItemReview.text="리뷰 작성 완료"
+                            productItem.textViewRowPurchaseHistoryItemReview.setTextColor(Color.BLUE)
+                        }
                         productItem.textViewRowPurchaseHistoryItemReview.text="리뷰 작성하기"
+                        productItem.textViewRowPurchaseHistoryItemReview.setTextColor(Color.RED)
                         productItem.textViewRowPurchaseHistoryItemReview.setOnClickListener {
                             val bundle=Bundle()
                             bundle.putString("orderId",product.orderId)
