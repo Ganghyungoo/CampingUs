@@ -59,17 +59,13 @@ class PaymentFragment : Fragment() {
         //현재 로그인된 유저의 정보가 담긴 sharedPreference 객체
         val sharedPreference = mainActivity.getSharedPreferences("customer_user_info", Context.MODE_PRIVATE)
 
-        var orderProductId = 0L
-
-        OrderRepository.getProductId {
-            orderProductId = it.result.value as Long
-            Log.d("getProductId", "get")
-            runBlocking {
-                getProductData(sharedPreference, orderProductId)    //원래 이게 그 장바구니랑 제품 상세화면에서 받은
-                fragmentPaymentBinding.recyclerViewPaymentProduct.adapter?.notifyDataSetChanged()
-                Log.d("success", "hhh")
-            }
+        runBlocking {
+            getProductData(sharedPreference)
         }
+            //원래 이게 그 장바구니랑 제품 상세화면에서 받은
+        fragmentPaymentBinding.recyclerViewPaymentProduct.adapter?.notifyDataSetChanged()
+        Log.d("success", "hhh")
+
 
         fragmentPaymentBinding.run {
             //주문 번호 설정
@@ -89,8 +85,6 @@ class PaymentFragment : Fragment() {
 
             //라디오 그룹 기본값 설정
             radioGroupPayment.check(R.id.radio_button_card)
-
-
 
             // 툴바
             toolbarPayment.run {
@@ -145,9 +139,6 @@ class PaymentFragment : Fragment() {
                 for(item in orderproductList){
                     OrderRepository.addOrderProductInfo(item){
                         Log.d("FirebaseSave", "orderProductModel 저장")
-                        OrderRepository.setProductId(orderProductId+1){
-                            Log.d("FirebaseSave", "setProductId")
-                        }
                     }
                 }
 
@@ -215,7 +206,7 @@ class PaymentFragment : Fragment() {
         }
     }
 
-    fun getProductData(sharedPreference : SharedPreferences, orderProductId: Long){
+    suspend fun getProductData(sharedPreference : SharedPreferences){
 
         //장바구니에서 bundle로 전달한 선택 상품 목록
         val spinnerList = arguments?.getIntArray("spinnerList")
@@ -225,12 +216,18 @@ class PaymentFragment : Fragment() {
         val product = arguments?.getStringArrayList("strArray")
 
         if (productList != null) {
+
             for (idx in 0 until spinnerList?.size!!){
+
+                val orderProductId = OrderRepository.getProductId().value as Long
+
                 val productCount = spinnerList[idx]
                 val productName = productList[idx].productName
                 val productPrice = productList[idx].productPrice
                 val productImage = productList[idx].productImage
                 val productSellerId = productList[idx].productSellerId
+
+                Log.d("orderProductId저장된 값", "$orderProductId")
 
                 val orderProduct = OrderProductModel(orderId, orderProductId, productSellerId!!, orderDate,
                     sharedPreference.getString("customerUserId", null)!!, productName!!,
@@ -241,9 +238,13 @@ class PaymentFragment : Fragment() {
                 orderproductList.add(orderProduct)
                 Log.d("저장", "저장완")
 
+                OrderRepository.setProductId(orderProductId+1L)
             }
         }
         if(product != null){
+
+            val orderProductId = OrderRepository.getProductId().value as Long
+
             val productCount = product[0]
             val productName = product[1]
             val productDiscountRate = product[3]
@@ -262,6 +263,8 @@ class PaymentFragment : Fragment() {
             Log.d("저장", "저장전")
             orderproductList.add(orderProduct)
             Log.d("저장", "저장완")
+
+            OrderRepository.setProductId(orderProductId+1)
         }
         //결제 금액 설정
         val totalPrice = calTotalPrice()

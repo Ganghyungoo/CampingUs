@@ -1,6 +1,5 @@
 package com.test.campingusproject_customer.viewmodel
 
-import android.support.annotation.MainThread
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
