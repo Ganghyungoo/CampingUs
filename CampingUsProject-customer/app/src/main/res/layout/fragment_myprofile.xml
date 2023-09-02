@@ -247,7 +247,7 @@
                     android:drawableTint="@color/highLightColor"
                     android:text="회원탈퇴"
                     android:textColor="@color/highLightColor"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/text_size_2" />
             </LinearLayout>
 
         </LinearLayout>

@@ -49,7 +49,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="인기특가"
-                    android:textSize="@dimen/text_size_2" />
+                    android:textSize="@dimen/text_size_1" />
 
                 <TextView
                     android:id="@+id/textViewHomePopularSaleShowMore"
@@ -75,7 +75,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="30dp"
                 android:layout_marginBottom="20dp"
                 android:orientation="horizontal">
 
@@ -85,7 +85,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="제휴 캠핑장"
-                    android:textSize="@dimen/text_size_2" />
+                    android:textSize="@dimen/text_size_1" />
 
                 <TextView
                     android:id="@+id/textViewHomeContractCampsiteMore"
@@ -109,7 +109,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="30dp"
                 android:layout_marginBottom="20dp"
                 android:orientation="horizontal">
 
@@ -119,7 +119,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="인기 게시판"
-                    android:textSize="@dimen/text_size_2" />
+                    android:textSize="@dimen/text_size_1" />
 
                 <TextView
                     android:id="@+id/textViewHomePopularBoardShowMore"

@@ -21,6 +21,7 @@ import com.test.campingusproject_customer.databinding.FragmentShoppingProductBin
 import com.test.campingusproject_customer.dataclassmodel.CartModel
 import com.test.campingusproject_customer.repository.CartRepository
 import com.test.campingusproject_customer.databinding.RowProductImageBinding
+import com.test.campingusproject_customer.repository.CustomerUserRepository
 import com.test.campingusproject_customer.repository.ProductRepository
 import com.test.campingusproject_customer.ui.main.MainActivity
 import com.test.campingusproject_customer.viewmodel.ProductViewModel
@@ -49,7 +50,6 @@ class ShoppingProductFragment : Fragment() {
 
         // 회원 이름 가져오기
         val sharedPreferences = mainActivity.getSharedPreferences("customer_user_info", Context.MODE_PRIVATE)
-        val productUserName = sharedPreferences.getString("customerUserName", null)!!
 
         // 상품 뷰모델 객체 생성
         productViewModel = ViewModelProvider(mainActivity)[ProductViewModel::class.java]
@@ -72,7 +72,6 @@ class ShoppingProductFragment : Fragment() {
                 fragmentShoppingProductBinding.textViewShoppingProductNumber.setText("남은 수량 : $it 개")
 
                 if(it == 0L){
-                    Log.d("countTest", "zero")
                     fragmentShoppingProductBinding.buttonShoppingProductToBuy.isEnabled = false
                     fragmentShoppingProductBinding.buttonShoppingProductToBuy.setTextColor(Color.GRAY)
                     fragmentShoppingProductBinding.buttonShoppingProductToCart.isEnabled = false
@@ -113,7 +112,6 @@ class ShoppingProductFragment : Fragment() {
         fragmentShoppingProductBinding.run {
             //툴바
             toolbarShoppingProduct.run {
-                title = "쇼핑"
                 setNavigationIcon(R.drawable.arrow_back_24px)
                 setNavigationOnClickListener {
                     mainActivity.removeFragment(MainActivity.SHOPPING_PRODUCT_FRAGMENT)
@@ -123,21 +121,33 @@ class ShoppingProductFragment : Fragment() {
             // 장바구니 담기 클릭시 다이얼로그
             buttonShoppingProductToCart.run {
                 setOnClickListener { // 버튼 클릭시 다이얼로그
-                    MaterialAlertDialogBuilder(mainActivity, R.style.ThemeOverlay_App_MaterialAlertDialog).run {
-                        val cartModel = CartModel(sharedPreferences.getString("customerUserId", null).toString(), productId, 1)
-                        CartRepository.addCartData(cartModel) {
+                    val sharedPreferences = mainActivity.getSharedPreferences("customer_user_info", Context.MODE_PRIVATE)
+                    if(CustomerUserRepository.checkLoginStatus(sharedPreferences)) {
+                        MaterialAlertDialogBuilder(mainActivity, R.style.ThemeOverlay_App_MaterialAlertDialog).run {
+                            val cartModel = CartModel(sharedPreferences.getString("customerUserId", null).toString(), productId, 1)
+                            CartRepository.addCartData(cartModel) {}
 
+                            setTitle("장바구니 담기 완료")
+                            setMessage("장바구니로 이동하시겠습니까?")
+                            setPositiveButton("쇼핑 계속하기") { dialogInterface: DialogInterface, i: Int ->
+                                mainActivity.removeFragment(MainActivity.SHOPPING_PRODUCT_FRAGMENT)
+                            }
+                            setNegativeButton("장바구니로 이동") { dialogInterface: DialogInterface, i: Int ->
+                                mainActivity.replaceFragment(MainActivity.CART_FRAGMENT, true, true, null)
+                            }
+                            show()
                         }
-
-                        setTitle("장바구니 담기 완료")
-                        setMessage("장바구니로 이동하시겠습니까?")
-                        setPositiveButton("쇼핑 계속하기") { dialogInterface: DialogInterface, i: Int ->
-                            mainActivity.removeFragment(MainActivity.SHOPPING_PRODUCT_FRAGMENT)
+                    }
+                    else{
+                        MaterialAlertDialogBuilder(mainActivity,R.style.ThemeOverlay_App_MaterialAlertDialog).run {
+                            setTitle("접근 권한 없음")
+                            setMessage("로그인이 필요한 서비스입니다.")
+                            setPositiveButton("취소", null)
+                            setNegativeButton("확인"){ dialogInterface: DialogInterface, i: Int ->
+                                mainActivity.replaceFragment(MainActivity.LOGIN_FRAGMENT, true, true, null)
+                            }
+                            show()
                         }
-                        setNegativeButton("장바구니로 이동") { dialogInterface: DialogInterface, i: Int ->
-                            mainActivity.replaceFragment(MainActivity.CART_FRAGMENT, true, true, null)
-                        }
-                        show()
                     }
                 }
             }
@@ -145,14 +155,28 @@ class ShoppingProductFragment : Fragment() {
             // 구매 버튼 클릭시 이동
             buttonShoppingProductToBuy.run {
                 setOnClickListener {
-                    val newBundle = Bundle()
-                    val strArray = arrayListOf<String>("1", productViewModel.productName.value.toString(),
-                        productViewModel.productPrice.value.toString(), productViewModel.productDiscountRate.value.toString(),
-                        productViewModel.productImage.value.toString(), productViewModel.productId_.value.toString(),
-                        productViewModel.productSellerId.value.toString()
-                    )
-                    newBundle.putStringArrayList("strArray", strArray)
-                    mainActivity.replaceFragment(MainActivity.PAYMENT_FRAGMENT, true, true, newBundle)
+                    val sharedPreferences = mainActivity.getSharedPreferences("customer_user_info", Context.MODE_PRIVATE)
+                    if(CustomerUserRepository.checkLoginStatus(sharedPreferences)) {
+                        val newBundle = Bundle()
+                        val strArray = arrayListOf<String>("1", productViewModel.productName.value.toString(),
+                            productViewModel.productPrice.value.toString(), productViewModel.productDiscountRate.value.toString(),
+                            productViewModel.productImage.value.toString(), productViewModel.productId_.value.toString(),
+                            productViewModel.productSellerId.value.toString()
+                        )
+                        newBundle.putStringArrayList("strArray", strArray)
+                        mainActivity.replaceFragment(MainActivity.PAYMENT_FRAGMENT, true, true, newBundle)
+                    }
+                    else{
+                        MaterialAlertDialogBuilder(mainActivity,R.style.ThemeOverlay_App_MaterialAlertDialog).run {
+                            setTitle("접근 권한 없음")
+                            setMessage("로그인이 필요한 서비스입니다.")
+                            setPositiveButton("취소", null)
+                            setNegativeButton("확인"){ dialogInterface: DialogInterface, i: Int ->
+                                mainActivity.replaceFragment(MainActivity.LOGIN_FRAGMENT, true, true, null)
+                            }
+                            show()
+                        }
+                    }
                 }
             }
 
@@ -170,12 +194,26 @@ class ShoppingProductFragment : Fragment() {
             // 플로팅 버튼 클릭시 문의등록 화면 이동
             floatingActionButtonShoppingProductInquiry.run {
                 setOnClickListener {
-                    newBundle.run {
-                        putLong("productId", productId)
-                        putString("productName", productViewModel.productName.value)
-                        putString("productImage", productViewModel.productImage.value)
+                    val sharedPreferences = mainActivity.getSharedPreferences("customer_user_info", Context.MODE_PRIVATE)
+                    if(CustomerUserRepository.checkLoginStatus(sharedPreferences)) {
+                        newBundle.run {
+                            putLong("productId", productId)
+                            putString("productName", productViewModel.productName.value)
+                            putString("productImage", productViewModel.productImage.value)
+                        }
+                        mainActivity.replaceFragment(MainActivity.INQUIRY_FRAGMENT, true, true, newBundle)
                     }
-                    mainActivity.replaceFragment(MainActivity.INQUIRY_FRAGMENT, true, true, newBundle)
+                    else{
+                        MaterialAlertDialogBuilder(mainActivity,R.style.ThemeOverlay_App_MaterialAlertDialog).run {
+                            setTitle("접근 권한 없음")
+                            setMessage("로그인이 필요한 서비스입니다.")
+                            setPositiveButton("취소", null)
+                            setNegativeButton("확인"){ dialogInterface: DialogInterface, i: Int ->
+                                mainActivity.replaceFragment(MainActivity.LOGIN_FRAGMENT, true, true, null)
+                            }
+                            show()
+                        }
+                    }
                 }
             }
 
