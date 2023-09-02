@@ -243,10 +243,12 @@ class ManageProductFragment : Fragment() {
             // 체크 되어 있는 체크박스의 개수를 구한다.
             for(idx in 0 until checkBoxCount){
                 val itemView = recyclerViewManageProduct.getChildAt(idx)
-                val itemCheckBox = itemView.findViewById<CheckBox>(R.id.checkBoxRowProduct)
+                if(itemView != null){
+                    val itemCheckBox = itemView.findViewById<CheckBox>(R.id.checkBoxRowProduct)
 
-                if(itemCheckBox.isChecked){
-                    checkedCount++
+                    if(itemCheckBox.isChecked){
+                        checkedCount++
+                    }
                 }
             }
 

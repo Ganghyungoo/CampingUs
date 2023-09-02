@@ -60,8 +60,6 @@ class PurchaseHistoryFragment : Fragment() {
 
         fragmentPurchaseHistoryBinding.run {
 
-
-
             // 툴바
             toolbarPayment.run {
                 //백버튼 설정
@@ -70,9 +68,7 @@ class PurchaseHistoryFragment : Fragment() {
                     mainActivity.removeFragment(MainActivity.PURCHASE_HISTORY_FRAGMENT)
                 }
             }
-
         }
-
         return fragmentPurchaseHistoryBinding.root
     }
 

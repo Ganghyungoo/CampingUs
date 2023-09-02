@@ -92,8 +92,6 @@ class AuthFragment : Fragment() {
             linearLayoutAuthCode.visibility = View.GONE
 
             materialToolbarAuth.run {
-                title = "본인 인증"
-
                 setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
                 setNavigationOnClickListener {
                     mainActivity.removeFragment(MainActivity.AUTH_FRAGMENT)

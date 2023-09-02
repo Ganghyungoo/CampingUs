@@ -54,9 +54,10 @@ class CartViewModel() : ViewModel() {
                     val productInfo = c2.child("productInfo").value as String
                     val productId = c2.child("productId").value as Long
                     val productSellerId = c2.child("productSellerId").value as String
+                    val productDiscountRate = c2.child("productDiscountRate").value as Long
 
-
-                    val cartProductModel = CartProductModel(productName, productPrice, productImage, productInfo, productId, productSellerId)
+                    val cartProductModel = CartProductModel(productName, productPrice,
+                        productImage, productInfo, productId, productSellerId, productDiscountRate)
                     tempList2.add(cartProductModel)
                 }
             }

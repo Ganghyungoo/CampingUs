@@ -49,8 +49,6 @@ class InquiryFragment : Fragment() {
             textViewInquiryProductName.text = inquiryProductName
 
             toolbarInquiry.run {
-                title = "상품 문의 등록"
-
                 // 백버튼
                 setNavigationIcon(R.drawable.arrow_back_24px)
                 setNavigationOnClickListener {

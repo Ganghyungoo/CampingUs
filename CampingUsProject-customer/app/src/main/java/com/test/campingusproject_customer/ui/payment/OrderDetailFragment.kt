@@ -92,9 +92,6 @@ class OrderDetailFragment : Fragment() {
         mainActivity.activityMainBinding.bottomNavigationViewMain.visibility = View.GONE
 
         fragmentOrderDetailBinding.run {
-
-
-
             // 툴바
             toolbarOrderDetail.run {
                 //백버튼 설정

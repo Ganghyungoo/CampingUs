@@ -36,8 +36,6 @@ class LoginFragment : Fragment() {
 
         fragmentLoginBinding.run {
             materialToolbarLogin.run {
-                title = "로그인"
-
                 setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
                 setNavigationOnClickListener {
                 //백버튼 클릭 시 화면 삭제

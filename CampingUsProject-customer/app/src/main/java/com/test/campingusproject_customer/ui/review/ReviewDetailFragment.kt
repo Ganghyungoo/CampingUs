@@ -55,8 +55,6 @@ class ReviewDetailFragment : Fragment() {
 
         fragmentReviewDetailBinding.run {
             materialToolbarReviewDetail.run {
-                title = "상품 리뷰"
-
                 // 백버튼
                 setNavigationIcon(R.drawable.arrow_back_24px)
                 setNavigationOnClickListener {

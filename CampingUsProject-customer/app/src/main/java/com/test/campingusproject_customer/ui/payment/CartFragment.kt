@@ -189,8 +189,16 @@ class CartFragment : Fragment() {
         override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
             holder.textViewRowCartTitle.text =
                 cartViewModel.cartProductList.value?.get(position)?.productName.toString()
-            holder.textViewRowCartCost.text =
+            holder.textViewRowCartCost.text = if(cartViewModel.cartProductList.value?.get(position)?.productDiscountRate == 0L){
                 "${cartViewModel.cartProductList.value?.get(position)?.productPrice.toString()} 원"
+            }
+            else{
+                val discountRate = cartViewModel.cartProductList.value?.get(position)?.productDiscountRate
+                val price = cartViewModel.cartProductList.value?.get(position)?.productPrice
+                val result = (price!! - (price * (discountRate!! * 0.01))).toInt()
+                "$result 원"
+            }
+
 
             // 상품에 등록된 이미지 경로로 첫 번째 이미지만 불러와 표시
             CartRepository.getProductFirstImage(cartViewModel.cartProductList.value?.get(position)?.productImage!!) { uri ->
@@ -244,8 +252,8 @@ class CartFragment : Fragment() {
 
                         spinnerList[position] = cartProductCount.toInt()
 
-                        holder.textViewRowCartCost.text =
-                            "${cartViewModel.cartProductList.value?.get(position)?.productPrice!!.toInt() * countList[pos].toInt()} 원"
+//                        holder.textViewRowCartCost.text =
+//                            "${cartViewModel.cartProductList.value?.get(position)?.productPrice!!.toInt() * countList[pos].toInt()} 원"
 
                     }
 

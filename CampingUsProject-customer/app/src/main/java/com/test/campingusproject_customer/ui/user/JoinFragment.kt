@@ -31,8 +31,6 @@ class JoinFragment : Fragment() {
 
         fragmentJoinBinding.run {
             materialToolbarJoin.run {
-                title = "회원가입"
-
                 setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
                 setNavigationOnClickListener {
                     mainActivity.removeFragment(MainActivity.JOIN_FRAGMENT)

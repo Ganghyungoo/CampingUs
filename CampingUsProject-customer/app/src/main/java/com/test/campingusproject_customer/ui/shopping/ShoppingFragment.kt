@@ -1,6 +1,7 @@
 package com.test.campingusproject_customer.ui.shopping
 
 import android.content.Context
+import android.content.DialogInterface
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
@@ -20,11 +21,13 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
 import com.test.campingusproject_customer.R
 import com.test.campingusproject_customer.databinding.FragmentShoppingBinding
 import com.test.campingusproject_customer.databinding.HeaderShoppingBinding
 import com.test.campingusproject_customer.databinding.RowShoppingBinding
+import com.test.campingusproject_customer.repository.CustomerUserRepository
 import com.test.campingusproject_customer.repository.ProductRepository
 import com.test.campingusproject_customer.ui.main.MainActivity
 import com.test.campingusproject_customer.viewmodel.ProductViewModel
@@ -92,9 +95,24 @@ class ShoppingFragment : Fragment() {
             // 툴바
             toolbarShopping.run {
                 setOnMenuItemClickListener {
-                    //장바구니로 가기
-                    mainActivity.replaceFragment(MainActivity.CART_FRAGMENT, true, true, null)
-                    true
+                    val sharedPreferences = mainActivity.getSharedPreferences("customer_user_info", Context.MODE_PRIVATE)
+                    if(CustomerUserRepository.checkLoginStatus(sharedPreferences)) {
+                        //장바구니로 가기
+                        mainActivity.replaceFragment(MainActivity.CART_FRAGMENT, true, true, null)
+                        true
+                    }
+                    else{
+                        MaterialAlertDialogBuilder(mainActivity,R.style.ThemeOverlay_App_MaterialAlertDialog).run {
+                            setTitle("접근 권한 없음")
+                            setMessage("로그인이 필요한 서비스입니다.")
+                            setPositiveButton("취소", null)
+                            setNegativeButton("확인"){ dialogInterface: DialogInterface, i: Int ->
+                                mainActivity.replaceFragment(MainActivity.LOGIN_FRAGMENT, true, true, null)
+                            }
+                            show()
+                        }
+                        false
+                    }
                 }
 
                 // drawerLayout 설정

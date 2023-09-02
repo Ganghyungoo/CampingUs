@@ -215,6 +215,7 @@ class PaymentFragment : Fragment() {
         //상품 상세 화면에서 bundle로 전달한 상품 정보
         val product = arguments?.getStringArrayList("strArray")
 
+        //장바구니에서 전달한 상품 목록을 받아 orderproductList에 저장하는 작업
         if (productList != null) {
 
             var orderProductId = OrderRepository.getProductId().value as Long
@@ -227,20 +228,17 @@ class PaymentFragment : Fragment() {
                 val productImage = productList[idx].productImage
                 val productSellerId = productList[idx].productSellerId
 
-                Log.d("orderProductId저장된 값", "$orderProductId")
-
                 val orderProduct = OrderProductModel(orderId, orderProductId++, productSellerId!!, orderDate,
                     sharedPreference.getString("customerUserId", null)!!, productName!!,
                     productCount.toString(), productPrice.toString(), productImage.toString(),
                     "결제 완료")
 
-                Log.d("저장", "저장전")
                 orderproductList.add(orderProduct)
-                Log.d("저장", "저장완")
-
             }
             OrderRepository.setProductId(orderProductId)
         }
+
+        //상품 상세화면에서 전달한 상품 목록을 받아 orderproductList에 저장하는 작업
         if(product != null){
 
             val orderProductId = OrderRepository.getProductId().value as Long
@@ -260,13 +258,11 @@ class PaymentFragment : Fragment() {
             val orderProduct = OrderProductModel(orderId, orderProductId, productSellerId,
                 orderDate, sharedPreference.getString("customerUserId", null)!!, productName,
                 productCount, productPrice.toString(), productImage,"결제 완료")
-            Log.d("저장", "저장전")
             orderproductList.add(orderProduct)
-            Log.d("저장", "저장완")
 
             OrderRepository.setProductId(orderProductId+1)
         }
-        //결제 금액 설정
+        //버튼과 금액 텍스트뷰에 결제 금액 설정
         val totalPrice = calTotalPrice()
         fragmentPaymentBinding.textViewPaymentTotalCost.setText("$totalPrice 원")
         fragmentPaymentBinding.buttonPaymentBuy.setText("$totalPrice 원 결제하기")
