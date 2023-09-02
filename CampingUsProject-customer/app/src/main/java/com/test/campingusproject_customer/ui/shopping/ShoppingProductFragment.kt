@@ -113,7 +113,6 @@ class ShoppingProductFragment : Fragment() {
         fragmentShoppingProductBinding.run {
             //툴바
             toolbarShoppingProduct.run {
-                title = "쇼핑"
                 setNavigationIcon(R.drawable.arrow_back_24px)
                 setNavigationOnClickListener {
                     mainActivity.removeFragment(MainActivity.SHOPPING_PRODUCT_FRAGMENT)
