@@ -4,11 +4,13 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="10dp"
     android:background="@drawable/border2">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:padding="5dp"
         android:orientation="horizontal">
         <TextView
             android:id="@+id/textViewRowPurchaseHistoryDate"
@@ -17,6 +19,7 @@
             android:layout_weight="1"
             android:text="2023-09-29"
             android:textStyle="bold"
+            android:layout_marginLeft="10dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
         <Button
             android:id="@+id/buttonRowPurchaseHistory"
@@ -32,6 +35,7 @@
         android:id="@+id/LayoutInner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:orientation="vertical"/>
 
 

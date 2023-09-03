@@ -2,6 +2,7 @@ package com.test.campingusproject_customer.ui.myprofile
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
@@ -16,6 +17,11 @@ import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.test.campingusproject_customer.R
 import com.test.campingusproject_customer.databinding.FragmentPurchaseHistoryBinding
 import com.test.campingusproject_customer.databinding.RowPurchaseHistoryBinding
@@ -23,6 +29,7 @@ import com.test.campingusproject_customer.databinding.RowPurchaseHistoryItemBind
 import com.test.campingusproject_customer.dataclassmodel.OrderModel
 import com.test.campingusproject_customer.dataclassmodel.OrderProductModel
 import com.test.campingusproject_customer.repository.OrderDetailRepository
+import com.test.campingusproject_customer.repository.ProductRepository
 import com.test.campingusproject_customer.ui.main.MainActivity
 import com.test.campingusproject_customer.viewmodel.CampsiteViewModel
 import com.test.campingusproject_customer.viewmodel.MyOrderListViewModel
@@ -42,6 +49,8 @@ class PurchaseHistoryFragment : Fragment() {
         mainActivity = activity as MainActivity
         fragmentPurchaseHistoryBinding = FragmentPurchaseHistoryBinding.inflate(layoutInflater)
         myOrderListViewModel = ViewModelProvider(mainActivity)[MyOrderListViewModel::class.java]
+
+
 
         //사용자의 구매내역을 위한 아이디 얻기
         val sharedPreferences = mainActivity.getSharedPreferences("customer_user_info", Context.MODE_PRIVATE)
@@ -145,9 +154,6 @@ class PurchaseHistoryFragment : Fragment() {
                 //상세보기 버튼 초기화
                 buttonRowPurchaseHistory = rowPurchaseHistoryBinding.buttonRowPurchaseHistory
                 //레이아웃 초기화
-                val addViewLayout= rowPurchaseHistoryBinding.LayoutInner
-
-
                 layoutInner=rowPurchaseHistoryBinding.LayoutInner
             }
         }
@@ -185,9 +191,38 @@ class PurchaseHistoryFragment : Fragment() {
                 for (product in it){
                     val productItem=RowPurchaseHistoryItemBinding.inflate(layoutInflater)
                     productItem.textViewRowPurchaseHistoryItemName.text=product.orderProductName
-                    productItem.textViewRowPurchaseHistoryItemPrice.text=product.orderProductPrice
-                    productItem.textViewRowPurchaseHistoryItemNumber.text=product.orderProductCount
+                    productItem.textViewRowPurchaseHistoryItemPrice.text=product.orderProductPrice+"원"
+                    productItem.textViewRowPurchaseHistoryItemNumber.text=product.orderProductCount+"개"
                     productItem.textViewRowPurchaseHistoryItemStateDone.text=product.orderProductState
+                    ProductRepository.getProductFirstImage(product.orderProductImage){
+                        //이미지 띄우기
+                        Glide.with(mainActivity).load(it.result)
+                            .listener(object : RequestListener<Drawable> {
+                                override fun onLoadFailed(
+                                    e: GlideException?,
+                                    model: Any?,
+                                    target: Target<Drawable>?,
+                                    isFirstResource: Boolean,
+                                ): Boolean {
+                                    productItem.progressBarRow.visibility = View.GONE
+                                    return false
+                                }
+
+                                override fun onResourceReady(
+                                    resource: Drawable?,
+                                    model: Any?,
+                                    target: Target<Drawable>?,
+                                    dataSource: DataSource?,
+                                    isFirstResource: Boolean,
+                                ): Boolean {
+                                    productItem.progressBarRow.visibility = View.GONE
+                                    return false
+                                }
+
+                            })
+                            .override(200, 200)
+                            .into(productItem.imageViewRowPurchaseHistoryItemProduct)
+                    }
                     if (productItem.textViewRowPurchaseHistoryItemStateDone.text=="결제 완료"){
                         productItem.textViewRowPurchaseHistoryItemReview.visibility=View.GONE
                     }else{
@@ -217,84 +252,15 @@ class PurchaseHistoryFragment : Fragment() {
 
 
 
-
         }
     }
 
-
-//    // 구매내역 아이템 어댑터
-//    inner class PurchaseHistoryItemAdapter() :
-//        RecyclerView.Adapter<PurchaseHistoryFragment.PurchaseHistoryItemAdapter.PurchaseHistoryItemViewHolder>() {
-//
-//        inner class PurchaseHistoryItemViewHolder(rowPurchaseHistoryItemBinding: RowPurchaseHistoryItemBinding) :
-//            RecyclerView.ViewHolder(rowPurchaseHistoryItemBinding.root) {
-//            val imageViewRowPurchaseHistoryItemProduct: ImageView
-//            val textViewRowPurchaseHistoryItemName: TextView
-//            val textViewRowPurchaseHistoryItemPrice: TextView
-//            val textViewRowPurchaseHistoryItemNumber: TextView
-//            val textViewRowPurchaseHistoryItemState: TextView
-//            val textViewRowPurchaseHistoryItemStateDone: TextView
-//            val textViewRowPurchaseHistoryItemReview: TextView
-//
-//            init {
-//                imageViewRowPurchaseHistoryItemProduct =
-//                    rowPurchaseHistoryItemBinding.imageViewRowPurchaseHistoryItemProduct
-//                textViewRowPurchaseHistoryItemName =
-//                    rowPurchaseHistoryItemBinding.textViewRowPurchaseHistoryItemName
-//                textViewRowPurchaseHistoryItemPrice =
-//                    rowPurchaseHistoryItemBinding.textViewRowPurchaseHistoryItemPrice
-//                textViewRowPurchaseHistoryItemNumber =
-//                    rowPurchaseHistoryItemBinding.textViewRowPurchaseHistoryItemNumber
-//                textViewRowPurchaseHistoryItemState =
-//                    rowPurchaseHistoryItemBinding.textViewRowPurchaseHistoryItemState
-//                textViewRowPurchaseHistoryItemStateDone =
-//                    rowPurchaseHistoryItemBinding.textViewRowPurchaseHistoryItemStateDone
-//                textViewRowPurchaseHistoryItemReview =
-//                    rowPurchaseHistoryItemBinding.textViewRowPurchaseHistoryItemReview
-//
-//            }
-//        }
-//
-//        override fun onCreateViewHolder(
-//            parent: ViewGroup,
-//            viewType: Int,
-//        ): PurchaseHistoryItemViewHolder {
-//            val rowPurchaseHistoryItemBinding =
-//                RowPurchaseHistoryItemBinding.inflate(layoutInflater)
-//            val purchaseHistoryItemViewHolder =
-//                PurchaseHistoryItemViewHolder(rowPurchaseHistoryItemBinding)
-//
-//            rowPurchaseHistoryItemBinding.root.layoutParams = ViewGroup.LayoutParams(
-//                ViewGroup.LayoutParams.MATCH_PARENT,
-//                ViewGroup.LayoutParams.WRAP_CONTENT
-//            )
-//            return purchaseHistoryItemViewHolder
-//        }
-//
-//        override fun getItemCount(): Int {
-//            return 5
-//        }
-//
-//        override fun onBindViewHolder(holder: PurchaseHistoryItemViewHolder, position: Int) {
-//            holder.textViewRowPurchaseHistoryItemName.text = "장작"
-//            holder.textViewRowPurchaseHistoryItemPrice.text = "15000원"
-//            holder.textViewRowPurchaseHistoryItemNumber.text = "3개"
-//            if (state) {
-//                holder.textViewRowPurchaseHistoryItemState.visibility = View.GONE
-//                holder.textViewRowPurchaseHistoryItemStateDone.visibility = View.VISIBLE
-//                holder.textViewRowPurchaseHistoryItemReview.visibility = View.VISIBLE
-//            } else {
-//                holder.textViewRowPurchaseHistoryItemState.visibility = View.VISIBLE
-//                holder.textViewRowPurchaseHistoryItemStateDone.visibility = View.GONE
-//                holder.textViewRowPurchaseHistoryItemReview.visibility = View.GONE
-//            }
-//
-//            holder.textViewRowPurchaseHistoryItemReview.setOnClickListener {
-//                mainActivity.replaceFragment(MainActivity.REVIEW_WRITE_FRAGMENT, true, true, null)
-//            }
-//        }
-//    }
-
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        val main=activity as MainActivity
+        Log.d("testt","바텀 삭제 코드")
+        main.activityMainBinding.bottomNavigationViewMain.visibility=View.GONE
+    }
     override fun onDetach() {
         super.onDetach()
         mainActivity.activityMainBinding.bottomNavigationViewMain.visibility=View.VISIBLE
