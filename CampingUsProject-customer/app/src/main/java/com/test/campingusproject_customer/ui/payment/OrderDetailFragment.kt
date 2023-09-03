@@ -25,6 +25,7 @@ class OrderDetailFragment : Fragment() {
     lateinit var fragmentOrderDetailBinding: FragmentOrderDetailBinding
     lateinit var orderDetailViewModel: OrderDetailViewModel
     lateinit var orderProductList1: MutableList<OrderProductModel>
+    var orderIdCheck: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,7 +34,7 @@ class OrderDetailFragment : Fragment() {
 
        //번들로 넘어온 값을 받는 부분
         val orderId=arguments?.getString("orderId")
-
+        orderIdCheck=orderId
 
         mainActivity = activity as MainActivity
         fragmentOrderDetailBinding = FragmentOrderDetailBinding.inflate(layoutInflater)
@@ -97,9 +98,11 @@ class OrderDetailFragment : Fragment() {
                 //백버튼 설정
                 setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
                 setNavigationOnClickListener {
-                    mainActivity.removeFragment(MainActivity.ORDER_DETAIL_FRAGMENT)
-                    mainActivity.removeFragment(MainActivity.PAYMENT_FRAGMENT)
-                    mainActivity.removeFragment(MainActivity.CART_FRAGMENT)
+                        mainActivity.removeFragment(MainActivity.ORDER_DETAIL_FRAGMENT)
+                        mainActivity.removeFragment(MainActivity.PAYMENT_FRAGMENT)
+                        mainActivity.removeFragment(MainActivity.CART_FRAGMENT)
+
+
                 }
             }
         }
@@ -153,7 +156,12 @@ class OrderDetailFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        mainActivity.activityMainBinding.bottomNavigationViewMain.visibility = View.VISIBLE
+        if (orderIdCheck==null){
+            mainActivity.activityMainBinding.bottomNavigationViewMain.visibility = View.VISIBLE
+        }else{
+            mainActivity.activityMainBinding.bottomNavigationViewMain.visibility = View.GONE
+        }
+
     }
 
     override fun onDetach() {
