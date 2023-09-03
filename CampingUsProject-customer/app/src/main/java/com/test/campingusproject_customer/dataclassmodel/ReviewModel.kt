@@ -6,5 +6,6 @@ data class ReviewModel(
     var reviewWriterId: String,         // 리뷰 작성자 ID
     var reviewRating: Long,            // 리뷰 별점
     var reviewImage: String,            // 리뷰 사진
-    var reviewContent: String           // 리뷰 내용
+    var reviewContent: String,           // 리뷰 내용
+    var sellerId:String                 //판매자 아이디
 )

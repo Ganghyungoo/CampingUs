@@ -63,6 +63,8 @@ class ReviewWriteFragment : Fragment() {
         val orderProductImage = arguments?.getString("productImage")
         val orderProductName = arguments?.getString("productName")
         val orderDate = arguments?.getString("orderDate")
+        val sellerId = arguments?.getString("sellerId")
+
 
         //앨범 런처 초기화
         albumLauncher = albumSetting()
@@ -183,7 +185,7 @@ class ReviewWriteFragment : Fragment() {
                                 val currentProductRecommendationCount = c1.child("productRecommendationCount").value as Long
 
                                 // 리뷰 객체
-                                val review = ReviewModel(reviewId, currentProductId, userId, starScore, fileDir, textInputEditTextReviewWrite.text.toString())
+                                val review = ReviewModel(reviewId, currentProductId, userId, starScore, fileDir, textInputEditTextReviewWrite.text.toString(),sellerId!!)
 
                                 ReviewRepository.setReviewInfo(review) {
                                     reviewId++
@@ -200,6 +202,10 @@ class ReviewWriteFragment : Fragment() {
                                                         Snackbar.make(fragmentReviewWriteBinding.root, "저장되었습니다.", Snackbar.LENGTH_SHORT).show()
                                                         mainActivity.removeFragment(MainActivity.REVIEW_WRITE_FRAGMENT)
                                                     }
+                                                }
+                                                else{
+                                                    Snackbar.make(fragmentReviewWriteBinding.root, "저장되었습니다.", Snackbar.LENGTH_SHORT).show()
+                                                    mainActivity.removeFragment(MainActivity.REVIEW_WRITE_FRAGMENT)
                                                 }
                                             }
                                         }

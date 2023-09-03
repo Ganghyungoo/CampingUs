@@ -1,11 +1,14 @@
 package com.test.campingusproject_seller.ui.notification
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
@@ -16,6 +19,7 @@ import com.test.campingusproject_seller.ui.main.MainActivity
 class NotificationMainFragment : Fragment() {
     lateinit var fragmentNotificationMainBinding: FragmentNotificationMainBinding
     lateinit var mainActivity: MainActivity
+    lateinit var callback: OnBackPressedCallback
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,6 +36,7 @@ class NotificationMainFragment : Fragment() {
                 setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
                 setNavigationOnClickListener {
                     mainActivity.removeFragment(MainActivity.NOTIFICATION_MAIN_FRAGMENT)
+                    mainActivity.activityMainBinding.bottomNavigationViewMain.visibility=View.VISIBLE
                 }
             }
 
@@ -73,5 +78,23 @@ class NotificationMainFragment : Fragment() {
             }
             return resultFragment
         }
+    }
+
+    //뒤로가기 버튼 눌렀을 때 동작할 코드 onDetech까지
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                mainActivity.removeFragment(MainActivity.NOTIFICATION_MAIN_FRAGMENT)
+                mainActivity.activityMainBinding.bottomNavigationViewMain.visibility=View.VISIBLE
+
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        callback.remove()
     }
 }
