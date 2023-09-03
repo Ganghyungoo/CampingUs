@@ -1,6 +1,7 @@
 package com.test.campingusproject_customer.repository
 
 import android.net.Uri
+import android.provider.ContactsContract.Data
 import com.google.android.gms.tasks.Task
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -9,6 +10,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.test.campingusproject_customer.dataclassmodel.ProductModel
+import kotlinx.coroutines.tasks.await
 
 class ProductRepository {
     companion object {
@@ -29,6 +31,15 @@ class ProductRepository {
             imageRef.downloadUrl.addOnCompleteListener(callback1)
         }
 
+        // 상품의 대표 이미지만 가져오는 함수
+        suspend fun getProductFirstImage(fileDir:String) : Uri{
+            val storage = FirebaseStorage.getInstance()
+            val fileName = fileDir + "1.png"
+
+            val imageRef = storage.reference.child(fileName)
+            return imageRef.downloadUrl.await()
+        }
+
         // 좋아요 버튼 클릭 시 +1 하는 함수
         fun likeButtonClicked(productId: Long, productRecommendationCount: Long, callback1: (Task<Void>) -> Unit) {
             val database = FirebaseDatabase.getInstance()
@@ -47,6 +58,14 @@ class ProductRepository {
 
             val productRef = database.getReference("ProductData")
             productRef.orderByChild("productId").equalTo(productId.toDouble()).get().addOnCompleteListener(callback1)
+        }
+
+        //하나의 상품 정보 가져오는 함수
+        suspend fun getOneProductData(productName : String) : DataSnapshot{
+            val database = FirebaseDatabase.getInstance()
+
+            val productRef = database.getReference("ProductData")
+            return productRef.orderByChild("productName").equalTo(productName).get().await()
         }
 
         //판매자의 정보 가져오는 함수

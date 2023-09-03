@@ -27,5 +27,16 @@ class OrderDetailRepository {
             customerOrderRef.orderByChild("orderUserId").equalTo(orderUserId).get().addOnCompleteListener(callback)
         }
 
+        //주문 상품의 리뷰 작성 상태를 변경하는 메서드
+        fun setReviewState(orderId: String){
+            val database = FirebaseDatabase.getInstance()
+            val customerOrderRef = database.getReference("OrderProductData")
+            customerOrderRef.orderByChild("orderId").equalTo(orderId).get().addOnCompleteListener {
+                for(c1 in it.result.children){
+                    c1.ref.child("reviewState").setValue(true)
+                }
+            }
+        }
+
     }
 }
