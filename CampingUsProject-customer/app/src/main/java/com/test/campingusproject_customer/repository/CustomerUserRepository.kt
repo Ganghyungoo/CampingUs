@@ -23,6 +23,7 @@ import com.google.firebase.storage.UploadTask
 import com.test.campingusproject_customer.dataclassmodel.CustomerUserModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.tasks.await
 import java.lang.Exception
 import java.util.concurrent.TimeUnit
 
@@ -101,15 +102,12 @@ class CustomerUserRepository() {
         }
 
         //서버에서 유저 ID 찾는 함수
-        fun getRegisteredID(
-            customerUserId : String,
-            callback: (Task<DataSnapshot>) -> Unit
-        ){
+        suspend fun getRegisteredID(customerUserId : String) : DataSnapshot{
             val database = FirebaseDatabase.getInstance()
 
             val customerUserRef = database.getReference("CustomerUsers")
-            customerUserRef.orderByChild("customerUserId").equalTo(customerUserId)
-                .get().addOnCompleteListener(callback)
+            return customerUserRef.orderByChild("customerUserId").equalTo(customerUserId)
+                .get().await()
         }
 
         fun modifyUserInfo(customerUserId: String, customerUserModel: CustomerUserModel,
