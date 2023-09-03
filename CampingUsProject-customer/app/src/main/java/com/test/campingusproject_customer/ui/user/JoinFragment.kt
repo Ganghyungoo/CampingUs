@@ -11,7 +11,9 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.test.campingusproject_customer.R
 import com.test.campingusproject_customer.databinding.FragmentJoinBinding
+import com.test.campingusproject_customer.repository.CustomerUserRepository
 import com.test.campingusproject_customer.ui.main.MainActivity
+import kotlinx.coroutines.runBlocking
 
 class JoinFragment : Fragment() {
 
@@ -59,22 +61,29 @@ class JoinFragment : Fragment() {
                      return@setOnClickListener
                 }
 
+                val registeredUser = runBlocking {
+                    //서버에 저장된 유저 데이터로 로그인 가능 여부 검사
+                    CustomerUserRepository.getRegisteredID(userId)
+                }
+
+                //가입된 ID일때
+                if(registeredUser.exists()){
+                    createDialog("중복된 정보", "이미 가입된 ID 입니다.")
+                    textInputEditTextJoinId.setText("")
+                    mainActivity.focusOnView(textInputEditTextJoinId)
+                    return@setOnClickListener
+                }
+
+
                 //비밀번호 불일치
                 if(userPw != userPwCheck){
                     //비밀번호, 비밀번호 확인 값 초기화
                     textInputEditTextJoinPw.setText("")
                     textInputEditTextJoinPwCheck.setText("")
 
-                    //다이얼로그 생성
-                    MaterialAlertDialogBuilder(mainActivity,R.style.ThemeOverlay_App_MaterialAlertDialog).run {
-                        setTitle("비밀번호 오류")
-                        setMessage("비밀번호가 일치하지 않습니다")
-                        setPositiveButton("확인"){ dialogInterface: DialogInterface, i: Int ->
-                            //비밀번호 textinput layout에 포커스
-                            mainActivity.focusOnView(textInputEditTextJoinPw)
-                        }
-                        show()
-                    }
+                    createDialog("비밀번호 오류", "비밀번호가 일치하지 않습니다")
+                    mainActivity.focusOnView(textInputEditTextJoinPw)
+
                     return@setOnClickListener
                 }
 
@@ -123,4 +132,13 @@ class JoinFragment : Fragment() {
         }
     }
 
+    //다이얼로그 생성하는 함수
+    fun createDialog(title : String, message : String){
+        MaterialAlertDialogBuilder(mainActivity,R.style.ThemeOverlay_App_MaterialAlertDialog).run {
+            setTitle(title)
+            setMessage(message)
+            setPositiveButton("확인", null)
+            show()
+        }
+    }
 }
