@@ -83,7 +83,6 @@ class SellStateFragment : Fragment() {
                 val itemDecoration = ItemDecoration()
                 adapter = OrderHistoryAdapter()
                 layoutManager = LinearLayoutManager(mainActivity)
-                addItemDecoration(itemDecoration)
             }
         }
         return fragmentSellStateBinding.root
@@ -247,4 +246,5 @@ class SellStateFragment : Fragment() {
             outRect.top = padding
         }
     }
+
 }

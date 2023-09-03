@@ -37,8 +37,9 @@ class ReviewViewModel: ViewModel() {
                     val reviewRating = c1.child("reviewRating").value as Long
                     val reviewImage = c1.child("reviewImage").value as String
                     val reviewContent = c1.child("reviewContent").value as String
+                    val sellerId=c1.child("sellerId").value as String
 
-                    val review = ReviewModel(reviewId, reviewProductId, reviewWriterId, reviewRating, reviewImage, reviewContent)
+                    val review = ReviewModel(reviewId, reviewProductId, reviewWriterId, reviewRating, reviewImage, reviewContent,sellerId)
 
                     tempList.add(review)
                 }
@@ -61,8 +62,9 @@ class ReviewViewModel: ViewModel() {
                     val reviewRating = c1.child("reviewRating").value as Long
                     val reviewImage = c1.child("reviewImage").value as String
                     val reviewContent = c1.child("reviewContent").value as String
+                    val sellerId = c1.child("sellerId").value as String
 
-                    val review = ReviewModel(reviewId, reviewProductId, reviewWriterId, reviewRating, reviewImage, reviewContent)
+                    val review = ReviewModel(reviewId, reviewProductId, reviewWriterId, reviewRating, reviewImage, reviewContent,sellerId)
 
                     tempList.add(review)
                 }

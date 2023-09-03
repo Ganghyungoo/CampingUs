@@ -122,11 +122,12 @@ class PurchaseHistoryFragment : Fragment() {
                     val orderSellerId = c2.child("orderSellerId").value as String
                     val orderDate = c2.child("orderDate").value as String
                     val orderUserId = c2.child("orderUserId").value as String
+                    val reviewState=c2.child("reviewState").value as Boolean
 
                     val productObj = OrderProductModel(
                         orderId2, orderProductId, orderSellerId, orderDate, orderUserId,
                         orderProductName, orderProductCount, orderProductPrice, orderProductImage,
-                        orderProductState)
+                        orderProductState,reviewState)
 
                     productTempList.add(productObj)
                 }
@@ -226,12 +227,14 @@ class PurchaseHistoryFragment : Fragment() {
                     if (productItem.textViewRowPurchaseHistoryItemStateDone.text=="결제 완료"){
                         productItem.textViewRowPurchaseHistoryItemReview.visibility=View.GONE
                     }else{
-                        if(product.reviewState){
-                            productItem.textViewRowPurchaseHistoryItemReview.setText("리뷰 작성 완료")
+                        if(product.reviewState==true){
+                            Log.d("zzz","리뷰 작성된거 알고있음")
+                            productItem.textViewRowPurchaseHistoryItemReview.text = "리뷰 작성 완료"
                             productItem.textViewRowPurchaseHistoryItemReview.setTextColor(Color.BLUE)
                         }
                         else{
-                            productItem.textViewRowPurchaseHistoryItemReview.setText("리뷰 작성하기")
+                            Log.d("zzz","리뷰 작성된거 알고있는대도 이거 띄우는중${product.reviewState}")
+                            productItem.textViewRowPurchaseHistoryItemReview.text = "리뷰 작성하기"
                             productItem.textViewRowPurchaseHistoryItemReview.setTextColor(Color.RED)
                             productItem.textViewRowPurchaseHistoryItemReview.setOnClickListener {
                                 val bundle=Bundle()
@@ -241,6 +244,7 @@ class PurchaseHistoryFragment : Fragment() {
                                 bundle.putString("productImage", product.orderProductImage)
                                 bundle.putString("productName",product.orderProductName)
                                 bundle.putString("orderDate", product.orderDate)
+                                bundle.putString("sellerId",product.orderSellerId)
                                 mainActivity.replaceFragment(MainActivity.REVIEW_WRITE_FRAGMENT,true,false,bundle)
                             }
                         }
