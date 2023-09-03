@@ -227,16 +227,22 @@ class PurchaseHistoryFragment : Fragment() {
                         productItem.textViewRowPurchaseHistoryItemReview.visibility=View.GONE
                     }else{
                         if(product.reviewState){
-                            productItem.textViewRowPurchaseHistoryItemReview.text="리뷰 작성 완료"
+                            productItem.textViewRowPurchaseHistoryItemReview.setText("리뷰 작성 완료")
                             productItem.textViewRowPurchaseHistoryItemReview.setTextColor(Color.BLUE)
                         }
-                        productItem.textViewRowPurchaseHistoryItemReview.text="리뷰 작성하기"
-                        productItem.textViewRowPurchaseHistoryItemReview.setTextColor(Color.RED)
-                        productItem.textViewRowPurchaseHistoryItemReview.setOnClickListener {
-                            val bundle=Bundle()
-                            bundle.putString("orderId",product.orderId)
-                            bundle.putString("productName",product.orderProductName)
-                            mainActivity.replaceFragment(MainActivity.REVIEW_WRITE_FRAGMENT,true,false,bundle)
+                        else{
+                            productItem.textViewRowPurchaseHistoryItemReview.setText("리뷰 작성하기")
+                            productItem.textViewRowPurchaseHistoryItemReview.setTextColor(Color.RED)
+                            productItem.textViewRowPurchaseHistoryItemReview.setOnClickListener {
+                                val bundle=Bundle()
+                                bundle.putString("orderId", product.orderId)
+                                bundle.putLong("orderProductId",product.orderProductId)
+                                bundle.putString("productPrice", product.orderProductPrice)
+                                bundle.putString("productImage", product.orderProductImage)
+                                bundle.putString("productName",product.orderProductName)
+                                bundle.putString("orderDate", product.orderDate)
+                                mainActivity.replaceFragment(MainActivity.REVIEW_WRITE_FRAGMENT,true,false,bundle)
+                            }
                         }
                     }
 

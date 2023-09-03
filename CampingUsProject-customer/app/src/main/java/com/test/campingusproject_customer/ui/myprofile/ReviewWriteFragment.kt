@@ -27,11 +27,13 @@ import com.test.campingusproject_customer.R
 import com.test.campingusproject_customer.databinding.FragmentReviewWriteBinding
 import com.test.campingusproject_customer.databinding.RowReviewWriteImageBinding
 import com.test.campingusproject_customer.dataclassmodel.ReviewModel
+import com.test.campingusproject_customer.repository.OrderDetailRepository
 import com.test.campingusproject_customer.repository.ProductRepository
 import com.test.campingusproject_customer.repository.ReviewRepository
 import com.test.campingusproject_customer.ui.main.MainActivity
 import com.test.campingusproject_customer.viewmodel.ProductViewModel
 import com.test.campingusproject_customer.viewmodel.ReviewViewModel
+import kotlinx.coroutines.runBlocking
 import java.io.IOException
 
 class ReviewWriteFragment : Fragment() {
@@ -40,13 +42,9 @@ class ReviewWriteFragment : Fragment() {
     lateinit var albumLauncher: ActivityResultLauncher<Intent>
 
     var reviewImageList = mutableListOf<Uri>()
-    var reviewRecommendationCount = 0L
 
-    var productImages = mutableListOf<Uri>()
-
-    // 뷰모델
-    lateinit var reviewViewModel: ReviewViewModel
-    lateinit var productViewModel: ProductViewModel
+    var starScore = 0L                 // 별점
+    var recommendationCheck = false      // 추천 눌렀는지 확인
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,50 +53,22 @@ class ReviewWriteFragment : Fragment() {
         fragmentReviewWriteBinding = FragmentReviewWriteBinding.inflate(layoutInflater)
         mainActivity = activity as MainActivity
 
-        // 뷰모델 객체
-        reviewViewModel = ViewModelProvider(mainActivity)[ReviewViewModel::class.java]
-        productViewModel = ViewModelProvider(mainActivity)[ProductViewModel::class.java]
-
-        productViewModel.run {
-            productName.observe(mainActivity) {
-                fragmentReviewWriteBinding.textViewReviewWriteTitle.text = it
-            }
-            productPrice.observe(mainActivity) {
-                fragmentReviewWriteBinding.textViewReviewWritePrice.text = "$it 원"
-            }
-            productImageList.observe(mainActivity) { uri ->
-                productImages = uri
-            }
-            productRecommendationCount.observe(mainActivity) {
-                reviewRecommendationCount = it
-            }
-        }
-
         // 회원 이름 가져오기
         val sharedPreferences = mainActivity.getSharedPreferences("customer_user_info", Context.MODE_PRIVATE)
         val userId = sharedPreferences.getString("customerUserId", null)!!
 
-        // 번들 객체로 상품 id 가져오기
-        //var productId = arguments?.getInt("productId")
-
-        // 테스트를 위해서 임이로 id값 지정
-        var productId = 47
-        val orderId= arguments?.getString("orderId",null)
-        val productName= arguments?.getString("productName",null)
-        Log.d("xxx","${orderId}")
-        Log.d("xxx","${productName}")
-
-        // 좋아요 수 데이터 가져오기
-        productViewModel.getOneProductData(orderId!!.toLong())
-        // reviewRecommendationCount = productViewModel.productRecommendationCount.value!!
+        val orderId = arguments?.getString("orderId")
+        val orderProductId = arguments?.getLong("orderProductId")
+        val orderProductPrice = arguments?.getString("productPrice")
+        val orderProductImage = arguments?.getString("productImage")
+        val orderProductName = arguments?.getString("productName")
+        val orderDate = arguments?.getString("orderDate")
 
         //앨범 런처 초기화
         albumLauncher = albumSetting()
 
         fragmentReviewWriteBinding.run {
-            var starScore = 0L                 // 별점
-            var recommendationCheck = false      // 추천 눌렀는지 확인
-            
+
             // 툴바
             toolbarReviewWrite.run {
                 //백버튼 설정
@@ -108,10 +78,13 @@ class ReviewWriteFragment : Fragment() {
                 }
             }
 
-            // 상품에 등록된 이미지 경로로 첫 번째 이미지만 불러와 표시
-            imageViewReviewWrite.run {
-                //글라이드 라이브러리로 이미지 표시
-                Glide.with(mainActivity).load(productImages)
+            textViewReviewWriteTitle.setText(orderProductName)
+            textViewReviewWriteDate.setText(orderDate)
+            textViewReviewWritePrice.setText(orderProductPrice)
+
+            if(orderProductImage != null){
+                val currentProductImage = runBlocking { ProductRepository.getProductFirstImage(orderProductImage) }
+                Glide.with(mainActivity).load(currentProductImage).error(R.drawable.error_24px)
                     .override(200, 200)
                     .into(imageViewReviewWrite)
             }
@@ -126,13 +99,13 @@ class ReviewWriteFragment : Fragment() {
             // 추천
             imageViewReviewWriteLiked.run {
                 setOnClickListener {
-                    setImageResource(R.drawable.favorite_fill_24px)
-                    recommendationCheck = true
-
-                    if(recommendationCheck) {
-                        ProductRepository.likeButtonClicked(productId.toLong(), reviewRecommendationCount) {
-                            Snackbar.make(mainActivity.activityMainBinding.root, "추천되었습니다.", Snackbar.LENGTH_SHORT).show()
-                        }
+                    if(recommendationCheck){
+                        setImageResource(R.drawable.favorite_24px)
+                        recommendationCheck = false
+                    }
+                    else{
+                        setImageResource(R.drawable.favorite_fill_24px)
+                        recommendationCheck = true
                     }
                 }
             }
@@ -166,7 +139,6 @@ class ReviewWriteFragment : Fragment() {
                 setOnClickListener {
                     ReviewRepository.getReviewIdx {
                         var reviewId = it.result.value as Long
-                        Log.d("ㅁㅇ", reviewId.toString())
 
                         // 유효성 검사
                         val reviewWriteText = textInputEditTextReviewWrite.text.toString()
@@ -200,20 +172,38 @@ class ReviewWriteFragment : Fragment() {
                             return@getReviewIdx
                         } else {
                             //이미지 저장될 파일 경로를 저장
-                            "ReviewImage/$productId/$userId/"
+                            "ReviewImage/$orderProductId/$userId/"
                         }
 
-                        // 리뷰 객체
-                        val review = ReviewModel(reviewId, productId.toLong(), userId, starScore, fileDir, textInputEditTextReviewWrite.text.toString())
+                        if(orderProductName != null){
+                            val currentProduct = runBlocking { ProductRepository.getOneProductData(orderProductName) }
 
-                        ReviewRepository.setReviewInfo(review) {
-                            reviewId++
+                            for(c1 in currentProduct.children){
+                                val currentProductId = c1.child("productId").value as Long
+                                val currentProductRecommendationCount = c1.child("productRecommendationCount").value as Long
 
-                            // 증가된 reviewId 값 저장
-                            ReviewRepository.setReviewIdx(reviewId) {
-                                ReviewRepository.uploadImages(reviewImageList, fileDir) {
-                                    Snackbar.make(mainActivity.activityMainBinding.root, "저장되었습니다.", Snackbar.LENGTH_SHORT).show()
-                                    mainActivity.removeFragment(MainActivity.REVIEW_WRITE_FRAGMENT)
+                                // 리뷰 객체
+                                val review = ReviewModel(reviewId, currentProductId, userId, starScore, fileDir, textInputEditTextReviewWrite.text.toString())
+
+                                ReviewRepository.setReviewInfo(review) {
+                                    reviewId++
+
+                                    if(orderId != null){
+                                        OrderDetailRepository.setReviewState(orderId)
+
+                                        // 증가된 reviewId 값 저장
+                                        ReviewRepository.setReviewIdx(reviewId) {
+                                            ReviewRepository.uploadImages(reviewImageList, fileDir) {
+
+                                                if(recommendationCheck){
+                                                    ProductRepository.likeButtonClicked(currentProductId, currentProductRecommendationCount){
+                                                        Snackbar.make(fragmentReviewWriteBinding.root, "저장되었습니다.", Snackbar.LENGTH_SHORT).show()
+                                                        mainActivity.removeFragment(MainActivity.REVIEW_WRITE_FRAGMENT)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -267,28 +257,6 @@ class ReviewWriteFragment : Fragment() {
                 .into(holder.imageViewRowReviewWriteImage)
 
         }
-    }
-
-    //이미지 회전 상태값 구하는 함수
-    fun getOrientationOfImage(uri:Uri): Int{
-        val inputStream = mainActivity.contentResolver.openInputStream(uri)
-        val exif : ExifInterface? = try{
-            ExifInterface(inputStream!!)
-        }catch (e: IOException){
-            Log.e("exifError", e.toString())
-            return -1
-        }
-        inputStream.close()
-
-        val orientation = exif?.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
-        if(orientation != -1){
-            when(orientation){
-                ExifInterface.ORIENTATION_ROTATE_90 -> return 90
-                ExifInterface.ORIENTATION_ROTATE_180 -> return 180
-                ExifInterface.ORIENTATION_ROTATE_270 -> return 270
-            }
-        }
-        return 0
     }
 
     //앨범 설정 함수
