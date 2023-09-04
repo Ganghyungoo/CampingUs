@@ -138,31 +138,7 @@
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/textViewSellStateDetailDeliveryPriceTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:text="배송비"
-                        android:textSize="@dimen/text_size_2" />
-
-                    <TextView
-                        android:id="@+id/textViewSellStateDetailDeliveryPrice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="5000원"
-                        android:textSize="@dimen/text_size_2" />
-
-                </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
@@ -173,28 +149,7 @@
                     android:layout_marginBottom="10dp"
                     android:background="#000000" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="5dp"
-                    android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/textViewSellStateDetailTotalPriceTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:text="총 결제금액"
-                        android:textSize="@dimen/text_size_2" />
-
-                    <TextView
-                        android:id="@+id/textViewSellStateDetailTotalPrice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:text="95000원"
-                        android:textSize="@dimen/text_size_2" />
-                </LinearLayout>
 
             </LinearLayout>
 
@@ -218,23 +173,33 @@
                     android:textSize="@dimen/text_size_1"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/textViewSellStateDetailOrderName"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
                     android:layout_marginTop="10dp"
-                    android:text="주문자명"
-                    android:textSize="@dimen/text_size_2" />
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="주문자명"
+                        android:textSize="@dimen/text_size_2" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size_2"
+                        android:text=" : "/>
+                    <TextView
+                        android:id="@+id/textViewSellStateDetailOrderName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size_2"
+                        android:text="강현구"/>
 
-                <TextView
-                    android:id="@+id/textViewSellStateDetailOrderEmail"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="5dp"
-                    android:text="email@naver.com"
-                    android:textSize="@dimen/text_size_2" />
+
+                </LinearLayout>
+
+
 
                 <TextView
                     android:id="@+id/textViewSellStateDetailOrderPhonNumber"
@@ -262,14 +227,31 @@
                     android:textSize="@dimen/text_size_1"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/textViewSellStateDetailRecipientName"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="5dp"
-                    android:text="받는 사람 이름"
-                    android:textSize="@dimen/text_size_2" />
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="받는사람 명"
+                        android:textSize="@dimen/text_size_2" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size_2"
+                        android:text=" : "/>
+                    <TextView
+                        android:id="@+id/textViewSellStateDetailRecipientName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size_2"
+                        android:text="강현구"/>
+
+
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/textViewSellStateDetailRecipientPhonNumber"
@@ -289,17 +271,9 @@
                     android:text="(45678) 충북 청주시 상당구 금천동"
                     android:textSize="@dimen/text_size_2" />
 
-                <TextView
-                    android:id="@+id/textViewSellStateDetailRecipientAddressDetail"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="5dp"
-                    android:text="시그니엘타워 301동 2456호"
-                    android:textSize="@dimen/text_size_2" />
             </LinearLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
@@ -308,7 +282,8 @@
                 android:background="@drawable/border"
                 android:padding="15dp"
                 android:paddingLeft="15dp"
-                android:paddingRight="15dp">
+                android:paddingRight="15dp"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/textViewSellStateDetailOrderProductInfo"
@@ -319,47 +294,77 @@
                     android:textStyle="bold"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:layout_editor_absoluteX="30dp" />
-
-                <ImageView
-                    android:id="@+id/imageViewSellStateDetailOrderProductImage"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/textViewSellStateDetailOrderProductInfo"
-                    tools:src="@tools:sample/avatars" />
+                    android:orientation="horizontal">
+                    <ProgressBar
+                        android:id="@+id/progressBarRow"
+                        style="?android:attr/progressBarStyle"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
 
-                <TextView
-                    android:id="@+id/textViewSellStateDetailOrderProductName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="24dp"
-                    android:text="텐트"
-                    app:layout_constraintLeft_toRightOf="@id/imageViewSellStateDetailOrderProductImage"
-                    app:layout_constraintTop_toBottomOf="@id/textViewSellStateDetailOrderProductInfo" />
+                    <ImageView
+                        android:id="@+id/imageViewSellStateDetailOrderProductImage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="10dp" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/textViewSellStateDetailOrderProductPrice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="16dp"
-                    android:text="485000원"
-                    app:layout_constraintLeft_toRightOf="@id/imageViewSellStateDetailOrderProductImage"
-                    app:layout_constraintTop_toBottomOf="@id/textViewSellStateDetailOrderProductName" />
+                        <TextView
+                            android:id="@+id/textViewSellStateDetailOrderProductName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="24dp"
+                            android:text="텐트"
+                            app:layout_constraintLeft_toRightOf="@id/imageViewSellStateDetailOrderProductImage"
+                            app:layout_constraintTop_toBottomOf="@id/textViewSellStateDetailOrderProductInfo" />
 
-                <TextView
-                    android:id="@+id/textViewSellStateDetailOrderProductNumber"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="16dp"
-                    android:text="1개"
-                    app:layout_constraintLeft_toRightOf="@id/imageViewSellStateDetailOrderProductImage"
-                    app:layout_constraintTop_toBottomOf="@id/textViewSellStateDetailOrderProductPrice" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                        <TextView
+                            android:id="@+id/textViewSellStateDetailOrderProductPrice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="16dp"
+                            android:text="485000원"
+                            app:layout_constraintLeft_toRightOf="@id/imageViewSellStateDetailOrderProductImage"
+                            app:layout_constraintTop_toBottomOf="@id/textViewSellStateDetailOrderProductName" />
+
+                        <TextView
+                            android:id="@+id/textViewSellStateDetailOrderProductNumber"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="16dp"
+                            android:text="1개"
+                            app:layout_constraintLeft_toRightOf="@id/imageViewSellStateDetailOrderProductImage"
+                            app:layout_constraintTop_toBottomOf="@id/textViewSellStateDetailOrderProductPrice" />
+
+                    </LinearLayout>
+
+
+
+                </LinearLayout>
+
+
+
+
+
+
+            </LinearLayout>
+
+
+
+
+
+
 
             <LinearLayout
                 android:layout_width="match_parent"

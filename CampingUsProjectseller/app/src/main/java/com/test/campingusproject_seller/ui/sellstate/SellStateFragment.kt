@@ -32,6 +32,7 @@ import com.test.campingusproject_seller.dataclassmodel.OrderProductModel
 import com.test.campingusproject_seller.repository.OrderProductRepository
 import com.test.campingusproject_seller.repository.ProductRepository
 import com.test.campingusproject_seller.ui.main.MainActivity
+import com.test.campingusproject_seller.ui.sellstatedetail.SellStateDetailFragment
 import com.test.campingusproject_seller.viewmodel.SellerStateViewModel
 import kotlinx.coroutines.runBlocking
 
@@ -173,6 +174,13 @@ class SellStateFragment : Fragment() {
                     }
 
 
+                }
+                rowSellStateOrderHistoryItemBinding.root.setOnClickListener {
+                    //주문 상세보기 창으로 넘겨야하는데
+                    val bundle=Bundle()
+                    bundle.putSerializable("orderproduct",itemList[position])
+                    mainActivity.replaceFragment(MainActivity.SELL_STATE_DETAIL_FRAGMENT,true,false,bundle)
+                    mainActivity.activityMainBinding.bottomNavigationViewMain.visibility=View.GONE
                 }
             }
         }

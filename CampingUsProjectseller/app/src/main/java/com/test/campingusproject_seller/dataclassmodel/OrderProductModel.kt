@@ -1,5 +1,7 @@
 package com.test.campingusproject_seller.dataclassmodel
 
+import java.io.Serializable
+
 data class OrderProductModel (
     val orderId : String,               //주문 ID
     val orderProductId : Long,          //주문 상품 고유 ID
@@ -12,4 +14,4 @@ data class OrderProductModel (
     val orderProductImage : String,     //상품 이미지
     val orderProductState : String,     //배송 상태
     val reviewState: Boolean = false    //리뷰 작성 여부
-)
+):Serializable

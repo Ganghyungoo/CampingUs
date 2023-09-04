@@ -47,9 +47,8 @@ class NotificationMainFragment : Fragment() {
 
                 TabLayoutMediator(tabLayoutNotification, viewPager2Notification) { tab, position ->
                     when(position) {
-                        0 -> tab.text = "결제"
-                        1 -> tab.text = "문의"
-                        2 -> tab.text = "리뷰"
+                        0 -> tab.text = "문의"
+                        1 -> tab.text = "리뷰"
                     }
                 }.attach()
             }
@@ -62,7 +61,7 @@ class NotificationMainFragment : Fragment() {
     inner class ViewPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
         val fragments: List<Fragment>
         init {
-            fragments= listOf(NotificationPaymentFragment(), NotificationReviewFragment(), NotificationInquiryFragment())
+            fragments= listOf(NotificationInquiryFragment(),NotificationReviewFragment())
         }
 
         override fun getItemCount(): Int {
@@ -71,10 +70,10 @@ class NotificationMainFragment : Fragment() {
 
         override fun createFragment(position: Int): Fragment {
             val resultFragment = when(position){
-                0 -> NotificationPaymentFragment()
-                1 -> NotificationInquiryFragment()
-                2 -> NotificationReviewFragment()
-                else -> NotificationPaymentFragment()
+                0 -> NotificationInquiryFragment()
+                1 -> NotificationReviewFragment()
+                else->NotificationInquiryFragment()
+
             }
             return resultFragment
         }
