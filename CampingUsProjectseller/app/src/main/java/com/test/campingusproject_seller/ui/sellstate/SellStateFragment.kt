@@ -32,6 +32,8 @@ import com.test.campingusproject_seller.dataclassmodel.OrderProductModel
 import com.test.campingusproject_seller.repository.OrderProductRepository
 import com.test.campingusproject_seller.repository.ProductRepository
 import com.test.campingusproject_seller.ui.main.MainActivity
+import com.test.campingusproject_seller.ui.notification.NotificationReviewFragment
+import com.test.campingusproject_seller.ui.sellstatedetail.SellStateDetailFragment
 import com.test.campingusproject_seller.viewmodel.SellerStateViewModel
 import kotlinx.coroutines.runBlocking
 
@@ -60,23 +62,19 @@ class SellStateFragment : Fragment() {
 
         fragmentSellStateBinding.run {
             toolbarSellState.run {
-                title = "판매현황"
-
                 inflateMenu(R.menu.menu_sellstate)
 
                 setOnMenuItemClickListener {
-                    when (it.itemId) {
-                        R.id.itemNotification -> { // 알림화면으로 넘어가기
-                            mainActivity.replaceFragment(
-                                MainActivity.NOTIFICATION_MAIN_FRAGMENT,
-                                true,
-                                true,
-                                null
-                            )
+                    when(it.itemId){
+                        R.id.itemNotification->{
+                            mainActivity.replaceFragment(MainActivity.NOTIFICATION_REVIEW_FRAGMENT,true,false,null)
+                            mainActivity.activityMainBinding.bottomNavigationViewMain.visibility=View.GONE
                         }
                     }
                     false
                 }
+                title = "판매현황"
+
             }
 
             recyclerViewSellState.run {
@@ -122,56 +120,11 @@ class SellStateFragment : Fragment() {
                     rowSellStateOrderHistoryItemBinding.textViewSellStateProductNumber
                 buttonSellStateSend = rowSellStateOrderHistoryItemBinding.buttonSellStateSend
                 rowSellStateOrderHistoryItemBinding.buttonSellStateSend.setOnClickListener {
-                    //발송하기 클릭 시 재고가 충분히 있다면 프로덕트 카운트 빼기 하고 완료 없다면 재고를 채우세요
-                    val orderProductId = itemList[position].orderProductId
-                    val orderProductCount = itemList[position].orderProductCount
-
-
-                    //해당 제품의 재고 갯수 파악
-                    OrderProductRepository.productCount(itemList[position].orderProductName) {
-                        if (it.result.exists()) {
-                            var productCount = 0L
-                            for (c1 in it.result.children) {
-                                productCount = c1.child("productCount").value as Long
-                            }
-                            if (orderProductCount.toLong() <= productCount) {
-                                Log.d("testt", "배송 가능한 상태")
-                                //배송 처리
-                                OrderProductRepository.setOrderProductState(orderProductId) {
-                                    Toast.makeText(mainActivity, "배송이 완료되었습니다", Toast.LENGTH_SHORT)
-                                        .show()
-                                    //함수 호출해서 리사이클러뷰 업데이트
-                                    val pref = mainActivity.getSharedPreferences(
-                                        "user_info",
-                                        Context.MODE_PRIVATE
-                                    )
-                                    sellerStateViewModel.fetchOrderProduct(
-                                        pref.getString(
-                                            "userId",
-                                            null
-                                        ).toString()
-                                    )
-                                }
-                                val resultCount=productCount-orderProductCount.toLong()
-                                OrderProductRepository.setProductCount(itemList[position].orderProductName,resultCount){
-                                    //제품 카운트
-                                }
-
-                            }else{
-                                val builder = MaterialAlertDialogBuilder(mainActivity,R.style.ThemeOverlay_App_MaterialAlertDialog).apply {
-                                    setTitle("재고 없음")
-                                    setMessage("재고를 채우세요!")
-                                    setPositiveButton("닫기", null)
-                                }
-                                builder.show()
-                            }
-
-                        } else {
-                            Log.d("testt", "존재안해")
-                        }
-
-                    }
-
+                    //주문 상세보기 창으로 넘겨야하는데
+                    val bundle=Bundle()
+                    bundle.putSerializable("orderproduct",itemList[position])
+                    mainActivity.replaceFragment(MainActivity.SELL_STATE_DETAIL_FRAGMENT,true,false,bundle)
+                    mainActivity.activityMainBinding.bottomNavigationViewMain.visibility=View.GONE
 
                 }
             }

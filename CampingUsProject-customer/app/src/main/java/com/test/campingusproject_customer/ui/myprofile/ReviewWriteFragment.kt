@@ -199,12 +199,12 @@ class ReviewWriteFragment : Fragment() {
 
                                                 if(recommendationCheck){
                                                     ProductRepository.likeButtonClicked(currentProductId, currentProductRecommendationCount){
-                                                        Snackbar.make(fragmentReviewWriteBinding.root, "저장되었습니다.", Snackbar.LENGTH_SHORT).show()
+//                                                        Snackbar.make(fragmentReviewWriteBinding.root, "저장되었습니다.", Snackbar.LENGTH_SHORT).show()
                                                         mainActivity.removeFragment(MainActivity.REVIEW_WRITE_FRAGMENT)
                                                     }
                                                 }
                                                 else{
-                                                    Snackbar.make(fragmentReviewWriteBinding.root, "저장되었습니다.", Snackbar.LENGTH_SHORT).show()
+//                                                    Snackbar.make(fragmentReviewWriteBinding.root, "저장되었습니다.", Snackbar.LENGTH_SHORT).show()
                                                     mainActivity.removeFragment(MainActivity.REVIEW_WRITE_FRAGMENT)
                                                 }
                                             }

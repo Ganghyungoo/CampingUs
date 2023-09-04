@@ -50,5 +50,10 @@ class OrderProductRepository {
             }
         }
 
+        fun getOrderInfoByOrderId(orderId:String,callback: (Task<DataSnapshot>) -> Unit){
+            val database = FirebaseDatabase.getInstance()
+            val orderRef = database.getReference("OrderData")
+            orderRef.orderByChild("orderId").equalTo(orderId).get().addOnCompleteListener(callback)
+        }
     }
 }
