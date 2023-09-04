@@ -14,6 +14,7 @@ import android.widget.ProgressBar
 import android.widget.RatingBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -40,6 +41,7 @@ class NotificationReviewFragment : Fragment() {
     lateinit var fragmentNotificationReviewBinding: FragmentNotificationReviewBinding
     lateinit var mainActivity: MainActivity
     lateinit var reviewViewModel: ReviewViewModel
+    lateinit var callback: OnBackPressedCallback
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,6 +59,15 @@ class NotificationReviewFragment : Fragment() {
             }
         }
 
+        fragmentNotificationReviewBinding.toolbarNotification.run {
+            title = "리뷰"
+            // 백버튼
+            setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
+            setNavigationOnClickListener {
+                mainActivity.removeFragment(MainActivity.NOTIFICATION_REVIEW_FRAGMENT)
+                mainActivity.activityMainBinding.bottomNavigationViewMain.visibility=View.VISIBLE
+            }
+        }
 
         fragmentNotificationReviewBinding.recyclerViewReview.run {
             adapter=ReviewAdapter()
@@ -150,5 +161,22 @@ class NotificationReviewFragment : Fragment() {
             val rating= itemList[position].reviewRating.toFloat()
             holder.ratingBar.rating=rating
         }
+    }
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                mainActivity.removeFragment(MainActivity.NOTIFICATION_REVIEW_FRAGMENT)
+                val main=activity as MainActivity
+                main.activityMainBinding.bottomNavigationViewMain.visibility=View.VISIBLE
+
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        callback.remove()
     }
 }

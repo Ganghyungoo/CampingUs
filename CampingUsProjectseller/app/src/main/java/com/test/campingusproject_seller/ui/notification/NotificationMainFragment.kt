@@ -47,8 +47,7 @@ class NotificationMainFragment : Fragment() {
 
                 TabLayoutMediator(tabLayoutNotification, viewPager2Notification) { tab, position ->
                     when(position) {
-                        0 -> tab.text = "문의"
-                        1 -> tab.text = "리뷰"
+                        0 -> tab.text = "리뷰"
                     }
                 }.attach()
             }
@@ -70,9 +69,8 @@ class NotificationMainFragment : Fragment() {
 
         override fun createFragment(position: Int): Fragment {
             val resultFragment = when(position){
-                0 -> NotificationInquiryFragment()
-                1 -> NotificationReviewFragment()
-                else->NotificationInquiryFragment()
+                0 -> NotificationReviewFragment()
+                else->NotificationReviewFragment()
 
             }
             return resultFragment
