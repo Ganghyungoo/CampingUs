@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/itemShoppingRealTimeRanking"
+        android:enabled="true"
+        android:title="실시간 랭킹" />
+    <item
+        android:id="@+id/itemShoppingPopularitySale"
+        android:enabled="true"
+        android:title="인기 특가" />
+
+    <item
+        android:id="@+id/itemShoppingTentAndTarp"
+        android:enabled="true"
+        android:title="텐트 / 타프" />
+    <item
+        android:id="@+id/itemShoppingSleepingBagAndMat"
+        android:enabled="true"
+        android:title="침낭 / 매트" />
+    <item
+        android:id="@+id/itemShoppingTableAndChair"
+        android:enabled="true"
+        android:title="테이블 / 의자" />
+    <item
+        android:id="@+id/itemShoppingLanternAndLight"
+        android:enabled="true"
+        android:title="랜턴 / 조명" />
+    <item
+        android:id="@+id/itemShoppingKitchen"
+        android:enabled="true"
+        android:title="키친" />
+    <item
+        android:id="@+id/itemShoppingBrazierAndGrill"
+        android:enabled="true"
+        android:title="화로 / 그릴" />
+    <item
+        android:id="@+id/itemShoppingSeasonalItems"
+        android:enabled="true"
+        android:title="계절용품" />
+    <item
+        android:id="@+id/itemShoppingContainer"
+        android:enabled="true"
+        android:title="용기" />
+</menu>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <ImageView
+        android:id="@+id/imageViewRowContractCampsiteImage"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:maxWidth="150dp"
+        android:maxHeight="150dp"
+        app:srcCompat="@drawable/error_24px" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textViewRowContractCampsiteName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="TextView"
+            android:textColor="@color/highLightColor"
+            android:textSize="@dimen/text_size_2" />
+
+        <TextView
+            android:id="@+id/textViewRowContractCampsiteValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:text="TextView"
+            android:textColor="@color/highLightColor"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/textViewRowContractCampsitePhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:text="TextView"
+            android:textColor="@color/highLightColor"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/textViewRowContractCampsiteAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:text="TextView"
+            android:textColor="@color/highLightColor"
+            android:textSize="@dimen/text_size_3" />
+    </LinearLayout>
+
+</LinearLayout>

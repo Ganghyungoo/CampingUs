@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/imageViewReviewProfileImage"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_horizontal|fill_horizontal"
+            android:src="@drawable/account_circle_24px" />
+
+        <TextView
+            android:id="@+id/textViewReviewProfileName"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="작성자 이름"
+            android:textSize="@dimen/text_size_1" />
+
+        <RatingBar
+            android:id="@+id/RatingBarReviewProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:isIndicator="true" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textViewReviewContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:text="리뷰 내용"
+        android:textSize="@dimen/text_size_2" />
+
+</LinearLayout>

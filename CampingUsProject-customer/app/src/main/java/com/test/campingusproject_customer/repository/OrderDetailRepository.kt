@@ -1,0 +1,42 @@
+package com.test.campingusproject_customer.repository
+
+import com.google.android.gms.tasks.Task
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.FirebaseDatabase
+
+class OrderDetailRepository {
+    companion object{
+        //주문번호에 맞는 주문 정보를 불러오는 메서드
+        fun getOrderInfoByOrdeNum(orderId:String,callback: (Task<DataSnapshot>) -> Unit){
+            val database = FirebaseDatabase.getInstance()
+            val customerOrderRef = database.getReference("OrderData")
+            customerOrderRef.orderByChild("orderId").equalTo(orderId).get().addOnCompleteListener(callback)
+        }
+
+        //주문 번호에 해당하는 제품을 불러오는 메서드
+        fun getOrderedProductByOrderNum(orderId: String,callback: (Task<DataSnapshot>) -> Unit){
+            val database = FirebaseDatabase.getInstance()
+            val customerOrderRef = database.getReference("OrderProductData")
+            customerOrderRef.orderByChild("orderId").equalTo(orderId).get().addOnCompleteListener(callback)
+        }
+
+        //사용자 아이디에 맞는 주문 정보를 불러오는 메서드
+        fun getOrderInfoByUserId(orderUserId:String,callback: (Task<DataSnapshot>) -> Unit){
+            val database = FirebaseDatabase.getInstance()
+            val customerOrderRef = database.getReference("OrderData")
+            customerOrderRef.orderByChild("orderUserId").equalTo(orderUserId).get().addOnCompleteListener(callback)
+        }
+
+        //주문 상품의 리뷰 작성 상태를 변경하는 메서드
+        fun setReviewState(orderId: String){
+            val database = FirebaseDatabase.getInstance()
+            val customerOrderRef = database.getReference("OrderProductData")
+            customerOrderRef.orderByChild("orderId").equalTo(orderId).get().addOnCompleteListener {
+                for(c1 in it.result.children){
+                    c1.ref.child("reviewState").setValue(true)
+                }
+            }
+        }
+
+    }
+}
