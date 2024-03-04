@@ -19,3 +19,17 @@
 | 🌊 Async | [Coroutines](https://kotlinlang.org/docs/coroutines-overview.html) |
 | 🌐 Networking | [Retrofit](https://square.github.io/retrofit/), [Gson](https://github.com/google/gson) |
 | ☁ BackEnd Platform |[Firebase RealTime Database](https://firebase.google.com/docs/database?hl=ko)|
+
+## DB 구조
+1.제품 관련 테이블  
+![image](https://github.com/Ganghyungoo/CampingUs/assets/104668071/392507eb-9ad9-499f-9cb5-a4653c09509d)
+  
+
+2.유저 관련 테이블
+![image](https://github.com/Ganghyungoo/CampingUs/assets/104668071/567ee5bb-0f5f-4bcd-bfde-7d51d8c9edf4)
+
+
+3.캠핑장 및 커뮤니티 테이블
+![image](https://github.com/Ganghyungoo/CampingUs/assets/104668071/d9869ba5-e9ab-4532-95b5-e642d4f608cf)
+
+
