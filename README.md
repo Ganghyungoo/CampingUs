@@ -71,7 +71,7 @@
 3.캠핑장 및 커뮤니티 테이블
 ![image](https://github.com/Ganghyungoo/CampingUs/assets/104668071/fb3f8e69-0e15-4166-9bc4-4a609232184f)
 
-## Deretory 구조
+## Derectory 구조
 1.판매자 앱
 ```
 📱 app
