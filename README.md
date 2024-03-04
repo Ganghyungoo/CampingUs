@@ -30,6 +30,108 @@
 
 
 3.캠핑장 및 커뮤니티 테이블
-![image](https://github.com/Ganghyungoo/CampingUs/assets/104668071/d9869ba5-e9ab-4532-95b5-e642d4f608cf)
+![image](https://github.com/Ganghyungoo/CampingUs/assets/104668071/fb3f8e69-0e15-4166-9bc4-4a609232184f)
 
+## Deretory 구조
+1.판매자 앱
+```
+📱 app
+┣ 📂 manifest
+┃
+┣ 📂 java
+┃ ┣ 📦 package
+┃   ┣ 📂 viewmodel
+┃   ┣ 📂 dataclassmodel
+┃   ┣ 📂 repository
+┃   ┣ 📂 ui
+┃     ┣ 📂 main
+┃     ┣ 📂 injury
+┃     ┣ 📂 myInfo
+┃   	┣ 📂 Notification
+┃     ┣ 📂 product
+┃     ┣ 📂 sellState
+┃     ┣ 📂 sellStateDetail
+┃     ┣ 📂 updateMyInfo
+┃     ┣ 📂user
+┃ 
+┣ 📂 res(resource)
+┃ ┣ 📂 drawable
+┃ ┣ 📂 layout
+┃ ┣ 📂 mipmap
+┃ ┣ 📂 values
+┃ ┣ 📂 xml
+┃ ┣ 📂 menu
+┃
+┣ 🐘 Gradle Scripts
+```
+
+2.구매자 앱
+```
+📱 app
+┣ 📂 manifest
+┃
+┣ 📂 java
+┃ ┣ 📦 package
+┃   ┣ 📂 viewmodel
+┃   ┣ 📂 dataclassmodel
+┃   ┣ 📂 repository
+┃   ┣ 📂 ui
+┃     ┣ 📂 main
+┃     ┣ 📂 campsite
+┃     ┣ 📂 injuiry
+┃   	┣ 📂 myProfile
+┃     ┣ 📂 payment
+┃     ┣ 📂 review
+┃     ┣ 📂 shopping
+┃     ┣ 📂 user
+┃     ┣ 📂user
+┃ 
+┣ 📂 res(resource)
+┃ ┣ 📂 drawable
+┃ ┣ 📂 layout
+┃ ┣ 📂 mipmap
+┃ ┣ 📂 values
+┃ ┣ 📂 xml
+┃ ┣ 📂 menu
+┃
+┣ 🐘 Gradle Scripts
+```
+
+## Contributors
+<table>
+    <tr align="center">
+        <td><B>강현구<B></td>
+        <td><B>이지은<B></td>
+        <td><B>장용진<B></td>
+        <td><B>김민우<B></td>
+        <td><B>유동호<B></td>  
+    </tr>
+    <tr align="center">
+        <td>
+            <img src="https://github.com/Ganghyungoo.png?size=120">
+            <br>
+            <a href="https://github.com/Ganghyungoo"><I>Ganghyungoo</I></a>
+        </td>
+        <td>
+          <img src="https://github.com/nueijeel.png?size=120">
+            <br>
+            <a href="https://github.com/nueijeel"><I>nueijeel</I></a>
+        </td>
+        <td>
+            <img src="https://github.com/YonjjinJang.png?size=120">
+            <br>
+            <a href="https://github.com/YonjjinJang"><I>YonjjinJang</I></a>
+        </td>
+        <td>
+            <img src="https://github.com/DoReMinWoo.png?size=120">
+            <br>
+            <a href="https://github.com/DoReMinWoo"><I>DoReMinWoo</I></a>
+        </td>
+        <td>
+            <img src="https://github.com/y-d-h.png?size=120">
+            <br>
+            <a href="https://github.com/y-d-h"><I>y-d-h</I></a>
+        </td>
+    </tr>
+</table>
 
